@@ -138,18 +138,6 @@ body {
 .stage-young { background: #fff3e0; color: #e65100; }
 .stage-mature { background: var(--success-bg); color: var(--success); }
 
-/* Typing */
-.typing-area { width: 100%; max-width: 500px; text-align: center; }
-.typing-prompt { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
-.typing-prompt.jp { color: var(--text); }
-.typing-prompt.en { color: var(--primary); }
-.typing-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
-.typing-input { width: 100%; padding: 16px; font-size: 20px; text-align: center; border: 2px solid var(--border); border-radius: var(--radius-sm); background: var(--card-bg); color: var(--text); outline: none; transition: border-color var(--transition); }
-.typing-input:focus { border-color: var(--primary); }
-.typing-input.correct { border-color: var(--success); background: var(--success-bg); }
-.typing-input.incorrect { border-color: var(--danger); background: var(--danger-bg); }
-.typing-feedback { margin-top: 12px; font-size: 16px; font-weight: 600; min-height: 24px; }
-.typing-answer { margin-top: 8px; font-size: 18px; color: var(--text-secondary); }
 
 /* Quiz */
 .quiz-area { display: flex; flex-direction: column; align-items: center; gap: 20px; }
@@ -157,6 +145,8 @@ body {
 .quiz-options { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 10px; }
 .quiz-option { padding: 16px 20px; background: var(--card-bg); border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 16px; cursor: pointer; transition: all var(--transition); text-align: left; color: var(--text); }
 .quiz-option:hover { border-color: var(--primary); }
+.quiz-options.compact .quiz-option { padding: 12px 16px; font-size: 15px; }
+.retry-badge { display: inline-block; background: var(--warning-bg); color: var(--warning); font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 8px; margin-left: 8px; }
 .quiz-option.correct { border-color: var(--success); background: var(--success-bg); color: var(--success); font-weight: 600; }
 .quiz-option.incorrect { border-color: var(--danger); background: var(--danger-bg); color: var(--danger); }
 .quiz-option.disabled { pointer-events: none; }
@@ -257,8 +247,7 @@ body {
   .task-summary { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .task-item .task-num { font-size: 24px; }
   .srs-actions .btn { padding: 10px 2px; font-size: 12px; }
-  .typing-prompt { font-size: 24px; }
-  .typing-input { font-size: 16px; }
+  .quiz-options.compact .quiz-option { padding: 10px 12px; font-size: 14px; }
 }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .fade-in { animation: fadeIn 0.3s ease; }
@@ -6831,7 +6820,7 @@ function startStudySession() {
   const newWords = getNewWords(newTarget);
 
   session = {
-    // Phase: 'intro' | 'quiz' | 'typing_en_jp' | 'typing_jp_en' | 'review' | 'complete'
+    // Phase: 'intro' | 'quiz' | 'deep_quiz' | 'typing_jp_en' | 'review' | 'complete'
     phase: newWords.length > 0 ? 'intro' : (dueWords.length > 0 ? 'review' : 'complete'),
     newWords: newWords,
     newBatch: [],       // current batch of 5 for intro
@@ -6841,9 +6830,11 @@ function startStudySession() {
     dueIdx: 0,
     quizQueue: [],
     quizIdx: 0,
-    typingQueue: [],
+    deepQuizQueue: [],
+    deepQuizIdx: 0,
+    deepQuizRetries: {},  // { wordId: retryCount }
+    typingQueue: [],      // used for reverse quiz (typing_jp_en)
     typingIdx: 0,
-    typingMode: 'en_jp',  // or 'jp_en'
     correct: 0,
     wrong: 0,
     total: 0,
@@ -6884,7 +6875,7 @@ function renderStudy(app) {
   switch(session.phase) {
     case 'intro': renderIntro(app); break;
     case 'quiz': renderSessionQuiz(app); break;
-    case 'typing_en_jp': renderTyping(app, 'en_jp'); break;
+    case 'deep_quiz': renderDeepQuiz(app); break;
     case 'typing_jp_en': renderReverseQuiz(app); break;
     case 'review': renderReview(app); break;
     case 'complete': renderComplete(app); break;
@@ -7019,148 +7010,107 @@ function nextSessionQuiz() {
 }
 
 function advanceFromQuiz() {
-  // After quiz -> typing (English -> Japanese)
+  // After quiz -> deep quiz (6-choice)
   if (session.newBatch.length > 0) {
-    session.typingQueue = shuffleArray([...session.newBatch]);
-    session.typingIdx = 0;
-    session.typingMode = 'en_jp';
-    session.phase = 'typing_en_jp';
+    session.deepQuizQueue = shuffleArray([...session.newBatch]);
+    session.deepQuizIdx = 0;
+    session.deepQuizRetries = {};
+    session.phase = 'deep_quiz';
     session.answered = false;
-    session.showAnswer = false;
   } else {
-    advanceFromTypingEnJp();
+    advanceFromDeepQuiz();
   }
   render();
 }
 
-function renderTyping(app, mode) {
-  if (session.typingIdx >= session.typingQueue.length) {
-    if (mode === 'en_jp') advanceFromTypingEnJp();
-    else advanceFromTypingJpEn();
+// Deep Quiz: 6-choice with smart options and retry on wrong answers
+function renderDeepQuiz(app) {
+  if (session.deepQuizIdx >= session.deepQuizQueue.length) {
+    advanceFromDeepQuiz();
     return;
   }
 
-  const w = session.typingQueue[session.typingIdx];
-  const isEnJp = mode === 'en_jp';
-  const prompt = isEnJp ? escapeHtml(w.word) : formatMeaning(w.meaning);
-  const promptClass = isEnJp ? 'en' : 'jp';
-  const placeholder = isEnJp ? '日本語の意味を入力...' : '英単語を入力...';
-  const phaseLabel = isEnJp ? 'タイピング (英→日)' : 'タイピング (日→英)';
+  const w = session.deepQuizQueue[session.deepQuizIdx];
+  const allW = getMergedWords();
+  const options = generateQuizOptions(w, allW, 5); // 6択
+  const retries = session.deepQuizRetries[w.id] || 0;
+  const retryLabel = retries > 0 ? `<span class="retry-badge">再チャレンジ ${retries}回目</span>` : '';
 
   app.innerHTML = `
     <div class="card fade-in">
       <div class="session-header">
-        <span class="session-phase">${phaseLabel}</span>
-        <span class="session-counter">${session.typingIdx + 1} / ${session.typingQueue.length}</span>
+        <span class="session-phase">深掘りクイズ (英→日) ${retryLabel}</span>
+        <span class="session-counter">${session.deepQuizIdx + 1} / ${session.deepQuizQueue.length}</span>
       </div>
       <div class="session-progress">
-        <div class="progress-bar"><div class="progress-fill" style="width:${session.typingQueue.length ? (session.typingIdx / session.typingQueue.length * 100) : 0}%"></div></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${session.deepQuizQueue.length ? (session.deepQuizIdx / session.deepQuizQueue.length * 100) : 0}%"></div></div>
       </div>
     </div>
-    <div class="flashcard-area fade-in">
-      <div class="typing-area">
-        <div class="typing-prompt ${promptClass}">${prompt}</div>
-        <div class="typing-sub">${isEnJp ? 'この英単語の意味は？' : 'この意味の英単語は？'}</div>
-        <input class="typing-input" id="typingInput" type="text" placeholder="${placeholder}"
-          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-          autofocus inputmode="text"
-          onkeydown="if(event.key==='Enter')checkTyping(${isEnJp}, ${w.id})">
-        <div class="typing-feedback" id="typingFeedback"></div>
-        <div class="typing-answer hidden" id="typingAnswer"></div>
-        <div style="margin-top:16px;">
-          <button class="btn btn-primary" id="typingCheck" onclick="checkTyping(${isEnJp}, ${w.id})">確認</button>
-          <button class="btn btn-outline hidden" id="typingNext" onclick="nextTyping()">次へ</button>
-          <button class="btn btn-outline" id="typingSkip" onclick="skipTyping(${w.id})" style="margin-left:8px;">スキップ</button>
-        </div>
+    <div class="quiz-area fade-in">
+      <div class="card" style="width:100%;text-align:center;">
+        <div style="font-size:12px;color:var(--text-secondary);">ZONE ${w.page}</div>
+        <div class="quiz-word">${escapeHtml(w.word)}</div>
       </div>
+      <div class="quiz-options compact">
+        ${options.map(o => `
+          <button class="quiz-option" data-correct="${o.id === w.id}" onclick="deepQuizAnswer(this, ${o.id === w.id}, ${w.id})">
+            ${formatMeaning(o.meaning)}
+          </button>
+        `).join('')}
+      </div>
+      <div class="hidden" id="deepQuizNext">
+        <button class="btn btn-primary" onclick="nextDeepQuiz()">次へ</button>
+      </div>
+      <div class="hidden" id="deepQuizRetryMsg" style="text-align:center; color:var(--warning); font-size:14px; font-weight:600; margin-top:8px;"></div>
+      <div style="text-align:center; font-size:13px; color:var(--text-secondary);">${session.deepQuizIdx + 1} / ${session.deepQuizQueue.length}</div>
     </div>`;
-  setTimeout(() => { const inp = document.getElementById('typingInput'); if (inp) { inp.focus(); inp.click(); } }, 100);
 }
 
-function checkTyping(isEnJp, wordId) {
-  if (session.showAnswer) return;
-  const input = document.getElementById('typingInput');
-  const feedback = document.getElementById('typingFeedback');
-  const answer = document.getElementById('typingAnswer');
-  const w = session.typingQueue[session.typingIdx];
-  const userVal = input.value.trim();
-
-  if (!userVal) return;
-
-  session.showAnswer = true;
+function deepQuizAnswer(el, isCorrect, wordId) {
+  if (session.answered) return;
+  session.answered = true;
   session.total++;
-  let isCorrect = false;
 
-  if (isEnJp) {
-    isCorrect = checkJapaneseFuzzy(userVal, w.meaning);
-    answer.innerHTML = '正解: ' + formatMeaning(w.meaning);
-  } else {
-    isCorrect = checkEnglishFuzzy(userVal, w.word);
-    answer.innerHTML = '正解: ' + escapeHtml(w.word);
-  }
+  document.querySelectorAll('.quiz-option').forEach(opt => {
+    opt.classList.add('disabled');
+    if (opt.dataset.correct === 'true') opt.classList.add('correct');
+  });
 
   if (isCorrect) {
-    input.classList.add('correct');
-    feedback.innerHTML = '<span style="color:var(--success)">正解!</span>';
+    el.classList.add('correct');
     session.correct++;
-    gradeSRS(wordId, 2);
+    const retries = session.deepQuizRetries[wordId] || 0;
+    gradeSRS(wordId, retries === 0 ? 2 : 1); // 初回正解=Good, リトライ後=Hard
   } else {
-    const dist = isEnJp ? 999 : levenshtein(userVal.toLowerCase(), w.word.toLowerCase());
-    if (!isEnJp && dist <= 1) {
-      input.classList.add('correct');
-      feedback.innerHTML = '<span style="color:var(--warning)">惜しい! (タイプミス)</span>';
-      session.correct++;
-      gradeSRS(wordId, 1); // Hard
+    el.classList.add('incorrect');
+    session.wrong++;
+    const retries = (session.deepQuizRetries[wordId] || 0) + 1;
+    session.deepQuizRetries[wordId] = retries;
+    if (retries <= 2) {
+      // キュー末尾に再追加
+      const w = session.deepQuizQueue[session.deepQuizIdx];
+      session.deepQuizQueue.push(w);
+      const msg = document.getElementById('deepQuizRetryMsg');
+      if (msg) { msg.textContent = 'この単語はもう一度出題します'; msg.classList.remove('hidden'); }
     } else {
-      input.classList.add('incorrect');
-      feedback.innerHTML = '<span style="color:var(--danger)">不正解</span>';
-      session.wrong++;
-      gradeSRS(wordId, 0);
+      gradeSRS(wordId, 0); // 3回不正解=Again
     }
   }
 
-  answer.classList.remove('hidden');
-  document.getElementById('typingCheck').classList.add('hidden');
-  document.getElementById('typingSkip').classList.add('hidden');
-  document.getElementById('typingNext').classList.remove('hidden');
-  input.disabled = true;
+  document.getElementById('deepQuizNext').classList.remove('hidden');
 }
 
-function skipTyping(wordId) {
-  session.showAnswer = true;
-  session.total++;
-  session.wrong++;
-  gradeSRS(wordId, 0);
-  const w = session.typingQueue[session.typingIdx];
-  const input = document.getElementById('typingInput');
-  const feedback = document.getElementById('typingFeedback');
-  const answer = document.getElementById('typingAnswer');
-  input.classList.add('incorrect');
-  feedback.innerHTML = '<span style="color:var(--danger)">スキップ</span>';
-  if (session.typingMode === 'en_jp') {
-    answer.innerHTML = '正解: ' + formatMeaning(w.meaning);
-  } else {
-    answer.innerHTML = '正解: ' + escapeHtml(w.word);
-  }
-  answer.classList.remove('hidden');
-  document.getElementById('typingCheck').classList.add('hidden');
-  document.getElementById('typingSkip').classList.add('hidden');
-  document.getElementById('typingNext').classList.remove('hidden');
-  input.disabled = true;
-}
-
-function nextTyping() {
-  session.typingIdx++;
-  session.showAnswer = false;
+function nextDeepQuiz() {
+  session.deepQuizIdx++;
+  session.answered = false;
   render();
 }
 
-function advanceFromTypingEnJp() {
-  // After English->Japanese typing -> Japanese->English typing
+function advanceFromDeepQuiz() {
+  // After deep quiz -> reverse quiz (meaning -> English word)
   if (session.newBatch.length > 0) {
     session.typingQueue = shuffleArray([...session.newBatch]);
     session.typingIdx = 0;
-    session.typingMode = 'jp_en';
     session.phase = 'typing_jp_en';
     session.showAnswer = false;
   } else {
@@ -7389,7 +7339,8 @@ function renderComplete(app) {
 // ==================================================
 // FREE PRACTICE MODE
 // ==================================================
-let practiceMode = 'flash'; // 'flash', 'quiz', 'typing_en', 'typing_jp'
+let practiceMode = 'flash'; // 'flash', 'quiz', 'deep_quiz', 'reverse'
+let practiceDeepRetries = {}; // { wordId: retryCount } for deep quiz retry
 let practiceQueue = [];
 let practiceIdx = 0;
 let practiceAnswered = false;
@@ -7413,8 +7364,8 @@ function renderPractice(app) {
       <div style="display:flex; gap:6px; flex-wrap:wrap;">
         <button class="btn btn-sm ${practiceMode === 'flash' ? 'btn-primary' : 'btn-outline'}" onclick="setPracticeMode('flash')">フラッシュカード</button>
         <button class="btn btn-sm ${practiceMode === 'quiz' ? 'btn-primary' : 'btn-outline'}" onclick="setPracticeMode('quiz')">4択クイズ</button>
-        <button class="btn btn-sm ${practiceMode === 'typing_en' ? 'btn-primary' : 'btn-outline'}" onclick="setPracticeMode('typing_en')">英→日</button>
-        <button class="btn btn-sm ${practiceMode === 'typing_jp' ? 'btn-primary' : 'btn-outline'}" onclick="setPracticeMode('typing_jp')">意味→英単語</button>
+        <button class="btn btn-sm ${practiceMode === 'deep_quiz' ? 'btn-primary' : 'btn-outline'}" onclick="setPracticeMode('deep_quiz')">深掘りクイズ</button>
+        <button class="btn btn-sm ${practiceMode === 'reverse' ? 'btn-primary' : 'btn-outline'}" onclick="setPracticeMode('reverse')">意味→英単語</button>
       </div>
     </div>`;
 
@@ -7452,9 +7403,13 @@ function renderPractice(app) {
     } else {
       html += renderPracticeQuiz(w, filtered);
     }
-  } else if (practiceMode === 'typing_en') {
-    html += renderPracticeTyping(w, true);
-  } else if (practiceMode === 'typing_jp') {
+  } else if (practiceMode === 'deep_quiz') {
+    if (filtered.length < 6) {
+      html += `<div class="empty-state"><p>深掘りクイズには最低6語必要です</p></div>`;
+    } else {
+      html += renderPracticeDeepQuiz(w, filtered);
+    }
+  } else if (practiceMode === 'reverse') {
     if (filtered.length < 4) {
       html += `<div class="empty-state"><p>クイズには最低4語必要です</p></div>`;
     } else {
@@ -7463,9 +7418,6 @@ function renderPractice(app) {
   }
 
   app.innerHTML = html;
-  if (practiceMode === 'typing_en' && !practiceShowAnswer) {
-    setTimeout(() => { const inp = document.getElementById('typingInput'); if (inp) { inp.focus(); inp.click(); } }, 100);
-  }
 }
 
 function buildPracticeQueue(words) {
@@ -7548,31 +7500,6 @@ function renderPracticeQuiz(w, pool) {
     </div>`;
 }
 
-function renderPracticeTyping(w, isEnJp) {
-  const prompt = isEnJp ? escapeHtml(w.word) : formatMeaning(w.meaning);
-  const promptClass = isEnJp ? 'en' : 'jp';
-  const placeholder = isEnJp ? '日本語の意味を入力...' : '英単語を入力...';
-  return `
-    <div class="flashcard-area fade-in">
-      <div class="typing-area">
-        <div class="typing-prompt ${promptClass}">${prompt}</div>
-        <div class="typing-sub">${isEnJp ? 'この英単語の意味は？' : 'この意味の英単語は？'}</div>
-        <input class="typing-input" id="typingInput" type="text" placeholder="${placeholder}"
-          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-          autofocus inputmode="text"
-          onkeydown="if(event.key==='Enter')checkPracticeTyping(${isEnJp}, ${w.id})">
-        <div class="typing-feedback" id="typingFeedback"></div>
-        <div class="typing-answer hidden" id="typingAnswer"></div>
-        <div style="margin-top:16px;">
-          <button class="btn btn-primary" id="typingCheck" onclick="checkPracticeTyping(${isEnJp}, ${w.id})">確認</button>
-          <button class="btn btn-outline hidden" id="typingNext" onclick="practiceNext()">次へ</button>
-          <button class="btn btn-outline" id="typingSkip" onclick="skipPracticeTyping(${isEnJp}, ${w.id})" style="margin-left:8px;">スキップ</button>
-        </div>
-      </div>
-      <div style="text-align:center; font-size:13px; color:var(--text-secondary); margin-top:12px;">${practiceIdx + 1} / ${practiceQueue.length}</div>
-    </div>`;
-}
-
 function renderPracticeReverseQuiz(w, pool) {
   const options = generateQuizOptions(w, pool);
   return `
@@ -7611,6 +7538,60 @@ function practiceReverseQuizAnswer(el, isCorrect, wordId) {
   } else {
     el.classList.add('incorrect');
     gradeSRS(wordId, 0);
+  }
+  document.getElementById('quizNext').classList.remove('hidden');
+}
+
+function renderPracticeDeepQuiz(w, pool) {
+  const options = generateQuizOptions(w, pool, 5); // 6択
+  const retries = practiceDeepRetries[w.id] || 0;
+  const retryLabel = retries > 0 ? `<span class="retry-badge">再チャレンジ ${retries}回目</span>` : '';
+  return `
+    <div class="quiz-area fade-in">
+      <div class="card" style="width:100%;text-align:center;">
+        <div style="font-size:12px;color:var(--text-secondary);">ZONE ${w.page} ${retryLabel}</div>
+        <div class="quiz-word">${escapeHtml(w.word)}</div>
+      </div>
+      <div class="quiz-options compact">
+        ${options.map(o => `
+          <button class="quiz-option" data-correct="${o.id === w.id}" onclick="practiceDeepQuizAnswer(this, ${o.id === w.id}, ${w.id})">
+            ${formatMeaning(o.meaning)}
+          </button>
+        `).join('')}
+      </div>
+      <div class="hidden" id="quizNext">
+        <button class="btn btn-primary" onclick="practiceNext()">次へ</button>
+      </div>
+      <div class="hidden" id="deepRetryMsg" style="text-align:center; color:var(--warning); font-size:14px; font-weight:600; margin-top:8px;"></div>
+      <div style="text-align:center; font-size:13px; color:var(--text-secondary);">${practiceIdx + 1} / ${practiceQueue.length}</div>
+    </div>`;
+}
+
+function practiceDeepQuizAnswer(el, isCorrect, wordId) {
+  if (practiceAnswered) return;
+  practiceAnswered = true;
+  practiceTotal++;
+  document.querySelectorAll('.quiz-option').forEach(opt => {
+    opt.classList.add('disabled');
+    if (opt.dataset.correct === 'true') opt.classList.add('correct');
+  });
+  if (isCorrect) {
+    el.classList.add('correct');
+    practiceCorrect++;
+    const retries = practiceDeepRetries[wordId] || 0;
+    gradeSRS(wordId, retries === 0 ? 2 : 1);
+  } else {
+    el.classList.add('incorrect');
+    const retries = (practiceDeepRetries[wordId] || 0) + 1;
+    practiceDeepRetries[wordId] = retries;
+    if (retries <= 2) {
+      const w = practiceQueue[practiceIdx];
+      practiceQueue.push(w);
+      const msg = document.getElementById('deepRetryMsg');
+      if (msg) { msg.textContent = 'この単語はもう一度出題します'; msg.classList.remove('hidden'); }
+    } else {
+      gradeSRS(wordId, 0);
+    }
   }
   document.getElementById('quizNext').classList.remove('hidden');
 }
@@ -7654,65 +7635,6 @@ function practiceQuizAnswer(el, isCorrect, wordId) {
   document.getElementById('quizNext').classList.remove('hidden');
 }
 
-function checkPracticeTyping(isEnJp, wordId) {
-  if (practiceShowAnswer) return;
-  const input = document.getElementById('typingInput');
-  const userVal = input.value.trim();
-  if (!userVal) return;
-  practiceShowAnswer = true;
-  practiceTotal++;
-  const w = practiceQueue[practiceIdx];
-  let isCorrect;
-  if (isEnJp) {
-    isCorrect = checkJapaneseFuzzy(userVal, w.meaning);
-    document.getElementById('typingAnswer').innerHTML = '正解: ' + formatMeaning(w.meaning);
-  } else {
-    isCorrect = checkEnglishFuzzy(userVal, w.word);
-    document.getElementById('typingAnswer').innerHTML = '正解: ' + escapeHtml(w.word);
-  }
-  if (isCorrect) {
-    input.classList.add('correct');
-    document.getElementById('typingFeedback').innerHTML = '<span style="color:var(--success)">正解!</span>';
-    practiceCorrect++;
-    gradeSRS(wordId, 2);
-  } else {
-    const dist = isEnJp ? 999 : levenshtein(userVal.toLowerCase(), w.word.toLowerCase());
-    if (!isEnJp && dist <= 1) {
-      input.classList.add('correct');
-      document.getElementById('typingFeedback').innerHTML = '<span style="color:var(--warning)">惜しい!</span>';
-      practiceCorrect++;
-      gradeSRS(wordId, 1);
-    } else {
-      input.classList.add('incorrect');
-      document.getElementById('typingFeedback').innerHTML = '<span style="color:var(--danger)">不正解</span>';
-      gradeSRS(wordId, 0);
-    }
-  }
-  document.getElementById('typingAnswer').classList.remove('hidden');
-  document.getElementById('typingCheck').classList.add('hidden');
-  document.getElementById('typingSkip').classList.add('hidden');
-  document.getElementById('typingNext').classList.remove('hidden');
-  input.disabled = true;
-}
-
-function skipPracticeTyping(isEnJp, wordId) {
-  if (practiceShowAnswer) return;
-  practiceShowAnswer = true;
-  practiceTotal++;
-  gradeSRS(wordId, 0);
-  const w = practiceQueue[practiceIdx];
-  const input = document.getElementById('typingInput');
-  input.classList.add('incorrect');
-  document.getElementById('typingFeedback').innerHTML = '<span style="color:var(--danger)">スキップ</span>';
-  if (isEnJp) document.getElementById('typingAnswer').innerHTML = '正解: ' + formatMeaning(w.meaning);
-  else document.getElementById('typingAnswer').innerHTML = '正解: ' + escapeHtml(w.word);
-  document.getElementById('typingAnswer').classList.remove('hidden');
-  document.getElementById('typingCheck').classList.add('hidden');
-  document.getElementById('typingSkip').classList.add('hidden');
-  document.getElementById('typingNext').classList.remove('hidden');
-  input.disabled = true;
-}
-
 function practiceNext() {
   practiceIdx++;
   practiceAnswered = false;
@@ -7728,6 +7650,7 @@ function setPracticeMode(mode) {
   practiceTotal = 0;
   practiceAnswered = false;
   practiceShowAnswer = false;
+  practiceDeepRetries = {};
   render();
 }
 
@@ -8062,11 +7985,33 @@ function levenshtein(a, b) {
 // ==================================================
 // Quiz helpers
 // ==================================================
-function generateQuizOptions(target, pool) {
+function generateQuizOptions(target, pool, count) {
+  count = count || 3; // デフォルト3つのダミー（4択）
   let options = [target];
   let available = pool.filter(w => w.id !== target.id);
-  shuffleArray(available);
-  for (let i = 0; i < 3 && i < available.length; i++) options.push(available[i]);
+
+  // 優先度1: 同じZONE
+  let sameZone = available.filter(w => w.page === target.page);
+  shuffleArray(sameZone);
+
+  // 優先度2: 隣接ZONE
+  let nearZone = available.filter(w => Math.abs(w.page - target.page) === 1);
+  shuffleArray(nearZone);
+
+  // 優先度3: その他
+  let rest = available.filter(w => w.page !== target.page && Math.abs(w.page - target.page) > 1);
+  shuffleArray(rest);
+
+  let candidates = [...sameZone, ...nearZone, ...rest];
+  let seen = new Set([target.id]);
+  for (let c of candidates) {
+    if (options.length >= count + 1) break;
+    if (!seen.has(c.id)) {
+      options.push(c);
+      seen.add(c.id);
+    }
+  }
+
   shuffleArray(options);
   return options;
 }
