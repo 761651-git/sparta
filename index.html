@@ -7,7 +7,8179 @@
 <style>
 :root {
   --bg: #f5f5f7;
+  --card-bg: #ffffff;<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPARTA 60-Day Master</title>
+<style>
+:root {
+  --bg: #f5f5f7;
   --card-bg: #ffffff;
+  --text: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --primary: #007aff;
+  --primary-hover: #0056b3;
+  --success: #34c759;
+  --success-bg: #d4f5dd;
+  --danger: #ff3b30;
+  --danger-bg: #fdd;
+  --warning: #ff9500;
+  --warning-bg: #fff3e0;
+  --border: #d2d2d7;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --transition: 0.3s ease;
+  --easy: #34c759;
+  --good: #007aff;
+  --hard: #ff9500;
+  --again: #ff3b30;
+}
+[data-theme="dark"] {
+  --bg: #1c1c1e;
+  --card-bg: #2c2c2e;
+  --text: #f5f5f7;
+  --text-secondary: #98989d;
+  --primary: #0a84ff;
+  --primary-hover: #409cff;
+  --success: #30d158;
+  --success-bg: #1a3a1a;
+  --danger: #ff453a;
+  --danger-bg: #3a1a1a;
+  --warning: #ff9f0a;
+  --warning-bg: #3a2a1a;
+  --border: #48484a;
+  --shadow: 0 2px 12px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.4);
+  --easy: #30d158;
+  --good: #0a84ff;
+  --hard: #ff9f0a;
+  --again: #ff453a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  background: var(--bg); color: var(--text); min-height: 100vh;
+  transition: background var(--transition), color var(--transition);
+}
+.header { background: var(--card-bg); border-bottom: 1px solid var(--border); padding: 12px 20px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
+.header-inner { max-width: 800px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.header h1 { font-size: 20px; font-weight: 700; background: linear-gradient(135deg, var(--primary), #5856d6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; white-space: nowrap; }
+.header-actions { display: flex; gap: 10px; align-items: center; }
+.streak-badge { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; color: var(--warning); }
+.theme-toggle { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; width: 40px; height: 24px; cursor: pointer; position: relative; transition: background var(--transition); }
+.theme-toggle::after { content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%; background: var(--primary); top: 2px; left: 2px; transition: transform var(--transition); }
+[data-theme="dark"] .theme-toggle::after { transform: translateX(16px); }
+.nav { max-width: 800px; margin: 16px auto 0; padding: 0 20px; display: flex; gap: 6px; flex-wrap: wrap; }
+.nav-btn { padding: 8px 14px; border: 2px solid var(--border); border-radius: 24px; background: var(--card-bg); color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; transition: all var(--transition); }
+.nav-btn:hover { border-color: var(--primary); color: var(--primary); }
+.nav-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.main { max-width: 800px; margin: 0 auto; padding: 20px; }
+.card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 16px; }
+.btn { padding: 10px 20px; border: none; border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; cursor: pointer; transition: all var(--transition); display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.btn:active { transform: scale(0.96); }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-success { background: var(--success); color: #fff; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-warning { background: var(--warning); color: #fff; }
+.btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+.btn-lg { padding: 16px 32px; font-size: 18px; border-radius: 14px; }
+.btn-block { width: 100%; }
+.progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--success)); border-radius: 4px; transition: width 0.5s ease; }
+.filter-section { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+.filter-section label { font-weight: 600; font-size: 14px; }
+.filter-input { padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card-bg); color: var(--text); font-size: 14px; width: 120px; }
+
+/* Dashboard */
+.day-counter { text-align: center; padding: 20px 0; }
+.day-counter .day-num { font-size: 64px; font-weight: 800; color: var(--primary); line-height: 1; }
+.day-counter .day-label { font-size: 16px; color: var(--text-secondary); margin-top: 4px; }
+.task-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+.task-item { text-align: center; padding: 16px 8px; background: var(--bg); border-radius: var(--radius-sm); }
+.task-item .task-num { font-size: 32px; font-weight: 700; }
+.task-item .task-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+.task-new .task-num { color: var(--primary); }
+.task-review .task-num { color: var(--warning); }
+.task-time .task-num { color: var(--success); }
+.zone-progress { margin: 16px 0; }
+.zone-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.zone-label { font-size: 13px; font-weight: 600; min-width: 60px; }
+.zone-bar { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; position: relative; }
+.zone-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+.zone-pct { font-size: 12px; color: var(--text-secondary); min-width: 40px; text-align: right; }
+.history-chart { display: flex; align-items: flex-end; gap: 4px; height: 80px; margin-top: 12px; }
+.history-bar { flex: 1; background: var(--primary); border-radius: 3px 3px 0 0; min-height: 2px; transition: height 0.3s; opacity: 0.7; }
+.history-bar.today { opacity: 1; }
+.history-labels { display: flex; gap: 4px; margin-top: 4px; }
+.history-labels span { flex: 1; font-size: 10px; color: var(--text-secondary); text-align: center; }
+
+/* SRS Grade Buttons */
+.srs-actions { display: flex; gap: 8px; width: 100%; max-width: 500px; }
+.srs-actions .btn { flex: 1; padding: 12px 4px; font-size: 13px; flex-direction: column; gap: 2px; }
+.srs-actions .btn small { font-size: 10px; opacity: 0.8; font-weight: 400; }
+.btn-again { background: var(--again); color: #fff; }
+.btn-hard { background: var(--hard); color: #fff; }
+.btn-good { background: var(--good); color: #fff; }
+.btn-easy { background: var(--easy); color: #fff; }
+
+/* Flashcard */
+.flashcard-area { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.flashcard-wrapper { width: 100%; max-width: 500px; perspective: 1000px; cursor: pointer; }
+.flashcard { width: 100%; min-height: 250px; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.flashcard.flipped { transform: rotateY(180deg); }
+.flashcard-face { position: absolute; top: 0; left: 0; right: 0; bottom: 0; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow-lg); background: var(--card-bg); }
+.flashcard-back { transform: rotateY(180deg); }
+.flashcard-word { font-size: 36px; font-weight: 700; color: var(--primary); text-align: center; }
+.flashcard-meaning { font-size: 28px; font-weight: 600; text-align: center; }
+.flashcard-hint { font-size: 13px; color: var(--text-secondary); margin-top: 12px; }
+.flashcard-page { position: absolute; top: 12px; right: 16px; font-size: 12px; color: var(--text-secondary); background: var(--bg); padding: 3px 8px; border-radius: 8px; }
+.flashcard-stats { position: absolute; top: 12px; left: 16px; font-size: 11px; color: var(--text-secondary); }
+.stage-badge { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
+.stage-new { background: var(--border); color: var(--text-secondary); }
+.stage-learning { background: #e3f2fd; color: #1565c0; }
+.stage-young { background: #fff3e0; color: #e65100; }
+.stage-mature { background: var(--success-bg); color: var(--success); }
+
+/* Typing */
+.typing-area { width: 100%; max-width: 500px; text-align: center; }
+.typing-prompt { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+.typing-prompt.jp { color: var(--text); }
+.typing-prompt.en { color: var(--primary); }
+.typing-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
+.typing-input { width: 100%; padding: 16px; font-size: 20px; text-align: center; border: 2px solid var(--border); border-radius: var(--radius-sm); background: var(--card-bg); color: var(--text); outline: none; transition: border-color var(--transition); }
+.typing-input:focus { border-color: var(--primary); }
+.typing-input.correct { border-color: var(--success); background: var(--success-bg); }
+.typing-input.incorrect { border-color: var(--danger); background: var(--danger-bg); }
+.typing-feedback { margin-top: 12px; font-size: 16px; font-weight: 600; min-height: 24px; }
+.typing-answer { margin-top: 8px; font-size: 18px; color: var(--text-secondary); }
+
+/* Quiz */
+.quiz-area { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.quiz-word { font-size: 36px; font-weight: 700; color: var(--primary); text-align: center; padding: 20px; }
+.quiz-options { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 10px; }
+.quiz-option { padding: 16px 20px; background: var(--card-bg); border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 16px; cursor: pointer; transition: all var(--transition); text-align: left; color: var(--text); }
+.quiz-option:hover { border-color: var(--primary); }
+.quiz-option.correct { border-color: var(--success); background: var(--success-bg); color: var(--success); font-weight: 600; }
+.quiz-option.incorrect { border-color: var(--danger); background: var(--danger-bg); color: var(--danger); }
+.quiz-option.disabled { pointer-events: none; }
+
+/* Stats */
+.stats-row { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.stat-badge { background: var(--card-bg); border-radius: var(--radius-sm); padding: 14px 12px; flex: 1; min-width: 80px; text-align: center; box-shadow: var(--shadow); }
+.stat-badge .stat-num { font-size: 24px; font-weight: 700; color: var(--primary); }
+.stat-badge .stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+/* Mastery Grid */
+.mastery-grid { display: flex; flex-wrap: wrap; gap: 2px; margin: 12px 0; }
+.mastery-cell { width: 8px; height: 8px; border-radius: 2px; background: var(--border); }
+.mastery-cell.new { background: var(--border); }
+.mastery-cell.learning { background: #64b5f6; }
+.mastery-cell.young { background: var(--warning); }
+.mastery-cell.mature { background: var(--success); }
+
+/* Edit Mode */
+.edit-toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.word-list-table { width: 100%; border-collapse: collapse; }
+.word-list-table th, .word-list-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
+.word-list-table th { font-weight: 600; color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+.word-list-table tr:hover { background: var(--bg); }
+.edit-input { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text); font-size: 14px; width: 100%; }
+.table-wrapper { overflow-x: auto; max-height: 60vh; overflow-y: auto; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+.search-input { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card-bg); color: var(--text); font-size: 15px; margin-bottom: 12px; }
+.sort-btn { cursor: pointer; user-select: none; }
+.sort-btn:hover { color: var(--primary); }
+
+/* Modal */
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; opacity: 0; pointer-events: none; transition: opacity var(--transition); }
+.modal-overlay.active { opacity: 1; pointer-events: all; }
+.modal { background: var(--card-bg); border-radius: var(--radius); padding: 28px; width: 100%; max-width: 500px; box-shadow: var(--shadow-lg); transform: translateY(20px); transition: transform var(--transition); }
+.modal-overlay.active .modal { transform: translateY(0); }
+.modal h3 { margin-bottom: 16px; font-size: 18px; }
+.modal-actions { display: flex; gap: 8px; margin-top: 16px; justify-content: flex-end; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; color: var(--text-secondary); }
+.form-group input, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card-bg); color: var(--text); font-size: 15px; }
+.form-group textarea { resize: vertical; min-height: 100px; font-family: inherit; }
+
+/* Toast */
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text); color: var(--bg); padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; z-index: 300; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-lg); }
+.toast.show { transform: translateX(-50%) translateY(0); }
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text-secondary); }
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state p { font-size: 16px; }
+
+/* Result/Celebration Overlay */
+.result-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; z-index: 150; background: rgba(0,0,0,0.6); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.result-overlay.active { opacity: 1; pointer-events: all; }
+.result-card { background: var(--card-bg); border-radius: var(--radius); padding: 40px; text-align: center; box-shadow: var(--shadow-lg); max-width: 400px; width: 90%; }
+.result-card h2 { font-size: 24px; margin-bottom: 16px; }
+.result-card .score { font-size: 60px; font-weight: 800; color: var(--primary); }
+.result-card p { color: var(--text-secondary); margin: 8px 0; }
+
+/* POS badges */
+.pos-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; margin-right: 3px; vertical-align: baseline; }
+.pos-名 { background: #2196F3; color: #fff; }
+.pos-動 { background: #e94560; color: #fff; }
+.pos-形 { background: #4CAF50; color: #fff; }
+.pos-副 { background: #FF9800; color: #fff; }
+.pos-前 { background: #9C27B0; color: #fff; }
+.pos-代 { background: #00BCD4; color: #fff; }
+.pos-接 { background: #795548; color: #fff; }
+.meaning-parts { display: inline-flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; }
+.meaning-part { display: inline-flex; align-items: baseline; gap: 3px; white-space: nowrap; }
+
+/* Session progress */
+.session-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.session-phase { font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+.session-counter { font-size: 13px; color: var(--text-secondary); }
+.session-progress { margin-bottom: 20px; }
+
+/* Confetti */
+@keyframes confetti-fall { 0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+.confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 400; overflow: hidden; }
+.confetti-piece { position: absolute; width: 10px; height: 10px; top: -10px; animation: confetti-fall 3s ease-in forwards; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .header h1 { font-size: 16px; }
+  .nav-btn { padding: 6px 10px; font-size: 12px; }
+  .flashcard-word { font-size: 28px; }
+  .flashcard-meaning { font-size: 22px; }
+  .flashcard { min-height: 200px; }
+  .quiz-word { font-size: 28px; }
+  .main { padding: 14px; }
+  .stat-badge .stat-num { font-size: 20px; }
+  .word-list-table th, .word-list-table td { padding: 8px 6px; font-size: 13px; }
+  .day-counter .day-num { font-size: 48px; }
+  .task-summary { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .task-item .task-num { font-size: 24px; }
+  .srs-actions .btn { padding: 10px 2px; font-size: 12px; }
+  .typing-prompt { font-size: 24px; }
+  .typing-input { font-size: 16px; }
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.3s ease; }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.pulse { animation: pulse 0.3s ease; }
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>SPARTA 60-Day Master</h1>
+    <div class="header-actions">
+      <div class="streak-badge" id="streakBadge"></div>
+      <button class="theme-toggle" onclick="toggleTheme()" title="テーマ切替"></button>
+    </div>
+  </div>
+</div>
+
+<div class="nav" id="nav">
+  <button class="nav-btn active" data-mode="dashboard">ホーム</button>
+  <button class="nav-btn" data-mode="study">学習</button>
+  <button class="nav-btn" data-mode="practice">自由練習</button>
+  <button class="nav-btn" data-mode="edit">データ</button>
+  <button class="nav-btn" data-mode="stats">統計</button>
+</div>
+
+<div class="main" id="app"></div>
+
+<!-- Add Word Modal -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <h3>単語を追加</h3>
+    <div class="form-group"><label>英単語</label><input type="text" id="addWord" placeholder="例: apple"></div>
+    <div class="form-group"><label>意味</label><input type="text" id="addMeaning" placeholder="例: りんご"></div>
+    <div class="form-group"><label>ZONE</label><input type="number" id="addPage" placeholder="1〜5" value="1" min="1" max="5"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('addModal')">キャンセル</button>
+      <button class="btn btn-primary" onclick="addWord()">追加</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="importModal">
+  <div class="modal">
+    <h3>CSV一括インポート</h3>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">形式: 英単語,意味,ZONE番号 (1行1単語)</p>
+    <div class="form-group"><textarea id="csvInput" placeholder="apple,りんご,1&#10;banana,バナナ,2"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('importModal')">キャンセル</button>
+      <button class="btn btn-primary" onclick="importCSV()">インポート</button>
+    </div>
+  </div>
+</div>
+
+<!-- Result Overlay -->
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-card" id="resultCard">
+    <h2 id="resultTitle">セッション完了!</h2>
+    <div class="score" id="resultScore">0%</div>
+    <p id="resultDetail"></p>
+    <p id="resultExtra"></p>
+    <button class="btn btn-primary" onclick="closeResult()" style="margin-top:20px;">閉じる</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ==================================================
+// State
+// ==================================================
+let allWords = [];
+let customWords = [];
+let editedMeanings = {};
+let deletedIds = new Set();
+let srsData = {};      // SRS per-word data
+let studyPlan = {};    // 60-day plan
+let streak = {};       // streak tracking
+let currentMode = 'dashboard';
+let pageFrom = '';
+let pageTo = '';
+
+// Session state
+let session = null;    // active study session
+
+// ==================================================
+// Init
+// ==================================================
+function init() {
+  loadTheme();
+  loadLocalData();
+  allWords = WORDS_DATA;
+  migrateData();
+  initPlan();
+  updateStreakBadge();
+  setupNav();
+  render();
+}
+
+function loadWords() {
+  allWords = WORDS_DATA;
+}
+
+const WORDS_DATA = [
+  {
+    "id": 1,
+    "word": "theory",
+    "meaning": "名 理論",
+    "page": 1
+  },
+  {
+    "id": 2,
+    "word": "overseas",
+    "meaning": "副 海外へ(で)・形 海外の",
+    "page": 1
+  },
+  {
+    "id": 3,
+    "word": "opposite",
+    "meaning": "形 反対の・副 反対に",
+    "page": 1
+  },
+  {
+    "id": 4,
+    "word": "comfortable",
+    "meaning": "形 快適な",
+    "page": 1
+  },
+  {
+    "id": 5,
+    "word": "uncomfortable",
+    "meaning": "形 落ち着かない",
+    "page": 1
+  },
+  {
+    "id": 6,
+    "word": "diet",
+    "meaning": "名 食事・ダイエット",
+    "page": 1
+  },
+  {
+    "id": 7,
+    "word": "breath",
+    "meaning": "名 呼吸",
+    "page": 1
+  },
+  {
+    "id": 8,
+    "word": "beg",
+    "meaning": "動 懇願する",
+    "page": 1
+  },
+  {
+    "id": 9,
+    "word": "thorough",
+    "meaning": "形 徹底的な・完全な",
+    "page": 1
+  },
+  {
+    "id": 10,
+    "word": "debut",
+    "meaning": "名 デビュー(初登場)・動 デビューする",
+    "page": 1
+  },
+  {
+    "id": 11,
+    "word": "estate",
+    "meaning": "名 財産",
+    "page": 1
+  },
+  {
+    "id": 12,
+    "word": "paid",
+    "meaning": "形 支払い済みの・有給の",
+    "page": 1
+  },
+  {
+    "id": 13,
+    "word": "purchase",
+    "meaning": "動 購入する・名 購入",
+    "page": 1
+  },
+  {
+    "id": 14,
+    "word": "accent",
+    "meaning": "名 アクセント・なまり",
+    "page": 1
+  },
+  {
+    "id": 15,
+    "word": "insist",
+    "meaning": "動 要求する・強く主張する",
+    "page": 1
+  },
+  {
+    "id": 16,
+    "word": "alcohol",
+    "meaning": "名 アルコール・酒",
+    "page": 1
+  },
+  {
+    "id": 17,
+    "word": "flexible",
+    "meaning": "形 融通の利く・柔軟な",
+    "page": 1
+  },
+  {
+    "id": 18,
+    "word": "clinic",
+    "meaning": "名 診療所",
+    "page": 1
+  },
+  {
+    "id": 19,
+    "word": "obey",
+    "meaning": "動 従う",
+    "page": 1
+  },
+  {
+    "id": 20,
+    "word": "chaos",
+    "meaning": "名 混乱",
+    "page": 1
+  },
+  {
+    "id": 21,
+    "word": "refer",
+    "meaning": "動 言う・表す・参照する",
+    "page": 1
+  },
+  {
+    "id": 22,
+    "word": "illusion",
+    "meaning": "名 錯覚・幻想",
+    "page": 1
+  },
+  {
+    "id": 23,
+    "word": "blame",
+    "meaning": "動 責める",
+    "page": 1
+  },
+  {
+    "id": 24,
+    "word": "unable",
+    "meaning": "形 〜できない",
+    "page": 1
+  },
+  {
+    "id": 25,
+    "word": "outcome",
+    "meaning": "名 結果",
+    "page": 1
+  },
+  {
+    "id": 26,
+    "word": "lazy",
+    "meaning": "形 だらけた",
+    "page": 1
+  },
+  {
+    "id": 27,
+    "word": "recovery",
+    "meaning": "名 回復",
+    "page": 1
+  },
+  {
+    "id": 28,
+    "word": "lessen",
+    "meaning": "動 少なくする・減る",
+    "page": 1
+  },
+  {
+    "id": 29,
+    "word": "obtain",
+    "meaning": "動 得る",
+    "page": 1
+  },
+  {
+    "id": 30,
+    "word": "introduction",
+    "meaning": "名 導入・紹介",
+    "page": 1
+  },
+  {
+    "id": 31,
+    "word": "substitute",
+    "meaning": "動 代わりに使う",
+    "page": 1
+  },
+  {
+    "id": 32,
+    "word": "depend",
+    "meaning": "動 頼る・左右される",
+    "page": 1
+  },
+  {
+    "id": 33,
+    "word": "path",
+    "meaning": "名 道",
+    "page": 1
+  },
+  {
+    "id": 34,
+    "word": "taboo",
+    "meaning": "名 タブー・ご法度",
+    "page": 1
+  },
+  {
+    "id": 35,
+    "word": "propose",
+    "meaning": "動 提案する",
+    "page": 1
+  },
+  {
+    "id": 36,
+    "word": "draft",
+    "meaning": "名 下書き",
+    "page": 1
+  },
+  {
+    "id": 37,
+    "word": "seldom",
+    "meaning": "副 めったに〜ない",
+    "page": 1
+  },
+  {
+    "id": 38,
+    "word": "hierarchy",
+    "meaning": "名 階層",
+    "page": 1
+  },
+  {
+    "id": 39,
+    "word": "palace",
+    "meaning": "名 宮殿",
+    "page": 1
+  },
+  {
+    "id": 40,
+    "word": "cab",
+    "meaning": "名 タクシー",
+    "page": 1
+  },
+  {
+    "id": 41,
+    "word": "donate",
+    "meaning": "動 寄付する・提供する",
+    "page": 1
+  },
+  {
+    "id": 42,
+    "word": "fortune",
+    "meaning": "名 富・幸運",
+    "page": 1
+  },
+  {
+    "id": 43,
+    "word": "option",
+    "meaning": "名 選択肢",
+    "page": 1
+  },
+  {
+    "id": 44,
+    "word": "enable",
+    "meaning": "動 可能にする",
+    "page": 1
+  },
+  {
+    "id": 45,
+    "word": "frighten",
+    "meaning": "動 怖がらせる・ぞっとさせる",
+    "page": 1
+  },
+  {
+    "id": 46,
+    "word": "claim",
+    "meaning": "動 主張する・要求する・名 主張・要求",
+    "page": 1
+  },
+  {
+    "id": 47,
+    "word": "mature",
+    "meaning": "形 成熟した・動 成熟する",
+    "page": 1
+  },
+  {
+    "id": 48,
+    "word": "recommend",
+    "meaning": "動 勧める",
+    "page": 1
+  },
+  {
+    "id": 49,
+    "word": "suspect",
+    "meaning": "動 疑う(〜ではないかと思う)・名 容疑者",
+    "page": 1
+  },
+  {
+    "id": 50,
+    "word": "slave",
+    "meaning": "名 奴隷",
+    "page": 1
+  },
+  {
+    "id": 51,
+    "word": "natural gas",
+    "meaning": "名 天然ガス",
+    "page": 1
+  },
+  {
+    "id": 52,
+    "word": "wheel",
+    "meaning": "名 車輪",
+    "page": 1
+  },
+  {
+    "id": 53,
+    "word": "flyer・flier",
+    "meaning": "名 チラシ",
+    "page": 1
+  },
+  {
+    "id": 54,
+    "word": "percentage",
+    "meaning": "名 パーセント",
+    "page": 1
+  },
+  {
+    "id": 55,
+    "word": "mention",
+    "meaning": "動 言及する・名 言及",
+    "page": 1
+  },
+  {
+    "id": 56,
+    "word": "script",
+    "meaning": "名 手書き・脚本",
+    "page": 1
+  },
+  {
+    "id": 57,
+    "word": "attach",
+    "meaning": "動 くっつける",
+    "page": 1
+  },
+  {
+    "id": 58,
+    "word": "institution",
+    "meaning": "名 機関・制度",
+    "page": 1
+  },
+  {
+    "id": 59,
+    "word": "hardly",
+    "meaning": "副 ほとんど〜ない",
+    "page": 1
+  },
+  {
+    "id": 60,
+    "word": "delay",
+    "meaning": "名 遅れ・動 遅らせる",
+    "page": 1
+  },
+  {
+    "id": 61,
+    "word": "double",
+    "meaning": "動 倍にする(なる)・形 倍の",
+    "page": 1
+  },
+  {
+    "id": 62,
+    "word": "ingredient",
+    "meaning": "名 成分・材料",
+    "page": 1
+  },
+  {
+    "id": 63,
+    "word": "glory",
+    "meaning": "名 栄光",
+    "page": 1
+  },
+  {
+    "id": 64,
+    "word": "exception",
+    "meaning": "名 例外",
+    "page": 1
+  },
+  {
+    "id": 65,
+    "word": "gradually",
+    "meaning": "副 徐々に・だんだんと",
+    "page": 1
+  },
+  {
+    "id": 66,
+    "word": "soldier",
+    "meaning": "名 兵士",
+    "page": 1
+  },
+  {
+    "id": 67,
+    "word": "pity",
+    "meaning": "名 残念なこと・哀れみ",
+    "page": 1
+  },
+  {
+    "id": 68,
+    "word": "legacy",
+    "meaning": "名 遺産",
+    "page": 1
+  },
+  {
+    "id": 69,
+    "word": "cooperate",
+    "meaning": "動 協力する",
+    "page": 1
+  },
+  {
+    "id": 70,
+    "word": "generate",
+    "meaning": "動 生み出す",
+    "page": 1
+  },
+  {
+    "id": 71,
+    "word": "bulb",
+    "meaning": "名 電球",
+    "page": 1
+  },
+  {
+    "id": 72,
+    "word": "rare",
+    "meaning": "形 珍しい",
+    "page": 1
+  },
+  {
+    "id": 73,
+    "word": "rarely",
+    "meaning": "副 めったに〜ない",
+    "page": 1
+  },
+  {
+    "id": 74,
+    "word": "art gallery",
+    "meaning": "名 美術館",
+    "page": 1
+  },
+  {
+    "id": 75,
+    "word": "false",
+    "meaning": "形 誤った",
+    "page": 1
+  },
+  {
+    "id": 76,
+    "word": "abroad",
+    "meaning": "副 外国へ",
+    "page": 1
+  },
+  {
+    "id": 77,
+    "word": "quite",
+    "meaning": "副 結構・完全に",
+    "page": 1
+  },
+  {
+    "id": 78,
+    "word": "independent",
+    "meaning": "形 独立した・自立した",
+    "page": 1
+  },
+  {
+    "id": 79,
+    "word": "virus",
+    "meaning": "名 ウイルス",
+    "page": 1
+  },
+  {
+    "id": 80,
+    "word": "apply",
+    "meaning": "動 当てはまる・申し込む",
+    "page": 1
+  },
+  {
+    "id": 81,
+    "word": "frank",
+    "meaning": "形 率直な",
+    "page": 1
+  },
+  {
+    "id": 82,
+    "word": "bind",
+    "meaning": "動 縛る・束ねる・義務を負わせる",
+    "page": 1
+  },
+  {
+    "id": 83,
+    "word": "mere",
+    "meaning": "形 単なる",
+    "page": 1
+  },
+  {
+    "id": 84,
+    "word": "biology",
+    "meaning": "名 生物学",
+    "page": 1
+  },
+  {
+    "id": 85,
+    "word": "intersection",
+    "meaning": "名 交差点",
+    "page": 1
+  },
+  {
+    "id": 86,
+    "word": "surely",
+    "meaning": "副 確かに",
+    "page": 1
+  },
+  {
+    "id": 87,
+    "word": "coast",
+    "meaning": "名 海岸",
+    "page": 1
+  },
+  {
+    "id": 88,
+    "word": "span",
+    "meaning": "名 範囲・期間",
+    "page": 1
+  },
+  {
+    "id": 89,
+    "word": "frequently",
+    "meaning": "副 頻繁に",
+    "page": 1
+  },
+  {
+    "id": 90,
+    "word": "survival",
+    "meaning": "名 生き残ること",
+    "page": 1
+  },
+  {
+    "id": 91,
+    "word": "target",
+    "meaning": "名 目標・対象・動 対象にする",
+    "page": 1
+  },
+  {
+    "id": 92,
+    "word": "fate",
+    "meaning": "名 運命",
+    "page": 1
+  },
+  {
+    "id": 93,
+    "word": "inquire",
+    "meaning": "動 尋ねる",
+    "page": 1
+  },
+  {
+    "id": 94,
+    "word": "jewelry",
+    "meaning": "名 宝石類",
+    "page": 1
+  },
+  {
+    "id": 95,
+    "word": "millionaire",
+    "meaning": "名 大金持ち",
+    "page": 1
+  },
+  {
+    "id": 96,
+    "word": "avoid",
+    "meaning": "動 避ける",
+    "page": 1
+  },
+  {
+    "id": 97,
+    "word": "fluent",
+    "meaning": "形 流暢な",
+    "page": 1
+  },
+  {
+    "id": 98,
+    "word": "selection",
+    "meaning": "名 選択・品揃え",
+    "page": 1
+  },
+  {
+    "id": 99,
+    "word": "gain",
+    "meaning": "動 得る・名 利益・増加",
+    "page": 1
+  },
+  {
+    "id": 100,
+    "word": "achievement",
+    "meaning": "名 達成",
+    "page": 1
+  },
+  {
+    "id": 101,
+    "word": "gone",
+    "meaning": "形 行ってしまった・なくなった",
+    "page": 1
+  },
+  {
+    "id": 102,
+    "word": "accurate",
+    "meaning": "形 正確な",
+    "page": 1
+  },
+  {
+    "id": 103,
+    "word": "poet",
+    "meaning": "名 詩人",
+    "page": 1
+  },
+  {
+    "id": 104,
+    "word": "aspect",
+    "meaning": "名 側面",
+    "page": 1
+  },
+  {
+    "id": 105,
+    "word": "shame",
+    "meaning": "名 残念なこと・恥",
+    "page": 1
+  },
+  {
+    "id": 106,
+    "word": "tasty",
+    "meaning": "形 おいしい",
+    "page": 1
+  },
+  {
+    "id": 107,
+    "word": "prohibit",
+    "meaning": "動 禁止する",
+    "page": 1
+  },
+  {
+    "id": 108,
+    "word": "goodness",
+    "meaning": "名 善・Godの婉曲表現(Godを直接口にすることを避ける)",
+    "page": 1
+  },
+  {
+    "id": 109,
+    "word": "clone",
+    "meaning": "名 クローン・動 クローンを作る",
+    "page": 1
+  },
+  {
+    "id": 110,
+    "word": "maternity",
+    "meaning": "形 妊婦の",
+    "page": 1
+  },
+  {
+    "id": 111,
+    "word": "tail",
+    "meaning": "名 しっぽ",
+    "page": 1
+  },
+  {
+    "id": 112,
+    "word": "adjust",
+    "meaning": "動 調節する",
+    "page": 1
+  },
+  {
+    "id": 113,
+    "word": "majority",
+    "meaning": "名 大多数・過半数",
+    "page": 1
+  },
+  {
+    "id": 114,
+    "word": "lesser",
+    "meaning": "形 小さいほうの",
+    "page": 1
+  },
+  {
+    "id": 115,
+    "word": "length",
+    "meaning": "名 長さ",
+    "page": 1
+  },
+  {
+    "id": 116,
+    "word": "combine",
+    "meaning": "動 組み合わせる",
+    "page": 1
+  },
+  {
+    "id": 117,
+    "word": "instruct",
+    "meaning": "動 指示する",
+    "page": 1
+  },
+  {
+    "id": 118,
+    "word": "via",
+    "meaning": "前 〜によって",
+    "page": 1
+  },
+  {
+    "id": 119,
+    "word": "oral",
+    "meaning": "形 口頭の・口の",
+    "page": 1
+  },
+  {
+    "id": 120,
+    "word": "probable",
+    "meaning": "形 ありそうな",
+    "page": 1
+  },
+  {
+    "id": 121,
+    "word": "ultimate",
+    "meaning": "形 最終的な",
+    "page": 1
+  },
+  {
+    "id": 122,
+    "word": "analogy",
+    "meaning": "名 類推・類似",
+    "page": 1
+  },
+  {
+    "id": 123,
+    "word": "phase",
+    "meaning": "名 段階",
+    "page": 1
+  },
+  {
+    "id": 124,
+    "word": "declare",
+    "meaning": "動 宣言する・申告する",
+    "page": 1
+  },
+  {
+    "id": 125,
+    "word": "conduct",
+    "meaning": "名 行為・動 行う・導く・案内する",
+    "page": 1
+  },
+  {
+    "id": 126,
+    "word": "luckily",
+    "meaning": "副 運良く",
+    "page": 1
+  },
+  {
+    "id": 127,
+    "word": "permit",
+    "meaning": "動 許可する",
+    "page": 1
+  },
+  {
+    "id": 128,
+    "word": "fiber",
+    "meaning": "名 繊維",
+    "page": 1
+  },
+  {
+    "id": 129,
+    "word": "rude",
+    "meaning": "形 無礼な・無作法な",
+    "page": 1
+  },
+  {
+    "id": 130,
+    "word": "approximately",
+    "meaning": "副 およそ",
+    "page": 1
+  },
+  {
+    "id": 131,
+    "word": "individual",
+    "meaning": "名 個人・形 個人の",
+    "page": 1
+  },
+  {
+    "id": 132,
+    "word": "sudden",
+    "meaning": "形 急な",
+    "page": 1
+  },
+  {
+    "id": 133,
+    "word": "raise",
+    "meaning": "動 上げる・育てる・(金を)集める・(質問を)出す",
+    "page": 1
+  },
+  {
+    "id": 134,
+    "word": "correct",
+    "meaning": "形 正しい・動 訂正する",
+    "page": 1
+  },
+  {
+    "id": 135,
+    "word": "aisle",
+    "meaning": "名 通路",
+    "page": 1
+  },
+  {
+    "id": 136,
+    "word": "quit",
+    "meaning": "動 やめる",
+    "page": 1
+  },
+  {
+    "id": 137,
+    "word": "assistance",
+    "meaning": "名 援助",
+    "page": 1
+  },
+  {
+    "id": 138,
+    "word": "habitat",
+    "meaning": "名 生息地・(人の)居住地",
+    "page": 1
+  },
+  {
+    "id": 139,
+    "word": "innovation",
+    "meaning": "名 革新",
+    "page": 1
+  },
+  {
+    "id": 140,
+    "word": "gravity",
+    "meaning": "名 重力・重大さ",
+    "page": 1
+  },
+  {
+    "id": 141,
+    "word": "flat",
+    "meaning": "形 平らな",
+    "page": 1
+  },
+  {
+    "id": 142,
+    "word": "poverty",
+    "meaning": "名 貧困",
+    "page": 1
+  },
+  {
+    "id": 143,
+    "word": "thankful",
+    "meaning": "形 感謝している",
+    "page": 1
+  },
+  {
+    "id": 144,
+    "word": "laboratory",
+    "meaning": "名 研究室",
+    "page": 1
+  },
+  {
+    "id": 145,
+    "word": "reaction",
+    "meaning": "名 反応",
+    "page": 1
+  },
+  {
+    "id": 146,
+    "word": "react",
+    "meaning": "動 反応する",
+    "page": 1
+  },
+  {
+    "id": 147,
+    "word": "equal",
+    "meaning": "形 等しい",
+    "page": 1
+  },
+  {
+    "id": 148,
+    "word": "disadvantage",
+    "meaning": "名 不利・デメリット",
+    "page": 1
+  },
+  {
+    "id": 149,
+    "word": "distinguish",
+    "meaning": "動 区別する",
+    "page": 1
+  },
+  {
+    "id": 150,
+    "word": "except",
+    "meaning": "前 〜を除いて",
+    "page": 1
+  },
+  {
+    "id": 151,
+    "word": "evolve",
+    "meaning": "動 (徐々に)発展する・進化する",
+    "page": 1
+  },
+  {
+    "id": 152,
+    "word": "evolution",
+    "meaning": "名 進化",
+    "page": 1
+  },
+  {
+    "id": 153,
+    "word": "responsible",
+    "meaning": "形 責任(感)がある・原因となる",
+    "page": 1
+  },
+  {
+    "id": 154,
+    "word": "blind",
+    "meaning": "形 目の見えない",
+    "page": 1
+  },
+  {
+    "id": 155,
+    "word": "guilty",
+    "meaning": "形 有罪の・罪悪感がある",
+    "page": 1
+  },
+  {
+    "id": 156,
+    "word": "omit",
+    "meaning": "動 省く",
+    "page": 1
+  },
+  {
+    "id": 157,
+    "word": "fuel",
+    "meaning": "名 燃料・動 煽る",
+    "page": 1
+  },
+  {
+    "id": 158,
+    "word": "rural",
+    "meaning": "形 田舎の",
+    "page": 1
+  },
+  {
+    "id": 159,
+    "word": "greeting",
+    "meaning": "名 あいさつ",
+    "page": 1
+  },
+  {
+    "id": 160,
+    "word": "military",
+    "meaning": "形 軍の・名 軍隊",
+    "page": 1
+  },
+  {
+    "id": 161,
+    "word": "background",
+    "meaning": "名 背景・経歴",
+    "page": 1
+  },
+  {
+    "id": 162,
+    "word": "prison",
+    "meaning": "名 刑務所",
+    "page": 1
+  },
+  {
+    "id": 163,
+    "word": "challenge",
+    "meaning": "名 挑戦・困難・やりがい・動 挑戦する・異議を唱える",
+    "page": 1
+  },
+  {
+    "id": 164,
+    "word": "distant",
+    "meaning": "形 遠い",
+    "page": 1
+  },
+  {
+    "id": 165,
+    "word": "humanity",
+    "meaning": "名 人間性・人類",
+    "page": 1
+  },
+  {
+    "id": 166,
+    "word": "hug",
+    "meaning": "動 抱き締める",
+    "page": 1
+  },
+  {
+    "id": 167,
+    "word": "industry",
+    "meaning": "名 業界・勤勉",
+    "page": 1
+  },
+  {
+    "id": 168,
+    "word": "core",
+    "meaning": "名 核心・中心",
+    "page": 1
+  },
+  {
+    "id": 169,
+    "word": "preschool",
+    "meaning": "形 就学前の・名 幼稚園・保育園",
+    "page": 1
+  },
+  {
+    "id": 170,
+    "word": "normally",
+    "meaning": "副 普通は",
+    "page": 1
+  },
+  {
+    "id": 171,
+    "word": "weaken",
+    "meaning": "動 弱める",
+    "page": 1
+  },
+  {
+    "id": 172,
+    "word": "none",
+    "meaning": "代 ひとつも〜ない",
+    "page": 1
+  },
+  {
+    "id": 173,
+    "word": "rent",
+    "meaning": "動 賃借りする・賃貸しする・名 貸し家",
+    "page": 1
+  },
+  {
+    "id": 174,
+    "word": "permanent",
+    "meaning": "形 永久の",
+    "page": 1
+  },
+  {
+    "id": 175,
+    "word": "laptop",
+    "meaning": "名 ノートパソコン",
+    "page": 1
+  },
+  {
+    "id": 176,
+    "word": "pure",
+    "meaning": "形 純粋な",
+    "page": 1
+  },
+  {
+    "id": 177,
+    "word": "lecture",
+    "meaning": "名 講義・説教・動 講義する",
+    "page": 1
+  },
+  {
+    "id": 178,
+    "word": "typical",
+    "meaning": "形 典型的な",
+    "page": 1
+  },
+  {
+    "id": 179,
+    "word": "tire",
+    "meaning": "動 疲れさせる",
+    "page": 1
+  },
+  {
+    "id": 180,
+    "word": "tiring",
+    "meaning": "形 疲れさせるような・退屈な",
+    "page": 1
+  },
+  {
+    "id": 181,
+    "word": "widely",
+    "meaning": "副 広く・広範囲にわたって",
+    "page": 1
+  },
+  {
+    "id": 182,
+    "word": "width",
+    "meaning": "名 幅",
+    "page": 1
+  },
+  {
+    "id": 183,
+    "word": "summary",
+    "meaning": "名 要約",
+    "page": 1
+  },
+  {
+    "id": 184,
+    "word": "mental",
+    "meaning": "形 精神の",
+    "page": 1
+  },
+  {
+    "id": 185,
+    "word": "microwave",
+    "meaning": "名 電子レンジ",
+    "page": 1
+  },
+  {
+    "id": 186,
+    "word": "root",
+    "meaning": "名 根・ルーツ・動 根づかせる",
+    "page": 1
+  },
+  {
+    "id": 187,
+    "word": "formal",
+    "meaning": "形 正式の・形式的な",
+    "page": 1
+  },
+  {
+    "id": 188,
+    "word": "amazed",
+    "meaning": "形 驚いた・驚嘆した",
+    "page": 1
+  },
+  {
+    "id": 189,
+    "word": "aid",
+    "meaning": "名 援助・動 援助する",
+    "page": 1
+  },
+  {
+    "id": 190,
+    "word": "navy",
+    "meaning": "名 海軍",
+    "page": 1
+  },
+  {
+    "id": 191,
+    "word": "passion",
+    "meaning": "名 情熱",
+    "page": 1
+  },
+  {
+    "id": 192,
+    "word": "pillar",
+    "meaning": "名 柱",
+    "page": 1
+  },
+  {
+    "id": 193,
+    "word": "reserve",
+    "meaning": "動 予約する・取っておく・名 蓄え",
+    "page": 1
+  },
+  {
+    "id": 194,
+    "word": "baggage",
+    "meaning": "名 荷物(一式)",
+    "page": 1
+  },
+  {
+    "id": 195,
+    "word": "fare",
+    "meaning": "名 運賃",
+    "page": 1
+  },
+  {
+    "id": 196,
+    "word": "cycle",
+    "meaning": "動 自転車に乗る・循環する・名 自転車",
+    "page": 1
+  },
+  {
+    "id": 197,
+    "word": "senior",
+    "meaning": "形 役職が上の",
+    "page": 1
+  },
+  {
+    "id": 198,
+    "word": "incredible",
+    "meaning": "形 信じられない(ほどすごい)",
+    "page": 1
+  },
+  {
+    "id": 199,
+    "word": "indeed",
+    "meaning": "副 本当に・いや実は",
+    "page": 1
+  },
+  {
+    "id": 200,
+    "word": "politician",
+    "meaning": "名 政治家",
+    "page": 1
+  },
+  {
+    "id": 201,
+    "word": "bore",
+    "meaning": "動 退屈させる",
+    "page": 2
+  },
+  {
+    "id": 202,
+    "word": "philosophy",
+    "meaning": "名 哲学",
+    "page": 2
+  },
+  {
+    "id": 203,
+    "word": "economy",
+    "meaning": "名 経済・節約",
+    "page": 2
+  },
+  {
+    "id": 204,
+    "word": "flour",
+    "meaning": "名 小麦粉",
+    "page": 2
+  },
+  {
+    "id": 205,
+    "word": "currently",
+    "meaning": "副 現在(のところ)",
+    "page": 2
+  },
+  {
+    "id": 206,
+    "word": "checkup",
+    "meaning": "名 検査・健康診断",
+    "page": 2
+  },
+  {
+    "id": 207,
+    "word": "coupon",
+    "meaning": "名 割引券・クーポン",
+    "page": 2
+  },
+  {
+    "id": 208,
+    "word": "highly",
+    "meaning": "副 非常に・大いに",
+    "page": 2
+  },
+  {
+    "id": 209,
+    "word": "vaccine",
+    "meaning": "名 ワクチン",
+    "page": 2
+  },
+  {
+    "id": 210,
+    "word": "fully",
+    "meaning": "副 十分に",
+    "page": 2
+  },
+  {
+    "id": 211,
+    "word": "inconvenience",
+    "meaning": "名 不便",
+    "page": 2
+  },
+  {
+    "id": 212,
+    "word": "device",
+    "meaning": "名 装置",
+    "page": 2
+  },
+  {
+    "id": 213,
+    "word": "hospitality",
+    "meaning": "名 おもてなし",
+    "page": 2
+  },
+  {
+    "id": 214,
+    "word": "success",
+    "meaning": "名 成功",
+    "page": 2
+  },
+  {
+    "id": 215,
+    "word": "disturb",
+    "meaning": "動 邪魔する",
+    "page": 2
+  },
+  {
+    "id": 216,
+    "word": "proper",
+    "meaning": "形 適切な",
+    "page": 2
+  },
+  {
+    "id": 217,
+    "word": "complete",
+    "meaning": "形 完全な・動 完成させる・記入する",
+    "page": 2
+  },
+  {
+    "id": 218,
+    "word": "quantity",
+    "meaning": "名 量",
+    "page": 2
+  },
+  {
+    "id": 219,
+    "word": "destination",
+    "meaning": "名 目的地",
+    "page": 2
+  },
+  {
+    "id": 220,
+    "word": "moving",
+    "meaning": "形 感動的な",
+    "page": 2
+  },
+  {
+    "id": 221,
+    "word": "loyal",
+    "meaning": "形 忠実な",
+    "page": 2
+  },
+  {
+    "id": 222,
+    "word": "employ",
+    "meaning": "動 雇う",
+    "page": 2
+  },
+  {
+    "id": 223,
+    "word": "employer",
+    "meaning": "名 雇用者",
+    "page": 2
+  },
+  {
+    "id": 224,
+    "word": "puppy",
+    "meaning": "名 子犬",
+    "page": 2
+  },
+  {
+    "id": 225,
+    "word": "familiar",
+    "meaning": "形 よく知っている",
+    "page": 2
+  },
+  {
+    "id": 226,
+    "word": "imitate",
+    "meaning": "動 まねる",
+    "page": 2
+  },
+  {
+    "id": 227,
+    "word": "occur",
+    "meaning": "動 起こる・(考えが)心に浮かぶ",
+    "page": 2
+  },
+  {
+    "id": 228,
+    "word": "advance",
+    "meaning": "動 進む・進める・名 進行",
+    "page": 2
+  },
+  {
+    "id": 229,
+    "word": "fake",
+    "meaning": "形 偽の",
+    "page": 2
+  },
+  {
+    "id": 230,
+    "word": "protein",
+    "meaning": "名 たんぱく質",
+    "page": 2
+  },
+  {
+    "id": 231,
+    "word": "lay",
+    "meaning": "動 (他動詞)置く・横にする",
+    "page": 2
+  },
+  {
+    "id": 232,
+    "word": "fellow",
+    "meaning": "名 仲間・同僚",
+    "page": 2
+  },
+  {
+    "id": 233,
+    "word": "compete",
+    "meaning": "動 競争する",
+    "page": 2
+  },
+  {
+    "id": 234,
+    "word": "latter",
+    "meaning": "形 後半の・名 後者",
+    "page": 2
+  },
+  {
+    "id": 235,
+    "word": "hire",
+    "meaning": "動 (有料で)借りる・雇う",
+    "page": 2
+  },
+  {
+    "id": 236,
+    "word": "remind",
+    "meaning": "動 思い出させる",
+    "page": 2
+  },
+  {
+    "id": 237,
+    "word": "reduce",
+    "meaning": "動 減らす",
+    "page": 2
+  },
+  {
+    "id": 238,
+    "word": "reduction",
+    "meaning": "名 減少",
+    "page": 2
+  },
+  {
+    "id": 239,
+    "word": "diagram",
+    "meaning": "名 図表",
+    "page": 2
+  },
+  {
+    "id": 240,
+    "word": "broad",
+    "meaning": "形 広い",
+    "page": 2
+  },
+  {
+    "id": 241,
+    "word": "crew",
+    "meaning": "名 乗組員・乗務員",
+    "page": 2
+  },
+  {
+    "id": 242,
+    "word": "educate",
+    "meaning": "動 教育する",
+    "page": 2
+  },
+  {
+    "id": 243,
+    "word": "necessarily",
+    "meaning": "副 必ず",
+    "page": 2
+  },
+  {
+    "id": 244,
+    "word": "guided",
+    "meaning": "形 ガイド付きの",
+    "page": 2
+  },
+  {
+    "id": 245,
+    "word": "organizer",
+    "meaning": "名 主催者",
+    "page": 2
+  },
+  {
+    "id": 246,
+    "word": "arrange",
+    "meaning": "動 きちんと並べる・取り決める",
+    "page": 2
+  },
+  {
+    "id": 247,
+    "word": "pill",
+    "meaning": "名 錠剤",
+    "page": 2
+  },
+  {
+    "id": 248,
+    "word": "regularly",
+    "meaning": "副 定期的に・規則正しく",
+    "page": 2
+  },
+  {
+    "id": 249,
+    "word": "steady",
+    "meaning": "形 安定した",
+    "page": 2
+  },
+  {
+    "id": 250,
+    "word": "anytime",
+    "meaning": "副 いつでも",
+    "page": 2
+  },
+  {
+    "id": 251,
+    "word": "discrimination",
+    "meaning": "名 差別",
+    "page": 2
+  },
+  {
+    "id": 252,
+    "word": "waste",
+    "meaning": "名 廃棄物・無駄・動 無駄にする",
+    "page": 2
+  },
+  {
+    "id": 253,
+    "word": "vivid",
+    "meaning": "形 いきいきとした・鮮やかな",
+    "page": 2
+  },
+  {
+    "id": 254,
+    "word": "suppose",
+    "meaning": "動 思う・仮定する・接 もし〜なら",
+    "page": 2
+  },
+  {
+    "id": 255,
+    "word": "perceive",
+    "meaning": "動 知覚する・気づく",
+    "page": 2
+  },
+  {
+    "id": 256,
+    "word": "generous",
+    "meaning": "形 気前のよい",
+    "page": 2
+  },
+  {
+    "id": 257,
+    "word": "tend",
+    "meaning": "動 傾向がある",
+    "page": 2
+  },
+  {
+    "id": 258,
+    "word": "minor",
+    "meaning": "形 小さいほうの・重要でない・名 未成年",
+    "page": 2
+  },
+  {
+    "id": 259,
+    "word": "stimulate",
+    "meaning": "動 刺激する",
+    "page": 2
+  },
+  {
+    "id": 260,
+    "word": "preparation",
+    "meaning": "名 準備",
+    "page": 2
+  },
+  {
+    "id": 261,
+    "word": "injury",
+    "meaning": "名 ケガ",
+    "page": 2
+  },
+  {
+    "id": 262,
+    "word": "leadership",
+    "meaning": "名 指導者の地位・指導",
+    "page": 2
+  },
+  {
+    "id": 263,
+    "word": "rob",
+    "meaning": "動 奪う",
+    "page": 2
+  },
+  {
+    "id": 264,
+    "word": "certainty",
+    "meaning": "名 確かさ",
+    "page": 2
+  },
+  {
+    "id": 265,
+    "word": "adapt",
+    "meaning": "動 適応させる",
+    "page": 2
+  },
+  {
+    "id": 266,
+    "word": "maximum",
+    "meaning": "名 最大限",
+    "page": 2
+  },
+  {
+    "id": 267,
+    "word": "evil",
+    "meaning": "名 悪・形 悪い",
+    "page": 2
+  },
+  {
+    "id": 268,
+    "word": "sufficient",
+    "meaning": "形 十分な",
+    "page": 2
+  },
+  {
+    "id": 269,
+    "word": "structure",
+    "meaning": "名 構造・建物",
+    "page": 2
+  },
+  {
+    "id": 270,
+    "word": "fog",
+    "meaning": "名 霧",
+    "page": 2
+  },
+  {
+    "id": 271,
+    "word": "spectator",
+    "meaning": "名 観客",
+    "page": 2
+  },
+  {
+    "id": 272,
+    "word": "edit",
+    "meaning": "動 編集する",
+    "page": 2
+  },
+  {
+    "id": 273,
+    "word": "eternal",
+    "meaning": "形 永遠の",
+    "page": 2
+  },
+  {
+    "id": 274,
+    "word": "construct",
+    "meaning": "動 建設する",
+    "page": 2
+  },
+  {
+    "id": 275,
+    "word": "accustom",
+    "meaning": "動 慣れさせる",
+    "page": 2
+  },
+  {
+    "id": 276,
+    "word": "maintain",
+    "meaning": "動 維持する・主張する・養う",
+    "page": 2
+  },
+  {
+    "id": 277,
+    "word": "crash",
+    "meaning": "動 衝突する・名 衝突",
+    "page": 2
+  },
+  {
+    "id": 278,
+    "word": "actual",
+    "meaning": "形 実際の",
+    "page": 2
+  },
+  {
+    "id": 279,
+    "word": "relate",
+    "meaning": "動 関連づける",
+    "page": 2
+  },
+  {
+    "id": 280,
+    "word": "notify",
+    "meaning": "動 通知する",
+    "page": 2
+  },
+  {
+    "id": 281,
+    "word": "ideology",
+    "meaning": "名 イデオロギー・思想傾向",
+    "page": 2
+  },
+  {
+    "id": 282,
+    "word": "fee",
+    "meaning": "名 報酬・授業料・公共料金・手数料",
+    "page": 2
+  },
+  {
+    "id": 283,
+    "word": "awake",
+    "meaning": "形 目覚めている",
+    "page": 2
+  },
+  {
+    "id": 284,
+    "word": "sponsor",
+    "meaning": "名 スポンサー・動 スポンサーをつとめる",
+    "page": 2
+  },
+  {
+    "id": 285,
+    "word": "mad",
+    "meaning": "形 怒って・狂って",
+    "page": 2
+  },
+  {
+    "id": 286,
+    "word": "thin",
+    "meaning": "形 細い・薄い",
+    "page": 2
+  },
+  {
+    "id": 287,
+    "word": "versus",
+    "meaning": "前 〜対…",
+    "page": 2
+  },
+  {
+    "id": 288,
+    "word": "genre",
+    "meaning": "名 ジャンル",
+    "page": 2
+  },
+  {
+    "id": 289,
+    "word": "bear",
+    "meaning": "動 持つ・耐える・産む・名 熊",
+    "page": 2
+  },
+  {
+    "id": 290,
+    "word": "foresee",
+    "meaning": "動 予知する",
+    "page": 2
+  },
+  {
+    "id": 291,
+    "word": "additionally",
+    "meaning": "副 加えて",
+    "page": 2
+  },
+  {
+    "id": 292,
+    "word": "superior",
+    "meaning": "形 より優れた",
+    "page": 2
+  },
+  {
+    "id": 293,
+    "word": "inferior",
+    "meaning": "形 より劣った",
+    "page": 2
+  },
+  {
+    "id": 294,
+    "word": "interpret",
+    "meaning": "動 通訳する・解釈する",
+    "page": 2
+  },
+  {
+    "id": 295,
+    "word": "column",
+    "meaning": "名 柱・コラム",
+    "page": 2
+  },
+  {
+    "id": 296,
+    "word": "fund",
+    "meaning": "名 資金・動 資金を提供する",
+    "page": 2
+  },
+  {
+    "id": 297,
+    "word": "value",
+    "meaning": "名 価値",
+    "page": 2
+  },
+  {
+    "id": 298,
+    "word": "toll",
+    "meaning": "名 通行料金・通話料・死傷者数",
+    "page": 2
+  },
+  {
+    "id": 299,
+    "word": "plenty",
+    "meaning": "名 たくさん",
+    "page": 2
+  },
+  {
+    "id": 300,
+    "word": "architecture",
+    "meaning": "名 建築",
+    "page": 2
+  },
+  {
+    "id": 301,
+    "word": "directly",
+    "meaning": "副 直接に",
+    "page": 2
+  },
+  {
+    "id": 302,
+    "word": "region",
+    "meaning": "名 地域",
+    "page": 2
+  },
+  {
+    "id": 303,
+    "word": "determine",
+    "meaning": "動 決心する・決心させる",
+    "page": 2
+  },
+  {
+    "id": 304,
+    "word": "possibility",
+    "meaning": "名 可能性",
+    "page": 2
+  },
+  {
+    "id": 305,
+    "word": "warn",
+    "meaning": "動 警告する",
+    "page": 2
+  },
+  {
+    "id": 306,
+    "word": "layer",
+    "meaning": "名 層",
+    "page": 2
+  },
+  {
+    "id": 307,
+    "word": "illustration",
+    "meaning": "名 説明・例",
+    "page": 2
+  },
+  {
+    "id": 308,
+    "word": "preserve",
+    "meaning": "動 保存する・保護する",
+    "page": 2
+  },
+  {
+    "id": 309,
+    "word": "paragraph",
+    "meaning": "名 パラグラフ・段落",
+    "page": 2
+  },
+  {
+    "id": 310,
+    "word": "surgeon",
+    "meaning": "名 外科医",
+    "page": 2
+  },
+  {
+    "id": 311,
+    "word": "consume",
+    "meaning": "動 消費する",
+    "page": 2
+  },
+  {
+    "id": 312,
+    "word": "tribe",
+    "meaning": "名 部族",
+    "page": 2
+  },
+  {
+    "id": 313,
+    "word": "likely",
+    "meaning": "形 ありそうな・副 たぶん・おそらく",
+    "page": 2
+  },
+  {
+    "id": 314,
+    "word": "scarcely",
+    "meaning": "副 ほとんど〜ない",
+    "page": 2
+  },
+  {
+    "id": 315,
+    "word": "equally",
+    "meaning": "副 平等に",
+    "page": 2
+  },
+  {
+    "id": 316,
+    "word": "tension",
+    "meaning": "名 緊張",
+    "page": 2
+  },
+  {
+    "id": 317,
+    "word": "bathe",
+    "meaning": "動 入浴する",
+    "page": 2
+  },
+  {
+    "id": 318,
+    "word": "unless",
+    "meaning": "接 〜しない限り",
+    "page": 2
+  },
+  {
+    "id": 319,
+    "word": "laughter",
+    "meaning": "名 笑い",
+    "page": 2
+  },
+  {
+    "id": 320,
+    "word": "bay",
+    "meaning": "名 湾",
+    "page": 2
+  },
+  {
+    "id": 321,
+    "word": "religion",
+    "meaning": "名 宗教",
+    "page": 2
+  },
+  {
+    "id": 322,
+    "word": "unknown",
+    "meaning": "形 知られていない",
+    "page": 2
+  },
+  {
+    "id": 323,
+    "word": "appeal",
+    "meaning": "動 訴える・名 訴え・魅力",
+    "page": 2
+  },
+  {
+    "id": 324,
+    "word": "absolutely",
+    "meaning": "副 完全に・その通りだ・ぜひ",
+    "page": 2
+  },
+  {
+    "id": 325,
+    "word": "position",
+    "meaning": "名 位置・地位・動 置く",
+    "page": 2
+  },
+  {
+    "id": 326,
+    "word": "argue",
+    "meaning": "動 議論する・口論する・主張する",
+    "page": 2
+  },
+  {
+    "id": 327,
+    "word": "resemble",
+    "meaning": "動 似ている",
+    "page": 2
+  },
+  {
+    "id": 328,
+    "word": "skeleton",
+    "meaning": "名 骨格・骨組み",
+    "page": 2
+  },
+  {
+    "id": 329,
+    "word": "poll",
+    "meaning": "名 世論調査・投票",
+    "page": 2
+  },
+  {
+    "id": 330,
+    "word": "informal",
+    "meaning": "形 形式ばらない",
+    "page": 2
+  },
+  {
+    "id": 331,
+    "word": "phrase",
+    "meaning": "名 フレーズ・表現",
+    "page": 2
+  },
+  {
+    "id": 332,
+    "word": "divorce",
+    "meaning": "名 離婚",
+    "page": 2
+  },
+  {
+    "id": 333,
+    "word": "physician",
+    "meaning": "名 医師",
+    "page": 2
+  },
+  {
+    "id": 334,
+    "word": "document",
+    "meaning": "名 書類・文書・動 記録する",
+    "page": 2
+  },
+  {
+    "id": 335,
+    "word": "navigate",
+    "meaning": "動 航行する・進路を示す",
+    "page": 2
+  },
+  {
+    "id": 336,
+    "word": "client",
+    "meaning": "名 (弁護士などの)依頼人・相談者",
+    "page": 2
+  },
+  {
+    "id": 337,
+    "word": "beard",
+    "meaning": "名 あごひげ",
+    "page": 2
+  },
+  {
+    "id": 338,
+    "word": "confidence",
+    "meaning": "名 自信・信頼・秘密",
+    "page": 2
+  },
+  {
+    "id": 339,
+    "word": "aware",
+    "meaning": "形 気づいている",
+    "page": 2
+  },
+  {
+    "id": 340,
+    "word": "motive",
+    "meaning": "名 動機・目的",
+    "page": 2
+  },
+  {
+    "id": 341,
+    "word": "inner",
+    "meaning": "形 内側の・心の",
+    "page": 2
+  },
+  {
+    "id": 342,
+    "word": "multiple",
+    "meaning": "形 多数の",
+    "page": 2
+  },
+  {
+    "id": 343,
+    "word": "lean",
+    "meaning": "動 寄りかかる",
+    "page": 2
+  },
+  {
+    "id": 344,
+    "word": "regret",
+    "meaning": "動 後悔する・名 後悔",
+    "page": 2
+  },
+  {
+    "id": 345,
+    "word": "examination",
+    "meaning": "名 試験・検査",
+    "page": 2
+  },
+  {
+    "id": 346,
+    "word": "tax",
+    "meaning": "名 税金・動 課税する",
+    "page": 2
+  },
+  {
+    "id": 347,
+    "word": "concept",
+    "meaning": "名 概念・コンセプト",
+    "page": 2
+  },
+  {
+    "id": 348,
+    "word": "terminal",
+    "meaning": "形 終点の・名 終点",
+    "page": 2
+  },
+  {
+    "id": 349,
+    "word": "container",
+    "meaning": "名 容器",
+    "page": 2
+  },
+  {
+    "id": 350,
+    "word": "failure",
+    "meaning": "名 失敗",
+    "page": 2
+  },
+  {
+    "id": 351,
+    "word": "patience",
+    "meaning": "名 我慢・根気",
+    "page": 2
+  },
+  {
+    "id": 352,
+    "word": "shift",
+    "meaning": "名 変化・(勤務の)交替・勤務時間・動 移動する",
+    "page": 2
+  },
+  {
+    "id": 353,
+    "word": "non-governmental",
+    "meaning": "形 政府が関係しない・民間の",
+    "page": 2
+  },
+  {
+    "id": 354,
+    "word": "domestic",
+    "meaning": "形 家庭の・国内の",
+    "page": 2
+  },
+  {
+    "id": 355,
+    "word": "respond",
+    "meaning": "動 反応する・答える",
+    "page": 2
+  },
+  {
+    "id": 356,
+    "word": "bend",
+    "meaning": "動 曲げる",
+    "page": 2
+  },
+  {
+    "id": 357,
+    "word": "fluently",
+    "meaning": "副 流暢に",
+    "page": 2
+  },
+  {
+    "id": 358,
+    "word": "relative",
+    "meaning": "形 相対的な・関連した・名 親戚",
+    "page": 2
+  },
+  {
+    "id": 359,
+    "word": "rely",
+    "meaning": "動 頼る",
+    "page": 2
+  },
+  {
+    "id": 360,
+    "word": "being",
+    "meaning": "名 存在・生き物・beの-ing",
+    "page": 2
+  },
+  {
+    "id": 361,
+    "word": "vary",
+    "meaning": "動 変化する・異なる",
+    "page": 2
+  },
+  {
+    "id": 362,
+    "word": "vehicle",
+    "meaning": "名 乗り物・伝達手段・媒体",
+    "page": 2
+  },
+  {
+    "id": 363,
+    "word": "Buddhism",
+    "meaning": "名 仏教",
+    "page": 2
+  },
+  {
+    "id": 364,
+    "word": "tight",
+    "meaning": "形 (服が)きつい・(予定が)詰まった",
+    "page": 2
+  },
+  {
+    "id": 365,
+    "word": "chief",
+    "meaning": "形 主要な・第一の",
+    "page": 2
+  },
+  {
+    "id": 366,
+    "word": "coal",
+    "meaning": "名 石炭",
+    "page": 2
+  },
+  {
+    "id": 367,
+    "word": "examine",
+    "meaning": "動 調べる・診察する",
+    "page": 2
+  },
+  {
+    "id": 368,
+    "word": "anger",
+    "meaning": "名 怒り",
+    "page": 2
+  },
+  {
+    "id": 369,
+    "word": "personality",
+    "meaning": "名 個性・性格",
+    "page": 2
+  },
+  {
+    "id": 370,
+    "word": "angle",
+    "meaning": "名 角度",
+    "page": 2
+  },
+  {
+    "id": 371,
+    "word": "mechanic",
+    "meaning": "名 修理工",
+    "page": 2
+  },
+  {
+    "id": 372,
+    "word": "soul",
+    "meaning": "名 魂・精神・人",
+    "page": 2
+  },
+  {
+    "id": 373,
+    "word": "proudly",
+    "meaning": "副 誇らしげに・自慢げに",
+    "page": 2
+  },
+  {
+    "id": 374,
+    "word": "routine",
+    "meaning": "名 決まり切った仕事",
+    "page": 2
+  },
+  {
+    "id": 375,
+    "word": "entire",
+    "meaning": "形 全体の",
+    "page": 2
+  },
+  {
+    "id": 376,
+    "word": "feedback",
+    "meaning": "名 意見・感想",
+    "page": 2
+  },
+  {
+    "id": 377,
+    "word": "tornado",
+    "meaning": "名 竜巻(トルネード)",
+    "page": 2
+  },
+  {
+    "id": 378,
+    "word": "dining",
+    "meaning": "名 食事",
+    "page": 2
+  },
+  {
+    "id": 379,
+    "word": "basis",
+    "meaning": "名 基準・根拠",
+    "page": 2
+  },
+  {
+    "id": 380,
+    "word": "therapy",
+    "meaning": "名 治療",
+    "page": 2
+  },
+  {
+    "id": 381,
+    "word": "detail",
+    "meaning": "名 詳細・動 詳しく述べる",
+    "page": 2
+  },
+  {
+    "id": 382,
+    "word": "confident",
+    "meaning": "形 自信がある",
+    "page": 2
+  },
+  {
+    "id": 383,
+    "word": "sweat",
+    "meaning": "名 汗・動 汗をかく",
+    "page": 2
+  },
+  {
+    "id": 384,
+    "word": "refuse",
+    "meaning": "動 拒む",
+    "page": 2
+  },
+  {
+    "id": 385,
+    "word": "frankly",
+    "meaning": "副 率直に",
+    "page": 2
+  },
+  {
+    "id": 386,
+    "word": "impact",
+    "meaning": "名 影響",
+    "page": 2
+  },
+  {
+    "id": 387,
+    "word": "tip",
+    "meaning": "名 チップ・助言・先端",
+    "page": 2
+  },
+  {
+    "id": 388,
+    "word": "conscious",
+    "meaning": "形 意識している・気づいている",
+    "page": 2
+  },
+  {
+    "id": 389,
+    "word": "warmth",
+    "meaning": "名 暖かさ",
+    "page": 2
+  },
+  {
+    "id": 390,
+    "word": "occasion",
+    "meaning": "名 時・場合・機会",
+    "page": 2
+  },
+  {
+    "id": 391,
+    "word": "duty",
+    "meaning": "名 義務・職務・関税",
+    "page": 2
+  },
+  {
+    "id": 392,
+    "word": "elect",
+    "meaning": "動 選ぶ",
+    "page": 2
+  },
+  {
+    "id": 393,
+    "word": "extreme",
+    "meaning": "形 極端な",
+    "page": 2
+  },
+  {
+    "id": 394,
+    "word": "decade",
+    "meaning": "名 10年",
+    "page": 2
+  },
+  {
+    "id": 395,
+    "word": "otherwise",
+    "meaning": "副 さもなければ・その他の点では・違った風に",
+    "page": 2
+  },
+  {
+    "id": 396,
+    "word": "depart",
+    "meaning": "動 出発する",
+    "page": 2
+  },
+  {
+    "id": 397,
+    "word": "ray",
+    "meaning": "名 光線",
+    "page": 2
+  },
+  {
+    "id": 398,
+    "word": "rhythm",
+    "meaning": "名 リズム",
+    "page": 2
+  },
+  {
+    "id": 399,
+    "word": "threaten",
+    "meaning": "動 脅かす",
+    "page": 2
+  },
+  {
+    "id": 400,
+    "word": "signal",
+    "meaning": "名 合図・動 合図をする",
+    "page": 2
+  },
+  {
+    "id": 401,
+    "word": "converse",
+    "meaning": "動 会話する",
+    "page": 3
+  },
+  {
+    "id": 402,
+    "word": "legend",
+    "meaning": "名 伝説",
+    "page": 3
+  },
+  {
+    "id": 403,
+    "word": "full-time",
+    "meaning": "形 正規雇用・常勤の・副 正規雇用・常勤で",
+    "page": 3
+  },
+  {
+    "id": 404,
+    "word": "part-time",
+    "meaning": "形 アルバイトの・非常勤の・副 アルバイトで",
+    "page": 3
+  },
+  {
+    "id": 405,
+    "word": "differ",
+    "meaning": "動 異なる",
+    "page": 3
+  },
+  {
+    "id": 406,
+    "word": "mansion",
+    "meaning": "名 大豪邸",
+    "page": 3
+  },
+  {
+    "id": 407,
+    "word": "weight",
+    "meaning": "名 重さ・体重",
+    "page": 3
+  },
+  {
+    "id": 408,
+    "word": "occupy",
+    "meaning": "動 占める・占領する",
+    "page": 3
+  },
+  {
+    "id": 409,
+    "word": "protest",
+    "meaning": "名 抗議・動 抗議する",
+    "page": 3
+  },
+  {
+    "id": 410,
+    "word": "demand",
+    "meaning": "名 要求・需要・動 要求する",
+    "page": 3
+  },
+  {
+    "id": 411,
+    "word": "mood",
+    "meaning": "名 気分",
+    "page": 3
+  },
+  {
+    "id": 412,
+    "word": "birthrate",
+    "meaning": "名 出生率",
+    "page": 3
+  },
+  {
+    "id": 413,
+    "word": "complicated",
+    "meaning": "形 複雑な",
+    "page": 3
+  },
+  {
+    "id": 414,
+    "word": "emotion",
+    "meaning": "名 感情",
+    "page": 3
+  },
+  {
+    "id": 415,
+    "word": "gratitude",
+    "meaning": "名 感謝",
+    "page": 3
+  },
+  {
+    "id": 416,
+    "word": "department",
+    "meaning": "名 部門",
+    "page": 3
+  },
+  {
+    "id": 417,
+    "word": "impose",
+    "meaning": "動 課す",
+    "page": 3
+  },
+  {
+    "id": 418,
+    "word": "artificial",
+    "meaning": "形 人工の",
+    "page": 3
+  },
+  {
+    "id": 419,
+    "word": "royal",
+    "meaning": "形 王室の",
+    "page": 3
+  },
+  {
+    "id": 420,
+    "word": "rapid",
+    "meaning": "形 急速な",
+    "page": 3
+  },
+  {
+    "id": 421,
+    "word": "peel",
+    "meaning": "動 皮をむく",
+    "page": 3
+  },
+  {
+    "id": 422,
+    "word": "flaw",
+    "meaning": "名 傷・欠点",
+    "page": 3
+  },
+  {
+    "id": 423,
+    "word": "furthest",
+    "meaning": "副 最も・形 最も遠い",
+    "page": 3
+  },
+  {
+    "id": 424,
+    "word": "comfort",
+    "meaning": "名 快適さ",
+    "page": 3
+  },
+  {
+    "id": 425,
+    "word": "beneficial",
+    "meaning": "形 利益になる",
+    "page": 3
+  },
+  {
+    "id": 426,
+    "word": "parking",
+    "meaning": "名 駐車",
+    "page": 3
+  },
+  {
+    "id": 427,
+    "word": "means",
+    "meaning": "名 手段",
+    "page": 3
+  },
+  {
+    "id": 428,
+    "word": "innovative",
+    "meaning": "形 革新的な",
+    "page": 3
+  },
+  {
+    "id": 429,
+    "word": "drown",
+    "meaning": "動 溺死する・溺死させる",
+    "page": 3
+  },
+  {
+    "id": 430,
+    "word": "regular",
+    "meaning": "形 定期的な・通常の",
+    "page": 3
+  },
+  {
+    "id": 431,
+    "word": "consequently",
+    "meaning": "副 結果として",
+    "page": 3
+  },
+  {
+    "id": 432,
+    "word": "split",
+    "meaning": "動 分割する・割れる",
+    "page": 3
+  },
+  {
+    "id": 433,
+    "word": "income",
+    "meaning": "名 収入",
+    "page": 3
+  },
+  {
+    "id": 434,
+    "word": "calm",
+    "meaning": "形 冷静な・穏やかな・名 平穏",
+    "page": 3
+  },
+  {
+    "id": 435,
+    "word": "seriously",
+    "meaning": "副 本気で",
+    "page": 3
+  },
+  {
+    "id": 436,
+    "word": "spacecraft",
+    "meaning": "名 宇宙船",
+    "page": 3
+  },
+  {
+    "id": 437,
+    "word": "general",
+    "meaning": "形 全体的な・一般的な",
+    "page": 3
+  },
+  {
+    "id": 438,
+    "word": "generally",
+    "meaning": "副 一般的に・たいてい",
+    "page": 3
+  },
+  {
+    "id": 439,
+    "word": "obvious",
+    "meaning": "形 明らかな",
+    "page": 3
+  },
+  {
+    "id": 440,
+    "word": "anniversary",
+    "meaning": "名 (○周年の)記念日(命日などにも使う)",
+    "page": 3
+  },
+  {
+    "id": 441,
+    "word": "copy",
+    "meaning": "名 部・冊・動 コピーをとる",
+    "page": 3
+  },
+  {
+    "id": 442,
+    "word": "enemy",
+    "meaning": "名 敵",
+    "page": 3
+  },
+  {
+    "id": 443,
+    "word": "divide",
+    "meaning": "動 分割する",
+    "page": 3
+  },
+  {
+    "id": 444,
+    "word": "universe",
+    "meaning": "名 宇宙",
+    "page": 3
+  },
+  {
+    "id": 445,
+    "word": "former",
+    "meaning": "形 以前の・前者の",
+    "page": 3
+  },
+  {
+    "id": 446,
+    "word": "spill",
+    "meaning": "動 こぼす",
+    "page": 3
+  },
+  {
+    "id": 447,
+    "word": "mainly",
+    "meaning": "副 主に・たいていの場合は",
+    "page": 3
+  },
+  {
+    "id": 448,
+    "word": "yearly",
+    "meaning": "形 毎年の",
+    "page": 3
+  },
+  {
+    "id": 449,
+    "word": "transportation",
+    "meaning": "名 輸送・乗り物",
+    "page": 3
+  },
+  {
+    "id": 450,
+    "word": "vast",
+    "meaning": "形 広大な・莫大な",
+    "page": 3
+  },
+  {
+    "id": 451,
+    "word": "expand",
+    "meaning": "動 拡大する・広がる",
+    "page": 3
+  },
+  {
+    "id": 452,
+    "word": "consequence",
+    "meaning": "名 結果・重要",
+    "page": 3
+  },
+  {
+    "id": 453,
+    "word": "chemistry",
+    "meaning": "名 化学(反応)",
+    "page": 3
+  },
+  {
+    "id": 454,
+    "word": "academic",
+    "meaning": "形 学問の・大学の",
+    "page": 3
+  },
+  {
+    "id": 455,
+    "word": "narrowly",
+    "meaning": "副 狭く・かろうじて",
+    "page": 3
+  },
+  {
+    "id": 456,
+    "word": "transmit",
+    "meaning": "動 送る・伝える",
+    "page": 3
+  },
+  {
+    "id": 457,
+    "word": "current",
+    "meaning": "形 現在の・名 流れ",
+    "page": 3
+  },
+  {
+    "id": 458,
+    "word": "investigate",
+    "meaning": "動 調査する",
+    "page": 3
+  },
+  {
+    "id": 459,
+    "word": "export",
+    "meaning": "名 輸出(品)・動 輸出する",
+    "page": 3
+  },
+  {
+    "id": 460,
+    "word": "warranty",
+    "meaning": "名 保証書",
+    "page": 3
+  },
+  {
+    "id": 461,
+    "word": "obstruct",
+    "meaning": "動 妨害する",
+    "page": 3
+  },
+  {
+    "id": 462,
+    "word": "fatigue",
+    "meaning": "名 疲労・動 とても疲れさせる",
+    "page": 3
+  },
+  {
+    "id": 463,
+    "word": "download",
+    "meaning": "動 ダウンロードする",
+    "page": 3
+  },
+  {
+    "id": 464,
+    "word": "ideal",
+    "meaning": "形 理想的な・名 理想",
+    "page": 3
+  },
+  {
+    "id": 465,
+    "word": "praise",
+    "meaning": "動 褒める・名 称賛",
+    "page": 3
+  },
+  {
+    "id": 466,
+    "word": "dedicate",
+    "meaning": "動 捧げる",
+    "page": 3
+  },
+  {
+    "id": 467,
+    "word": "anxious",
+    "meaning": "形 心配な・切望する",
+    "page": 3
+  },
+  {
+    "id": 468,
+    "word": "elementary",
+    "meaning": "形 初歩の",
+    "page": 3
+  },
+  {
+    "id": 469,
+    "word": "headquarters",
+    "meaning": "名 本社・本部",
+    "page": 3
+  },
+  {
+    "id": 470,
+    "word": "service",
+    "meaning": "名 乗り物の便・公共事業・勤務・奉仕",
+    "page": 3
+  },
+  {
+    "id": 471,
+    "word": "astronomer",
+    "meaning": "名 天文学者",
+    "page": 3
+  },
+  {
+    "id": 472,
+    "word": "childhood",
+    "meaning": "名 子どもの頃",
+    "page": 3
+  },
+  {
+    "id": 473,
+    "word": "due",
+    "meaning": "形 締め切りが来た・支払われるべき・到着予定の・誕生予定の",
+    "page": 3
+  },
+  {
+    "id": 474,
+    "word": "particular",
+    "meaning": "形 特定の・好みにうるさい",
+    "page": 3
+  },
+  {
+    "id": 475,
+    "word": "invest",
+    "meaning": "動 投資する",
+    "page": 3
+  },
+  {
+    "id": 476,
+    "word": "chemical",
+    "meaning": "名 化学物質・形 化学の",
+    "page": 3
+  },
+  {
+    "id": 477,
+    "word": "access",
+    "meaning": "名 接近・利用・入手",
+    "page": 3
+  },
+  {
+    "id": 478,
+    "word": "productive",
+    "meaning": "形 生産性がある",
+    "page": 3
+  },
+  {
+    "id": 479,
+    "word": "trace",
+    "meaning": "名 跡",
+    "page": 3
+  },
+  {
+    "id": 480,
+    "word": "bother",
+    "meaning": "動 悩ます・迷惑をかける・名 面倒・悩みの種",
+    "page": 3
+  },
+  {
+    "id": 481,
+    "word": "fear",
+    "meaning": "名 恐怖・動 怖がる",
+    "page": 3
+  },
+  {
+    "id": 482,
+    "word": "curious",
+    "meaning": "形 好奇心が強い・詮索好きな",
+    "page": 3
+  },
+  {
+    "id": 483,
+    "word": "persuade",
+    "meaning": "動 説得する",
+    "page": 3
+  },
+  {
+    "id": 484,
+    "word": "bow",
+    "meaning": "動 おじぎする・名 おじぎ",
+    "page": 3
+  },
+  {
+    "id": 485,
+    "word": "heavily",
+    "meaning": "副 重く・激しく",
+    "page": 3
+  },
+  {
+    "id": 486,
+    "word": "acceptance",
+    "meaning": "名 受け入れ",
+    "page": 3
+  },
+  {
+    "id": 487,
+    "word": "aim",
+    "meaning": "名 狙い・目的・動 狙う",
+    "page": 3
+  },
+  {
+    "id": 488,
+    "word": "recall",
+    "meaning": "動 思い出す",
+    "page": 3
+  },
+  {
+    "id": 489,
+    "word": "housing",
+    "meaning": "名 住宅",
+    "page": 3
+  },
+  {
+    "id": 490,
+    "word": "eager",
+    "meaning": "形 熱望して・熱心な",
+    "page": 3
+  },
+  {
+    "id": 491,
+    "word": "visual",
+    "meaning": "形 視覚の・目に見える",
+    "page": 3
+  },
+  {
+    "id": 492,
+    "word": "inevitable",
+    "meaning": "形 避けられない",
+    "page": 3
+  },
+  {
+    "id": 493,
+    "word": "label",
+    "meaning": "名 ラベル・動 ラベルを貼る・分類する",
+    "page": 3
+  },
+  {
+    "id": 494,
+    "word": "admit",
+    "meaning": "動 認める",
+    "page": 3
+  },
+  {
+    "id": 495,
+    "word": "admission",
+    "meaning": "名 入ること(入場・入学)・入場料",
+    "page": 3
+  },
+  {
+    "id": 496,
+    "word": "remarkable",
+    "meaning": "形 注目すべき",
+    "page": 3
+  },
+  {
+    "id": 497,
+    "word": "deliver",
+    "meaning": "動 配達する・伝える・演説をする・子を産む",
+    "page": 3
+  },
+  {
+    "id": 498,
+    "word": "increasingly",
+    "meaning": "副 ますます",
+    "page": 3
+  },
+  {
+    "id": 499,
+    "word": "psychologist",
+    "meaning": "名 心理学者",
+    "page": 3
+  },
+  {
+    "id": 500,
+    "word": "congratulate",
+    "meaning": "動 お祝いを伝える",
+    "page": 3
+  },
+  {
+    "id": 501,
+    "word": "conserve",
+    "meaning": "動 保存する・保護する",
+    "page": 3
+  },
+  {
+    "id": 502,
+    "word": "rid",
+    "meaning": "動 取り除く",
+    "page": 3
+  },
+  {
+    "id": 503,
+    "word": "affect",
+    "meaning": "動 影響を与える",
+    "page": 3
+  },
+  {
+    "id": 504,
+    "word": "mass",
+    "meaning": "名 かたまり・多数",
+    "page": 3
+  },
+  {
+    "id": 505,
+    "word": "prevent",
+    "meaning": "動 阻止する",
+    "page": 3
+  },
+  {
+    "id": 506,
+    "word": "development",
+    "meaning": "名 発展・開発",
+    "page": 3
+  },
+  {
+    "id": 507,
+    "word": "predict",
+    "meaning": "動 予測する",
+    "page": 3
+  },
+  {
+    "id": 508,
+    "word": "vote",
+    "meaning": "動 投票する・名 投票",
+    "page": 3
+  },
+  {
+    "id": 509,
+    "word": "astronomy",
+    "meaning": "名 天文学",
+    "page": 3
+  },
+  {
+    "id": 510,
+    "word": "prefer",
+    "meaning": "動 好む",
+    "page": 3
+  },
+  {
+    "id": 511,
+    "word": "formerly",
+    "meaning": "副 以前は",
+    "page": 3
+  },
+  {
+    "id": 512,
+    "word": "prime",
+    "meaning": "形 最も重要な・第一の・主要な",
+    "page": 3
+  },
+  {
+    "id": 513,
+    "word": "throughout",
+    "meaning": "前 〜の間ずっと・〜のいたるところに",
+    "page": 3
+  },
+  {
+    "id": 514,
+    "word": "atmosphere",
+    "meaning": "名 雰囲気・大気",
+    "page": 3
+  },
+  {
+    "id": 515,
+    "word": "engineering",
+    "meaning": "名 工学",
+    "page": 3
+  },
+  {
+    "id": 516,
+    "word": "yell",
+    "meaning": "動 叫ぶ・名 大声の叫び",
+    "page": 3
+  },
+  {
+    "id": 517,
+    "word": "rival",
+    "meaning": "名 ライバル・競争相手・動 ライバル視する・匹敵する",
+    "page": 3
+  },
+  {
+    "id": 518,
+    "word": "headline",
+    "meaning": "名 見出し",
+    "page": 3
+  },
+  {
+    "id": 519,
+    "word": "criticize",
+    "meaning": "動 批判する",
+    "page": 3
+  },
+  {
+    "id": 520,
+    "word": "exhaust",
+    "meaning": "動 疲れさせる",
+    "page": 3
+  },
+  {
+    "id": 521,
+    "word": "wealthy",
+    "meaning": "形 裕福な",
+    "page": 3
+  },
+  {
+    "id": 522,
+    "word": "precise",
+    "meaning": "形 正確な",
+    "page": 3
+  },
+  {
+    "id": 523,
+    "word": "refresh",
+    "meaning": "動 元気にする・再読み込みする",
+    "page": 3
+  },
+  {
+    "id": 524,
+    "word": "infant",
+    "meaning": "名 乳児・幼児",
+    "page": 3
+  },
+  {
+    "id": 525,
+    "word": "organize",
+    "meaning": "動 組織する・整理する",
+    "page": 3
+  },
+  {
+    "id": 526,
+    "word": "developing",
+    "meaning": "形 発展途上の",
+    "page": 3
+  },
+  {
+    "id": 527,
+    "word": "drunk",
+    "meaning": "形 酔った",
+    "page": 3
+  },
+  {
+    "id": 528,
+    "word": "request",
+    "meaning": "動 頼む・名 要望・依頼",
+    "page": 3
+  },
+  {
+    "id": 529,
+    "word": "bull",
+    "meaning": "名 牛・去勢していない雄牛",
+    "page": 3
+  },
+  {
+    "id": 530,
+    "word": "cattle",
+    "meaning": "名 牛",
+    "page": 3
+  },
+  {
+    "id": 531,
+    "word": "worth",
+    "meaning": "前 〜の価値がある",
+    "page": 3
+  },
+  {
+    "id": 532,
+    "word": "transfer",
+    "meaning": "動 移る",
+    "page": 3
+  },
+  {
+    "id": 533,
+    "word": "crowd",
+    "meaning": "名 人混み・動 場所に群がる",
+    "page": 3
+  },
+  {
+    "id": 534,
+    "word": "capital",
+    "meaning": "名 大文字・首都・資本金・形 重要な・資本の",
+    "page": 3
+  },
+  {
+    "id": 535,
+    "word": "forbid",
+    "meaning": "動 禁じる",
+    "page": 3
+  },
+  {
+    "id": 536,
+    "word": "adopt",
+    "meaning": "動 採用する",
+    "page": 3
+  },
+  {
+    "id": 537,
+    "word": "tourism",
+    "meaning": "名 観光旅行・観光事業",
+    "page": 3
+  },
+  {
+    "id": 538,
+    "word": "admire",
+    "meaning": "動 褒める・感心する",
+    "page": 3
+  },
+  {
+    "id": 539,
+    "word": "occasionally",
+    "meaning": "副 時々",
+    "page": 3
+  },
+  {
+    "id": 540,
+    "word": "foundation",
+    "meaning": "名 土台・設立",
+    "page": 3
+  },
+  {
+    "id": 541,
+    "word": "contain",
+    "meaning": "動 含む",
+    "page": 3
+  },
+  {
+    "id": 542,
+    "word": "capacity",
+    "meaning": "名 能力・収容力",
+    "page": 3
+  },
+  {
+    "id": 543,
+    "word": "growth",
+    "meaning": "名 成長・発育・栽培",
+    "page": 3
+  },
+  {
+    "id": 544,
+    "word": "certain",
+    "meaning": "形 確信して・ある〜",
+    "page": 3
+  },
+  {
+    "id": 545,
+    "word": "advise",
+    "meaning": "動 助言する",
+    "page": 3
+  },
+  {
+    "id": 546,
+    "word": "consideration",
+    "meaning": "名 考慮・思いやり",
+    "page": 3
+  },
+  {
+    "id": 547,
+    "word": "salary",
+    "meaning": "名 給料",
+    "page": 3
+  },
+  {
+    "id": 548,
+    "word": "silk",
+    "meaning": "名 絹",
+    "page": 3
+  },
+  {
+    "id": 549,
+    "word": "barometer",
+    "meaning": "名 気圧計・バロメーター(指標)",
+    "page": 3
+  },
+  {
+    "id": 550,
+    "word": "package",
+    "meaning": "名 小包・動 包装する",
+    "page": 3
+  },
+  {
+    "id": 551,
+    "word": "register",
+    "meaning": "動 登録する",
+    "page": 3
+  },
+  {
+    "id": 552,
+    "word": "scope",
+    "meaning": "名 範囲",
+    "page": 3
+  },
+  {
+    "id": 553,
+    "word": "personal information",
+    "meaning": "名 個人情報",
+    "page": 3
+  },
+  {
+    "id": 554,
+    "word": "odd",
+    "meaning": "形 奇妙な・奇数の",
+    "page": 3
+  },
+  {
+    "id": 555,
+    "word": "process",
+    "meaning": "名 過程・作業・方法・手順・動 加工する",
+    "page": 3
+  },
+  {
+    "id": 556,
+    "word": "analyze",
+    "meaning": "動 分析する",
+    "page": 3
+  },
+  {
+    "id": 557,
+    "word": "motivate",
+    "meaning": "動 やる気にさせる・動機を与える",
+    "page": 3
+  },
+  {
+    "id": 558,
+    "word": "thus",
+    "meaning": "副 このように・したがって",
+    "page": 3
+  },
+  {
+    "id": 559,
+    "word": "finite",
+    "meaning": "形 有限の",
+    "page": 3
+  },
+  {
+    "id": 560,
+    "word": "rough",
+    "meaning": "形 粗い",
+    "page": 3
+  },
+  {
+    "id": 561,
+    "word": "bury",
+    "meaning": "動 埋める・埋葬する",
+    "page": 3
+  },
+  {
+    "id": 562,
+    "word": "instinct",
+    "meaning": "名 本能",
+    "page": 3
+  },
+  {
+    "id": 563,
+    "word": "random",
+    "meaning": "形 無作為の・手あたり次第の",
+    "page": 3
+  },
+  {
+    "id": 564,
+    "word": "logical",
+    "meaning": "形 論理的な・筋が通った",
+    "page": 3
+  },
+  {
+    "id": 565,
+    "word": "relief",
+    "meaning": "名 除去・安心",
+    "page": 3
+  },
+  {
+    "id": 566,
+    "word": "hood",
+    "meaning": "名 フード(頭巾)",
+    "page": 3
+  },
+  {
+    "id": 567,
+    "word": "membership",
+    "meaning": "名 会員(であること)",
+    "page": 3
+  },
+  {
+    "id": 568,
+    "word": "tropical",
+    "meaning": "形 熱帯の",
+    "page": 3
+  },
+  {
+    "id": 569,
+    "word": "moist",
+    "meaning": "形 湿った",
+    "page": 3
+  },
+  {
+    "id": 570,
+    "word": "harmful",
+    "meaning": "形 有害な",
+    "page": 3
+  },
+  {
+    "id": 571,
+    "word": "nation",
+    "meaning": "名 国家・国民",
+    "page": 3
+  },
+  {
+    "id": 572,
+    "word": "fix",
+    "meaning": "動 修理する・固定する",
+    "page": 3
+  },
+  {
+    "id": 573,
+    "word": "gene",
+    "meaning": "名 遺伝子",
+    "page": 3
+  },
+  {
+    "id": 574,
+    "word": "common",
+    "meaning": "形 共通の・よくある",
+    "page": 3
+  },
+  {
+    "id": 575,
+    "word": "spare",
+    "meaning": "動 割く・省く・形 余分の・空いている",
+    "page": 3
+  },
+  {
+    "id": 576,
+    "word": "pronounce",
+    "meaning": "動 発音する",
+    "page": 3
+  },
+  {
+    "id": 577,
+    "word": "revolution",
+    "meaning": "名 回転・革命",
+    "page": 3
+  },
+  {
+    "id": 578,
+    "word": "appropriate",
+    "meaning": "形 適切な",
+    "page": 3
+  },
+  {
+    "id": 579,
+    "word": "priority",
+    "meaning": "名 優先(事項)",
+    "page": 3
+  },
+  {
+    "id": 580,
+    "word": "rather",
+    "meaning": "副 むしろ",
+    "page": 3
+  },
+  {
+    "id": 581,
+    "word": "demonstration",
+    "meaning": "名 実演・デモ",
+    "page": 3
+  },
+  {
+    "id": 582,
+    "word": "convey",
+    "meaning": "動 運ぶ・伝える",
+    "page": 3
+  },
+  {
+    "id": 583,
+    "word": "edge",
+    "meaning": "名 (刃物の)刃・ふち・強み",
+    "page": 3
+  },
+  {
+    "id": 584,
+    "word": "define",
+    "meaning": "動 明確にする・定義する",
+    "page": 3
+  },
+  {
+    "id": 585,
+    "word": "fault",
+    "meaning": "名 責任・欠点",
+    "page": 3
+  },
+  {
+    "id": 586,
+    "word": "payment",
+    "meaning": "名 支払い・返済",
+    "page": 3
+  },
+  {
+    "id": 587,
+    "word": "voyage",
+    "meaning": "名 航海・旅",
+    "page": 3
+  },
+  {
+    "id": 588,
+    "word": "range",
+    "meaning": "名 範囲",
+    "page": 3
+  },
+  {
+    "id": 589,
+    "word": "regional",
+    "meaning": "形 その地域の・局地的な",
+    "page": 3
+  },
+  {
+    "id": 590,
+    "word": "capture",
+    "meaning": "動 捕まえる",
+    "page": 3
+  },
+  {
+    "id": 591,
+    "word": "destiny",
+    "meaning": "名 運命",
+    "page": 3
+  },
+  {
+    "id": 592,
+    "word": "estimate",
+    "meaning": "動 評価する・推定する・名 見積り",
+    "page": 3
+  },
+  {
+    "id": 593,
+    "word": "observe",
+    "meaning": "動 守る・観察する・気づく・述べる",
+    "page": 3
+  },
+  {
+    "id": 594,
+    "word": "selfish",
+    "meaning": "形 わがままな",
+    "page": 3
+  },
+  {
+    "id": 595,
+    "word": "criminal",
+    "meaning": "名 犯人・形 犯罪の",
+    "page": 3
+  },
+  {
+    "id": 596,
+    "word": "minimum",
+    "meaning": "名 最小限",
+    "page": 3
+  },
+  {
+    "id": 597,
+    "word": "surface",
+    "meaning": "名 表面・外見",
+    "page": 3
+  },
+  {
+    "id": 598,
+    "word": "indicate",
+    "meaning": "動 示す",
+    "page": 3
+  },
+  {
+    "id": 599,
+    "word": "liquid",
+    "meaning": "名 液体",
+    "page": 3
+  },
+  {
+    "id": 600,
+    "word": "slip",
+    "meaning": "動 すべる・(記憶から)消える・名 すべること",
+    "page": 3
+  },
+  {
+    "id": 601,
+    "word": "found",
+    "meaning": "動 設立する",
+    "page": 4
+  },
+  {
+    "id": 602,
+    "word": "semester",
+    "meaning": "名 学期",
+    "page": 4
+  },
+  {
+    "id": 603,
+    "word": "emotional",
+    "meaning": "形 感情の・感情的な",
+    "page": 4
+  },
+  {
+    "id": 604,
+    "word": "wit",
+    "meaning": "名 頭の回転(の速さ)",
+    "page": 4
+  },
+  {
+    "id": 605,
+    "word": "attitude",
+    "meaning": "名 態度",
+    "page": 4
+  },
+  {
+    "id": 606,
+    "word": "cough",
+    "meaning": "名 咳・動 咳をする",
+    "page": 4
+  },
+  {
+    "id": 607,
+    "word": "second",
+    "meaning": "名 秒",
+    "page": 4
+  },
+  {
+    "id": 608,
+    "word": "strategy",
+    "meaning": "名 戦略",
+    "page": 4
+  },
+  {
+    "id": 609,
+    "word": "possess",
+    "meaning": "動 所有している",
+    "page": 4
+  },
+  {
+    "id": 610,
+    "word": "brow",
+    "meaning": "名 まゆ",
+    "page": 4
+  },
+  {
+    "id": 611,
+    "word": "frontier",
+    "meaning": "名 国境・辺境地・最先端",
+    "page": 4
+  },
+  {
+    "id": 612,
+    "word": "communication",
+    "meaning": "名 コミュニケーション(意思疎通)・伝達",
+    "page": 4
+  },
+  {
+    "id": 613,
+    "word": "linguist",
+    "meaning": "名 言語学者",
+    "page": 4
+  },
+  {
+    "id": 614,
+    "word": "following",
+    "meaning": "形 次の・以下の",
+    "page": 4
+  },
+  {
+    "id": 615,
+    "word": "consumer",
+    "meaning": "名 消費者",
+    "page": 4
+  },
+  {
+    "id": 616,
+    "word": "combat",
+    "meaning": "名 戦闘・対立・動 撲滅しようとする・交戦する",
+    "page": 4
+  },
+  {
+    "id": 617,
+    "word": "election",
+    "meaning": "名 選挙",
+    "page": 4
+  },
+  {
+    "id": 618,
+    "word": "master",
+    "meaning": "名 支配者・主人・習得者・動 習得する",
+    "page": 4
+  },
+  {
+    "id": 619,
+    "word": "timely",
+    "meaning": "形 タイミングの良い",
+    "page": 4
+  },
+  {
+    "id": 620,
+    "word": "extension",
+    "meaning": "名 延長",
+    "page": 4
+  },
+  {
+    "id": 621,
+    "word": "stuff",
+    "meaning": "名 (漠然と)物・素材",
+    "page": 4
+  },
+  {
+    "id": 622,
+    "word": "stock",
+    "meaning": "名 株・在庫",
+    "page": 4
+  },
+  {
+    "id": 623,
+    "word": "bill",
+    "meaning": "名 請求書・法案・紙幣",
+    "page": 4
+  },
+  {
+    "id": 624,
+    "word": "productivity",
+    "meaning": "名 生産性",
+    "page": 4
+  },
+  {
+    "id": 625,
+    "word": "isolation",
+    "meaning": "名 孤立",
+    "page": 4
+  },
+  {
+    "id": 626,
+    "word": "deserve",
+    "meaning": "動 値する",
+    "page": 4
+  },
+  {
+    "id": 627,
+    "word": "era",
+    "meaning": "名 時代",
+    "page": 4
+  },
+  {
+    "id": 628,
+    "word": "broadcast",
+    "meaning": "動 放送する・名 放送・番組",
+    "page": 4
+  },
+  {
+    "id": 629,
+    "word": "inform",
+    "meaning": "動 知らせる",
+    "page": 4
+  },
+  {
+    "id": 630,
+    "word": "nevertheless",
+    "meaning": "副 それにもかかわらず",
+    "page": 4
+  },
+  {
+    "id": 631,
+    "word": "clue",
+    "meaning": "名 手がかり",
+    "page": 4
+  },
+  {
+    "id": 632,
+    "word": "secondhand",
+    "meaning": "形 中古の・間接的な・副 中古で・間接的に",
+    "page": 4
+  },
+  {
+    "id": 633,
+    "word": "term",
+    "meaning": "名 期間・用語・条件・間柄",
+    "page": 4
+  },
+  {
+    "id": 634,
+    "word": "maximize",
+    "meaning": "動 最大にする",
+    "page": 4
+  },
+  {
+    "id": 635,
+    "word": "innocent",
+    "meaning": "形 無罪の・無知の",
+    "page": 4
+  },
+  {
+    "id": 636,
+    "word": "territory",
+    "meaning": "名 領域",
+    "page": 4
+  },
+  {
+    "id": 637,
+    "word": "account",
+    "meaning": "名 説明・勘定・口座・(SNSなどの)アカウント・動 説明する・占める",
+    "page": 4
+  },
+  {
+    "id": 638,
+    "word": "previously",
+    "meaning": "副 以前は",
+    "page": 4
+  },
+  {
+    "id": 639,
+    "word": "complex",
+    "meaning": "形 複合の・複雑な",
+    "page": 4
+  },
+  {
+    "id": 640,
+    "word": "consult",
+    "meaning": "動 相談する・診てもらう・(辞書を)調べる",
+    "page": 4
+  },
+  {
+    "id": 641,
+    "word": "belief",
+    "meaning": "名 信じること",
+    "page": 4
+  },
+  {
+    "id": 642,
+    "word": "essential",
+    "meaning": "形 本質的な・重要な",
+    "page": 4
+  },
+  {
+    "id": 643,
+    "word": "apart",
+    "meaning": "副 離れて",
+    "page": 4
+  },
+  {
+    "id": 644,
+    "word": "competition",
+    "meaning": "名 競争・競技会",
+    "page": 4
+  },
+  {
+    "id": 645,
+    "word": "height",
+    "meaning": "名 高さ",
+    "page": 4
+  },
+  {
+    "id": 646,
+    "word": "caution",
+    "meaning": "名 用心・警告・動 警告する",
+    "page": 4
+  },
+  {
+    "id": 647,
+    "word": "medication",
+    "meaning": "名 薬",
+    "page": 4
+  },
+  {
+    "id": 648,
+    "word": "object",
+    "meaning": "動 反対する・名 物・対象・目的・目的語",
+    "page": 4
+  },
+  {
+    "id": 649,
+    "word": "urge",
+    "meaning": "動 説得する・強く迫る",
+    "page": 4
+  },
+  {
+    "id": 650,
+    "word": "urgent",
+    "meaning": "形 緊急の",
+    "page": 4
+  },
+  {
+    "id": 651,
+    "word": "creativity",
+    "meaning": "名 創造性",
+    "page": 4
+  },
+  {
+    "id": 652,
+    "word": "totally",
+    "meaning": "副 完全に・とても",
+    "page": 4
+  },
+  {
+    "id": 653,
+    "word": "pillow",
+    "meaning": "名 枕",
+    "page": 4
+  },
+  {
+    "id": 654,
+    "word": "ugly",
+    "meaning": "形 醜い",
+    "page": 4
+  },
+  {
+    "id": 655,
+    "word": "luggage",
+    "meaning": "名 荷物(一式)",
+    "page": 4
+  },
+  {
+    "id": 656,
+    "word": "digest",
+    "meaning": "動 消化する・理解する・名 要約",
+    "page": 4
+  },
+  {
+    "id": 657,
+    "word": "tricky",
+    "meaning": "形 ずるい・ややこしい・巧妙な",
+    "page": 4
+  },
+  {
+    "id": 658,
+    "word": "exclude",
+    "meaning": "動 締め出す・除外する",
+    "page": 4
+  },
+  {
+    "id": 659,
+    "word": "ambitious",
+    "meaning": "形 野心がある",
+    "page": 4
+  },
+  {
+    "id": 660,
+    "word": "fantasy",
+    "meaning": "名 空想",
+    "page": 4
+  },
+  {
+    "id": 661,
+    "word": "elder",
+    "meaning": "形 (兄弟姉妹間で)年上の",
+    "page": 4
+  },
+  {
+    "id": 662,
+    "word": "recognize",
+    "meaning": "動 識別できる",
+    "page": 4
+  },
+  {
+    "id": 663,
+    "word": "horizon",
+    "meaning": "名 水平線・地平線",
+    "page": 4
+  },
+  {
+    "id": 664,
+    "word": "prove",
+    "meaning": "動 証明する・判明する",
+    "page": 4
+  },
+  {
+    "id": 665,
+    "word": "mist",
+    "meaning": "名 霧",
+    "page": 4
+  },
+  {
+    "id": 666,
+    "word": "form",
+    "meaning": "名 形・用紙・動 形作る",
+    "page": 4
+  },
+  {
+    "id": 667,
+    "word": "blood",
+    "meaning": "名 血液",
+    "page": 4
+  },
+  {
+    "id": 668,
+    "word": "reputation",
+    "meaning": "名 評判",
+    "page": 4
+  },
+  {
+    "id": 669,
+    "word": "edition",
+    "meaning": "名 (刊行物の)版",
+    "page": 4
+  },
+  {
+    "id": 670,
+    "word": "silly",
+    "meaning": "形 愚かな",
+    "page": 4
+  },
+  {
+    "id": 671,
+    "word": "production",
+    "meaning": "名 生産・生産量",
+    "page": 4
+  },
+  {
+    "id": 672,
+    "word": "security",
+    "meaning": "名 安全・警備",
+    "page": 4
+  },
+  {
+    "id": 673,
+    "word": "cure",
+    "meaning": "動 治す・名 治療・回復",
+    "page": 4
+  },
+  {
+    "id": 674,
+    "word": "lower",
+    "meaning": "動 下げる・形 低いほうの",
+    "page": 4
+  },
+  {
+    "id": 675,
+    "word": "indoor",
+    "meaning": "形 屋内の",
+    "page": 4
+  },
+  {
+    "id": 676,
+    "word": "crisis",
+    "meaning": "名 危機",
+    "page": 4
+  },
+  {
+    "id": 677,
+    "word": "efficient",
+    "meaning": "形 有能な・効率的な",
+    "page": 4
+  },
+  {
+    "id": 678,
+    "word": "cell",
+    "meaning": "名 小部屋・細胞",
+    "page": 4
+  },
+  {
+    "id": 679,
+    "word": "injure",
+    "meaning": "動 ケガをさせる",
+    "page": 4
+  },
+  {
+    "id": 680,
+    "word": "soften",
+    "meaning": "動 柔らかくする・和らげる",
+    "page": 4
+  },
+  {
+    "id": 681,
+    "word": "strictly",
+    "meaning": "副 厳密に",
+    "page": 4
+  },
+  {
+    "id": 682,
+    "word": "boast",
+    "meaning": "動 自慢する・誇る",
+    "page": 4
+  },
+  {
+    "id": 683,
+    "word": "tidy",
+    "meaning": "形 きちんとした・動 片付ける",
+    "page": 4
+  },
+  {
+    "id": 684,
+    "word": "bark",
+    "meaning": "動 (犬などが)ほえる・名 ほえ声",
+    "page": 4
+  },
+  {
+    "id": 685,
+    "word": "careless",
+    "meaning": "形 不注意な",
+    "page": 4
+  },
+  {
+    "id": 686,
+    "word": "ash",
+    "meaning": "名 灰・動 灰にする",
+    "page": 4
+  },
+  {
+    "id": 687,
+    "word": "motion",
+    "meaning": "名 動き・運動",
+    "page": 4
+  },
+  {
+    "id": 688,
+    "word": "lie",
+    "meaning": "動 いる・ある・嘘をつく",
+    "page": 4
+  },
+  {
+    "id": 689,
+    "word": "narrative",
+    "meaning": "名 話・物語",
+    "page": 4
+  },
+  {
+    "id": 690,
+    "word": "dispose",
+    "meaning": "動 処分する",
+    "page": 4
+  },
+  {
+    "id": 691,
+    "word": "jealous",
+    "meaning": "形 嫉妬して",
+    "page": 4
+  },
+  {
+    "id": 692,
+    "word": "element",
+    "meaning": "名 要素",
+    "page": 4
+  },
+  {
+    "id": 693,
+    "word": "pleased",
+    "meaning": "形 喜んで・満足して",
+    "page": 4
+  },
+  {
+    "id": 694,
+    "word": "threat",
+    "meaning": "名 脅威",
+    "page": 4
+  },
+  {
+    "id": 695,
+    "word": "concentrate",
+    "meaning": "動 集中する",
+    "page": 4
+  },
+  {
+    "id": 696,
+    "word": "simply",
+    "meaning": "副 単に",
+    "page": 4
+  },
+  {
+    "id": 697,
+    "word": "adequate",
+    "meaning": "形 十分な・適切な",
+    "page": 4
+  },
+  {
+    "id": 698,
+    "word": "interrupt",
+    "meaning": "動 邪魔をする・中断する",
+    "page": 4
+  },
+  {
+    "id": 699,
+    "word": "intellectual",
+    "meaning": "形 知的な",
+    "page": 4
+  },
+  {
+    "id": 700,
+    "word": "grammar",
+    "meaning": "名 文法",
+    "page": 4
+  },
+  {
+    "id": 701,
+    "word": "latest",
+    "meaning": "形 最新の・副 最も遅く",
+    "page": 4
+  },
+  {
+    "id": 702,
+    "word": "knit",
+    "meaning": "動 編み物をする",
+    "page": 4
+  },
+  {
+    "id": 703,
+    "word": "disaster",
+    "meaning": "名 災害",
+    "page": 4
+  },
+  {
+    "id": 704,
+    "word": "suggestion",
+    "meaning": "名 提案・暗示",
+    "page": 4
+  },
+  {
+    "id": 705,
+    "word": "finance",
+    "meaning": "名 金融・財政・動 融資する",
+    "page": 4
+  },
+  {
+    "id": 706,
+    "word": "financial",
+    "meaning": "形 財政の",
+    "page": 4
+  },
+  {
+    "id": 707,
+    "word": "community",
+    "meaning": "名 地域社会・共同体",
+    "page": 4
+  },
+  {
+    "id": 708,
+    "word": "effect",
+    "meaning": "名 結果・効果・影響",
+    "page": 4
+  },
+  {
+    "id": 709,
+    "word": "charger",
+    "meaning": "名 (バッテリーの)充電器",
+    "page": 4
+  },
+  {
+    "id": 710,
+    "word": "prior",
+    "meaning": "形 前の・前 (prior to ～で)～より前に",
+    "page": 4
+  },
+  {
+    "id": 711,
+    "word": "anxiety",
+    "meaning": "名 心配・不安・切望",
+    "page": 4
+  },
+  {
+    "id": 712,
+    "word": "reflect",
+    "meaning": "動 反射する・反映する・表す",
+    "page": 4
+  },
+  {
+    "id": 713,
+    "word": "terrific",
+    "meaning": "形 ものすごい・素晴らしい",
+    "page": 4
+  },
+  {
+    "id": 714,
+    "word": "journey",
+    "meaning": "名 旅行・通勤・通学",
+    "page": 4
+  },
+  {
+    "id": 715,
+    "word": "rumor",
+    "meaning": "名 うわさ",
+    "page": 4
+  },
+  {
+    "id": 716,
+    "word": "intelligence",
+    "meaning": "名 知能",
+    "page": 4
+  },
+  {
+    "id": 717,
+    "word": "dirt",
+    "meaning": "名 ほこり・泥",
+    "page": 4
+  },
+  {
+    "id": 718,
+    "word": "summit",
+    "meaning": "名 頂上・先進国首脳会議・動 登頂する",
+    "page": 4
+  },
+  {
+    "id": 719,
+    "word": "suitable",
+    "meaning": "形 ふさわしい",
+    "page": 4
+  },
+  {
+    "id": 720,
+    "word": "repeatedly",
+    "meaning": "副 繰り返して",
+    "page": 4
+  },
+  {
+    "id": 721,
+    "word": "promotion",
+    "meaning": "名 促進・昇進",
+    "page": 4
+  },
+  {
+    "id": 722,
+    "word": "entertainment",
+    "meaning": "名 娯楽・気晴らし",
+    "page": 4
+  },
+  {
+    "id": 723,
+    "word": "blow",
+    "meaning": "動 吹く・名 強打・打撃・災難",
+    "page": 4
+  },
+  {
+    "id": 724,
+    "word": "wisdom",
+    "meaning": "名 知恵",
+    "page": 4
+  },
+  {
+    "id": 725,
+    "word": "popularity",
+    "meaning": "名 人気・人望",
+    "page": 4
+  },
+  {
+    "id": 726,
+    "word": "agency",
+    "meaning": "名 代理店",
+    "page": 4
+  },
+  {
+    "id": 727,
+    "word": "rush",
+    "meaning": "動 急いで行く・名 急ぐこと",
+    "page": 4
+  },
+  {
+    "id": 728,
+    "word": "arithmetic",
+    "meaning": "名 算数",
+    "page": 4
+  },
+  {
+    "id": 729,
+    "word": "scale",
+    "meaning": "名 規模",
+    "page": 4
+  },
+  {
+    "id": 730,
+    "word": "attempt",
+    "meaning": "動 試みる・名 試み",
+    "page": 4
+  },
+  {
+    "id": 731,
+    "word": "nourish",
+    "meaning": "動 育てる",
+    "page": 4
+  },
+  {
+    "id": 732,
+    "word": "connection",
+    "meaning": "名 接続・関係",
+    "page": 4
+  },
+  {
+    "id": 733,
+    "word": "anticipate",
+    "meaning": "動 予想する",
+    "page": 4
+  },
+  {
+    "id": 734,
+    "word": "concern",
+    "meaning": "名 関係・関心・不安・動 関わらせる・心配させる",
+    "page": 4
+  },
+  {
+    "id": 735,
+    "word": "business trip",
+    "meaning": "名 出張",
+    "page": 4
+  },
+  {
+    "id": 736,
+    "word": "address",
+    "meaning": "動 向ける・演説する・取りかかる・名 住所・メールアドレス・演説",
+    "page": 4
+  },
+  {
+    "id": 737,
+    "word": "cultivate",
+    "meaning": "動 耕す",
+    "page": 4
+  },
+  {
+    "id": 738,
+    "word": "humid",
+    "meaning": "形 湿気のある",
+    "page": 4
+  },
+  {
+    "id": 739,
+    "word": "ambition",
+    "meaning": "名 野心",
+    "page": 4
+  },
+  {
+    "id": 740,
+    "word": "earn",
+    "meaning": "動 稼ぐ・得る",
+    "page": 4
+  },
+  {
+    "id": 741,
+    "word": "flow",
+    "meaning": "動 流れる",
+    "page": 4
+  },
+  {
+    "id": 742,
+    "word": "shorten",
+    "meaning": "動 短くする",
+    "page": 4
+  },
+  {
+    "id": 743,
+    "word": "bookshelf",
+    "meaning": "名 本棚",
+    "page": 4
+  },
+  {
+    "id": 744,
+    "word": "ahead",
+    "meaning": "副 前方に",
+    "page": 4
+  },
+  {
+    "id": 745,
+    "word": "modest",
+    "meaning": "形 謙虚な・適度な",
+    "page": 4
+  },
+  {
+    "id": 746,
+    "word": "emergency",
+    "meaning": "名 緊急事態",
+    "page": 4
+  },
+  {
+    "id": 747,
+    "word": "function",
+    "meaning": "名 機能",
+    "page": 4
+  },
+  {
+    "id": 748,
+    "word": "casual",
+    "meaning": "形 打ち解けた・何気ない",
+    "page": 4
+  },
+  {
+    "id": 749,
+    "word": "hopeful",
+    "meaning": "形 希望を持っている",
+    "page": 4
+  },
+  {
+    "id": 750,
+    "word": "possibly",
+    "meaning": "副 ひょっとしたら",
+    "page": 4
+  },
+  {
+    "id": 751,
+    "word": "soil",
+    "meaning": "名 土壌",
+    "page": 4
+  },
+  {
+    "id": 752,
+    "word": "thrill",
+    "meaning": "動 わくわくさせる",
+    "page": 4
+  },
+  {
+    "id": 753,
+    "word": "leap",
+    "meaning": "動 跳ぶ",
+    "page": 4
+  },
+  {
+    "id": 754,
+    "word": "locally",
+    "meaning": "副 現地で・その土地で",
+    "page": 4
+  },
+  {
+    "id": 755,
+    "word": "internal",
+    "meaning": "形 内部の・国内の",
+    "page": 4
+  },
+  {
+    "id": 756,
+    "word": "ordinary",
+    "meaning": "形 普通の",
+    "page": 4
+  },
+  {
+    "id": 757,
+    "word": "passive",
+    "meaning": "形 受動的な・消極的な",
+    "page": 4
+  },
+  {
+    "id": 758,
+    "word": "ignore",
+    "meaning": "動 無視する",
+    "page": 4
+  },
+  {
+    "id": 759,
+    "word": "polish",
+    "meaning": "動 磨く",
+    "page": 4
+  },
+  {
+    "id": 760,
+    "word": "aggressive",
+    "meaning": "形 攻撃的な・積極的な",
+    "page": 4
+  },
+  {
+    "id": 761,
+    "word": "code",
+    "meaning": "名 規則・記号・暗号",
+    "page": 4
+  },
+  {
+    "id": 762,
+    "word": "silence",
+    "meaning": "名 静けさ・静寂・沈黙",
+    "page": 4
+  },
+  {
+    "id": 763,
+    "word": "instrument",
+    "meaning": "名 道具・楽器",
+    "page": 4
+  },
+  {
+    "id": 764,
+    "word": "colleague",
+    "meaning": "名 同僚",
+    "page": 4
+  },
+  {
+    "id": 765,
+    "word": "sight",
+    "meaning": "名 目にすること・視力・光景",
+    "page": 4
+  },
+  {
+    "id": 766,
+    "word": "upstairs",
+    "meaning": "副 上の階へ",
+    "page": 4
+  },
+  {
+    "id": 767,
+    "word": "downstairs",
+    "meaning": "副 下の階へ",
+    "page": 4
+  },
+  {
+    "id": 768,
+    "word": "holy",
+    "meaning": "形 神聖な",
+    "page": 4
+  },
+  {
+    "id": 769,
+    "word": "leisure",
+    "meaning": "名 余暇",
+    "page": 4
+  },
+  {
+    "id": 770,
+    "word": "delicate",
+    "meaning": "形 敏感な・扱いにくい",
+    "page": 4
+  },
+  {
+    "id": 771,
+    "word": "championship",
+    "meaning": "名 選手権(大会)",
+    "page": 4
+  },
+  {
+    "id": 772,
+    "word": "beverage",
+    "meaning": "名 飲み物",
+    "page": 4
+  },
+  {
+    "id": 773,
+    "word": "cash",
+    "meaning": "名 現金",
+    "page": 4
+  },
+  {
+    "id": 774,
+    "word": "control",
+    "meaning": "動 支配する・(感情を)抑える・駆除する",
+    "page": 4
+  },
+  {
+    "id": 775,
+    "word": "punish",
+    "meaning": "動 罰する",
+    "page": 4
+  },
+  {
+    "id": 776,
+    "word": "division",
+    "meaning": "名 分割",
+    "page": 4
+  },
+  {
+    "id": 777,
+    "word": "alike",
+    "meaning": "形 似ている・副 同じように",
+    "page": 4
+  },
+  {
+    "id": 778,
+    "word": "ancient",
+    "meaning": "形 古代の",
+    "page": 4
+  },
+  {
+    "id": 779,
+    "word": "choice",
+    "meaning": "名 選択",
+    "page": 4
+  },
+  {
+    "id": 780,
+    "word": "curiosity",
+    "meaning": "名 好奇心",
+    "page": 4
+  },
+  {
+    "id": 781,
+    "word": "nonetheless",
+    "meaning": "副 それにもかかわらず",
+    "page": 4
+  },
+  {
+    "id": 782,
+    "word": "profit",
+    "meaning": "名 利益",
+    "page": 4
+  },
+  {
+    "id": 783,
+    "word": "response",
+    "meaning": "名 反応・返答",
+    "page": 4
+  },
+  {
+    "id": 784,
+    "word": "nowadays",
+    "meaning": "副 最近",
+    "page": 4
+  },
+  {
+    "id": 785,
+    "word": "condition",
+    "meaning": "名 状態・状況・条件",
+    "page": 4
+  },
+  {
+    "id": 786,
+    "word": "conceal",
+    "meaning": "動 隠す",
+    "page": 4
+  },
+  {
+    "id": 787,
+    "word": "wooden",
+    "meaning": "形 木製の",
+    "page": 4
+  },
+  {
+    "id": 788,
+    "word": "shocking",
+    "meaning": "形 衝撃的な",
+    "page": 4
+  },
+  {
+    "id": 789,
+    "word": "fortunate",
+    "meaning": "形 幸運な",
+    "page": 4
+  },
+  {
+    "id": 790,
+    "word": "faith",
+    "meaning": "名 信頼・信仰",
+    "page": 4
+  },
+  {
+    "id": 791,
+    "word": "brand",
+    "meaning": "名 銘柄・動 烙印を押す",
+    "page": 4
+  },
+  {
+    "id": 792,
+    "word": "parasite",
+    "meaning": "名 寄生虫・居候",
+    "page": 4
+  },
+  {
+    "id": 793,
+    "word": "postpone",
+    "meaning": "動 延期する",
+    "page": 4
+  },
+  {
+    "id": 794,
+    "word": "convince",
+    "meaning": "動 納得させる・確信させる",
+    "page": 4
+  },
+  {
+    "id": 795,
+    "word": "conference",
+    "meaning": "名 会議",
+    "page": 4
+  },
+  {
+    "id": 796,
+    "word": "global warming",
+    "meaning": "名 地球温暖化",
+    "page": 4
+  },
+  {
+    "id": 797,
+    "word": "idle",
+    "meaning": "形 怠けた・動 アイドリングする",
+    "page": 4
+  },
+  {
+    "id": 798,
+    "word": "evidence",
+    "meaning": "名 証拠",
+    "page": 4
+  },
+  {
+    "id": 799,
+    "word": "inspect",
+    "meaning": "動 検査する・視察する",
+    "page": 4
+  },
+  {
+    "id": 800,
+    "word": "doubt",
+    "meaning": "動 疑う(～ではないと思う)・名 疑い",
+    "page": 4
+  },
+  {
+    "id": 801,
+    "word": "extend",
+    "meaning": "動 延長する・広げる・広がる",
+    "page": 5
+  },
+  {
+    "id": 802,
+    "word": "offline",
+    "meaning": "形 オフラインの・副 オフラインで",
+    "page": 5
+  },
+  {
+    "id": 803,
+    "word": "psychology",
+    "meaning": "名 心理(学)",
+    "page": 5
+  },
+  {
+    "id": 804,
+    "word": "irony",
+    "meaning": "名 皮肉",
+    "page": 5
+  },
+  {
+    "id": 805,
+    "word": "review",
+    "meaning": "名 批評・復習・動 批評する・復習する",
+    "page": 5
+  },
+  {
+    "id": 806,
+    "word": "category",
+    "meaning": "名 区分",
+    "page": 5
+  },
+  {
+    "id": 807,
+    "word": "policy",
+    "meaning": "名 政策・方針",
+    "page": 5
+  },
+  {
+    "id": 808,
+    "word": "brief",
+    "meaning": "形 短い・簡潔な・名 要約",
+    "page": 5
+  },
+  {
+    "id": 809,
+    "word": "appoint",
+    "meaning": "動 任命する・(日時などを)指定する",
+    "page": 5
+  },
+  {
+    "id": 810,
+    "word": "actually",
+    "meaning": "副 実は",
+    "page": 5
+  },
+  {
+    "id": 811,
+    "word": "fortunately",
+    "meaning": "副 幸運にも",
+    "page": 5
+  },
+  {
+    "id": 812,
+    "word": "unfortunately",
+    "meaning": "副 残念なことに",
+    "page": 5
+  },
+  {
+    "id": 813,
+    "word": "unit",
+    "meaning": "名 集団・単位",
+    "page": 5
+  },
+  {
+    "id": 814,
+    "word": "unite",
+    "meaning": "動 結びつける",
+    "page": 5
+  },
+  {
+    "id": 815,
+    "word": "scholarship",
+    "meaning": "名 奨学金",
+    "page": 5
+  },
+  {
+    "id": 816,
+    "word": "grocery",
+    "meaning": "名 食料雑貨",
+    "page": 5
+  },
+  {
+    "id": 817,
+    "word": "smooth",
+    "meaning": "形 滑らかな",
+    "page": 5
+  },
+  {
+    "id": 818,
+    "word": "bias",
+    "meaning": "名 先入観・偏見・動 先入観を持たせる",
+    "page": 5
+  },
+  {
+    "id": 819,
+    "word": "vitality",
+    "meaning": "名 元気",
+    "page": 5
+  },
+  {
+    "id": 820,
+    "word": "vital",
+    "meaning": "形 生命の・重要な",
+    "page": 5
+  },
+  {
+    "id": 821,
+    "word": "progress",
+    "meaning": "名 進歩・動 進歩する",
+    "page": 5
+  },
+  {
+    "id": 822,
+    "word": "arrow",
+    "meaning": "名 矢",
+    "page": 5
+  },
+  {
+    "id": 823,
+    "word": "peak",
+    "meaning": "名 頂点",
+    "page": 5
+  },
+  {
+    "id": 824,
+    "word": "afford",
+    "meaning": "動 余裕がある・与える",
+    "page": 5
+  },
+  {
+    "id": 825,
+    "word": "dramatic",
+    "meaning": "形 劇的な・印象的な",
+    "page": 5
+  },
+  {
+    "id": 826,
+    "word": "originally",
+    "meaning": "副 元々は",
+    "page": 5
+  },
+  {
+    "id": 827,
+    "word": "state",
+    "meaning": "名 状態・国家・州・動 述べる",
+    "page": 5
+  },
+  {
+    "id": 828,
+    "word": "signature",
+    "meaning": "名 署名",
+    "page": 5
+  },
+  {
+    "id": 829,
+    "word": "treat",
+    "meaning": "動 扱う・治療する・おごる・名 ごほうび・ごちそう",
+    "page": 5
+  },
+  {
+    "id": 830,
+    "word": "conclude",
+    "meaning": "動 結論を出す・終える",
+    "page": 5
+  },
+  {
+    "id": 831,
+    "word": "brilliant",
+    "meaning": "形 光り輝く・すばらしい",
+    "page": 5
+  },
+  {
+    "id": 832,
+    "word": "murder",
+    "meaning": "名 殺人・動 殺害する",
+    "page": 5
+  },
+  {
+    "id": 833,
+    "word": "consider",
+    "meaning": "動 考える",
+    "page": 5
+  },
+  {
+    "id": 834,
+    "word": "cover",
+    "meaning": "動 覆う・扱う・取材する・保険をかける",
+    "page": 5
+  },
+  {
+    "id": 835,
+    "word": "regard",
+    "meaning": "動 みなす・名 関連",
+    "page": 5
+  },
+  {
+    "id": 836,
+    "word": "commit",
+    "meaning": "動 委ねる・(罪を)犯す",
+    "page": 5
+  },
+  {
+    "id": 837,
+    "word": "suburb",
+    "meaning": "名 郊外",
+    "page": 5
+  },
+  {
+    "id": 838,
+    "word": "solid",
+    "meaning": "形 固体の・しっかりした",
+    "page": 5
+  },
+  {
+    "id": 839,
+    "word": "bottled",
+    "meaning": "形 ボトル入りの",
+    "page": 5
+  },
+  {
+    "id": 840,
+    "word": "democracy",
+    "meaning": "名 民主主義",
+    "page": 5
+  },
+  {
+    "id": 841,
+    "word": "diversity",
+    "meaning": "名 多様性",
+    "page": 5
+  },
+  {
+    "id": 842,
+    "word": "intelligent",
+    "meaning": "形 知能が高い・理解力がある",
+    "page": 5
+  },
+  {
+    "id": 843,
+    "word": "route",
+    "meaning": "名 道・ルート",
+    "page": 5
+  },
+  {
+    "id": 844,
+    "word": "reliable",
+    "meaning": "形 信頼できる",
+    "page": 5
+  },
+  {
+    "id": 845,
+    "word": "explore",
+    "meaning": "動 探検する・調査する",
+    "page": 5
+  },
+  {
+    "id": 846,
+    "word": "depth",
+    "meaning": "名 深さ",
+    "page": 5
+  },
+  {
+    "id": 847,
+    "word": "appointment",
+    "meaning": "名 (人と会う)約束・(病院の)予約・任命",
+    "page": 5
+  },
+  {
+    "id": 848,
+    "word": "rewrite",
+    "meaning": "動 書き直す",
+    "page": 5
+  },
+  {
+    "id": 849,
+    "word": "crazy",
+    "meaning": "形 正気でない・夢中だ",
+    "page": 5
+  },
+  {
+    "id": 850,
+    "word": "delete",
+    "meaning": "動 削除する",
+    "page": 5
+  },
+  {
+    "id": 851,
+    "word": "dozen",
+    "meaning": "名 1ダース・12個",
+    "page": 5
+  },
+  {
+    "id": 852,
+    "word": "pollute",
+    "meaning": "動 汚染する",
+    "page": 5
+  },
+  {
+    "id": 853,
+    "word": "reject",
+    "meaning": "動 拒絶する",
+    "page": 5
+  },
+  {
+    "id": 854,
+    "word": "immediately",
+    "meaning": "副 直ちに",
+    "page": 5
+  },
+  {
+    "id": 855,
+    "word": "combination",
+    "meaning": "名 結合",
+    "page": 5
+  },
+  {
+    "id": 856,
+    "word": "slightly",
+    "meaning": "副 わずかに",
+    "page": 5
+  },
+  {
+    "id": 857,
+    "word": "despite",
+    "meaning": "前 ～にもかかわらず",
+    "page": 5
+  },
+  {
+    "id": 858,
+    "word": "proportion",
+    "meaning": "名 割合",
+    "page": 5
+  },
+  {
+    "id": 859,
+    "word": "contrast",
+    "meaning": "名 対照・対比",
+    "page": 5
+  },
+  {
+    "id": 860,
+    "word": "agreement",
+    "meaning": "名 同意",
+    "page": 5
+  },
+  {
+    "id": 861,
+    "word": "nervous",
+    "meaning": "形 緊張して・神経質な",
+    "page": 5
+  },
+  {
+    "id": 862,
+    "word": "similarly",
+    "meaning": "副 同様に",
+    "page": 5
+  },
+  {
+    "id": 863,
+    "word": "deny",
+    "meaning": "動 否定する",
+    "page": 5
+  },
+  {
+    "id": 864,
+    "word": "oppose",
+    "meaning": "動 反対する・反対させる",
+    "page": 5
+  },
+  {
+    "id": 865,
+    "word": "guideline",
+    "meaning": "名 ガイドライン(指針)",
+    "page": 5
+  },
+  {
+    "id": 866,
+    "word": "unlike",
+    "meaning": "前 ～と違って",
+    "page": 5
+  },
+  {
+    "id": 867,
+    "word": "satellite",
+    "meaning": "名 衛星・人工衛星",
+    "page": 5
+  },
+  {
+    "id": 868,
+    "word": "blank",
+    "meaning": "名 空白・形 空白の",
+    "page": 5
+  },
+  {
+    "id": 869,
+    "word": "erase",
+    "meaning": "動 消す",
+    "page": 5
+  },
+  {
+    "id": 870,
+    "word": "significant",
+    "meaning": "形 意義深い・重要な・かなりの",
+    "page": 5
+  },
+  {
+    "id": 871,
+    "word": "wage",
+    "meaning": "名 賃金",
+    "page": 5
+  },
+  {
+    "id": 872,
+    "word": "criticism",
+    "meaning": "名 批判・批評",
+    "page": 5
+  },
+  {
+    "id": 873,
+    "word": "terrorism",
+    "meaning": "名 テロリズム・テロ行為",
+    "page": 5
+  },
+  {
+    "id": 874,
+    "word": "exist",
+    "meaning": "動 存在する",
+    "page": 5
+  },
+  {
+    "id": 875,
+    "word": "debt",
+    "meaning": "名 借金・恩義",
+    "page": 5
+  },
+  {
+    "id": 876,
+    "word": "enthusiastic",
+    "meaning": "形 熱中している・乗り気な",
+    "page": 5
+  },
+  {
+    "id": 877,
+    "word": "slight",
+    "meaning": "形 わずかな",
+    "page": 5
+  },
+  {
+    "id": 878,
+    "word": "minority",
+    "meaning": "名 半数以下・小数派",
+    "page": 5
+  },
+  {
+    "id": 879,
+    "word": "protection",
+    "meaning": "名 保護",
+    "page": 5
+  },
+  {
+    "id": 880,
+    "word": "remote",
+    "meaning": "形 遠く離れた",
+    "page": 5
+  },
+  {
+    "id": 881,
+    "word": "concrete",
+    "meaning": "形 具体的な・名 コンクリート",
+    "page": 5
+  },
+  {
+    "id": 882,
+    "word": "boss",
+    "meaning": "名 上司",
+    "page": 5
+  },
+  {
+    "id": 883,
+    "word": "terrorist",
+    "meaning": "名 テロリスト(テロリズム行為者)",
+    "page": 5
+  },
+  {
+    "id": 884,
+    "word": "unlikely",
+    "meaning": "形 しなさそうな",
+    "page": 5
+  },
+  {
+    "id": 885,
+    "word": "tragedy",
+    "meaning": "名 悲劇",
+    "page": 5
+  },
+  {
+    "id": 886,
+    "word": "heal",
+    "meaning": "動 治す・癒す",
+    "page": 5
+  },
+  {
+    "id": 887,
+    "word": "defend",
+    "meaning": "動 防御する・弁護する",
+    "page": 5
+  },
+  {
+    "id": 888,
+    "word": "devote",
+    "meaning": "動 捧げる",
+    "page": 5
+  },
+  {
+    "id": 889,
+    "word": "factor",
+    "meaning": "名 要因",
+    "page": 5
+  },
+  {
+    "id": 890,
+    "word": "quote",
+    "meaning": "動 引用する",
+    "page": 5
+  },
+  {
+    "id": 891,
+    "word": "desire",
+    "meaning": "動 強く望む・名 願望",
+    "page": 5
+  },
+  {
+    "id": 892,
+    "word": "pollen",
+    "meaning": "名 花粉",
+    "page": 5
+  },
+  {
+    "id": 893,
+    "word": "childcare",
+    "meaning": "名 育児(育児施設)",
+    "page": 5
+  },
+  {
+    "id": 894,
+    "word": "acquire",
+    "meaning": "動 獲得する",
+    "page": 5
+  },
+  {
+    "id": 895,
+    "word": "despair",
+    "meaning": "名 絶望・動 絶望する",
+    "page": 5
+  },
+  {
+    "id": 896,
+    "word": "trend",
+    "meaning": "名 傾向・流行",
+    "page": 5
+  },
+  {
+    "id": 897,
+    "word": "diagnosis",
+    "meaning": "名 診断",
+    "page": 5
+  },
+  {
+    "id": 898,
+    "word": "biography",
+    "meaning": "名 伝記・経歴",
+    "page": 5
+  },
+  {
+    "id": 899,
+    "word": "forgive",
+    "meaning": "動 許す・免除する",
+    "page": 5
+  },
+  {
+    "id": 900,
+    "word": "chore",
+    "meaning": "名 雑用・家事",
+    "page": 5
+  },
+  {
+    "id": 901,
+    "word": "overnight",
+    "meaning": "副 一晩中・一夜で",
+    "page": 5
+  },
+  {
+    "id": 902,
+    "word": "dust",
+    "meaning": "名 ちり・ほこり",
+    "page": 5
+  },
+  {
+    "id": 903,
+    "word": "pursue",
+    "meaning": "動 追求する・実行する",
+    "page": 5
+  },
+  {
+    "id": 904,
+    "word": "suffer",
+    "meaning": "動 苦しむ",
+    "page": 5
+  },
+  {
+    "id": 905,
+    "word": "conservative",
+    "meaning": "形 保守的な",
+    "page": 5
+  },
+  {
+    "id": 906,
+    "word": "wizard",
+    "meaning": "名 魔法使い",
+    "page": 5
+  },
+  {
+    "id": 907,
+    "word": "license",
+    "meaning": "名 免許(証)",
+    "page": 5
+  },
+  {
+    "id": 908,
+    "word": "pause",
+    "meaning": "動 休止する・名 休止・中断",
+    "page": 5
+  },
+  {
+    "id": 909,
+    "word": "kingdom",
+    "meaning": "名 王国・分野",
+    "page": 5
+  },
+  {
+    "id": 910,
+    "word": "capable",
+    "meaning": "形 能力がある・有能な",
+    "page": 5
+  },
+  {
+    "id": 911,
+    "word": "associate",
+    "meaning": "動 連想する・付き合う・名 同僚・社員",
+    "page": 5
+  },
+  {
+    "id": 912,
+    "word": "treatment",
+    "meaning": "名 治療",
+    "page": 5
+  },
+  {
+    "id": 913,
+    "word": "bilingual",
+    "meaning": "名 2言語を使う人・形 2言語を使う",
+    "page": 5
+  },
+  {
+    "id": 914,
+    "word": "manufacture",
+    "meaning": "動 製造する・名 製造",
+    "page": 5
+  },
+  {
+    "id": 915,
+    "word": "campaign",
+    "meaning": "名 (政治的・社会的)運動",
+    "page": 5
+  },
+  {
+    "id": 916,
+    "word": "citizen",
+    "meaning": "名 市民・国民",
+    "page": 5
+  },
+  {
+    "id": 917,
+    "word": "intimate",
+    "meaning": "形 親密な",
+    "page": 5
+  },
+  {
+    "id": 918,
+    "word": "fluid",
+    "meaning": "名 流動体・形 流動体の・流動的な",
+    "page": 5
+  },
+  {
+    "id": 919,
+    "word": "currency",
+    "meaning": "名 通貨・普及",
+    "page": 5
+  },
+  {
+    "id": 920,
+    "word": "missing",
+    "meaning": "形 行方不明の",
+    "page": 5
+  },
+  {
+    "id": 921,
+    "word": "incident",
+    "meaning": "名 事件・出来事",
+    "page": 5
+  },
+  {
+    "id": 922,
+    "word": "league",
+    "meaning": "名 (競技)連盟・同盟",
+    "page": 5
+  },
+  {
+    "id": 923,
+    "word": "cost",
+    "meaning": "動 (お金が)かかる・犠牲にする・名 費用",
+    "page": 5
+  },
+  {
+    "id": 924,
+    "word": "apologize",
+    "meaning": "動 謝る",
+    "page": 5
+  },
+  {
+    "id": 925,
+    "word": "context",
+    "meaning": "名 文脈・状況",
+    "page": 5
+  },
+  {
+    "id": 926,
+    "word": "sum",
+    "meaning": "名 金額・合計",
+    "page": 5
+  },
+  {
+    "id": 927,
+    "word": "necessity",
+    "meaning": "名 必要性",
+    "page": 5
+  },
+  {
+    "id": 928,
+    "word": "automation",
+    "meaning": "名 自動化",
+    "page": 5
+  },
+  {
+    "id": 929,
+    "word": "manual",
+    "meaning": "形 手の・手動の・体の・名 取扱説明書",
+    "page": 5
+  },
+  {
+    "id": 930,
+    "word": "plain",
+    "meaning": "形 質素な・わかりやすい",
+    "page": 5
+  },
+  {
+    "id": 931,
+    "word": "responsibility",
+    "meaning": "名 責任",
+    "page": 5
+  },
+  {
+    "id": 932,
+    "word": "completely",
+    "meaning": "副 完全に",
+    "page": 5
+  },
+  {
+    "id": 933,
+    "word": "gently",
+    "meaning": "副 優しく",
+    "page": 5
+  },
+  {
+    "id": 934,
+    "word": "joyful",
+    "meaning": "形 喜びに満ちた",
+    "page": 5
+  },
+  {
+    "id": 935,
+    "word": "fasten",
+    "meaning": "動 しっかり固定する",
+    "page": 5
+  },
+  {
+    "id": 936,
+    "word": "behalf",
+    "meaning": "名 利益",
+    "page": 5
+  },
+  {
+    "id": 937,
+    "word": "syndrome",
+    "meaning": "名 症候群",
+    "page": 5
+  },
+  {
+    "id": 938,
+    "word": "comment",
+    "meaning": "名 コメント・批評・動 批評する・述べる",
+    "page": 5
+  },
+  {
+    "id": 939,
+    "word": "available",
+    "meaning": "形 利用できる・手に入る・都合がつく",
+    "page": 5
+  },
+  {
+    "id": 940,
+    "word": "crime",
+    "meaning": "名 犯罪",
+    "page": 5
+  },
+  {
+    "id": 941,
+    "word": "version",
+    "meaning": "名 ○○版・解釈",
+    "page": 5
+  },
+  {
+    "id": 942,
+    "word": "thief",
+    "meaning": "名 泥棒",
+    "page": 5
+  },
+  {
+    "id": 943,
+    "word": "ashamed",
+    "meaning": "形 恥ずかしく思って",
+    "page": 5
+  },
+  {
+    "id": 944,
+    "word": "ache",
+    "meaning": "名 痛み・動 痛む",
+    "page": 5
+  },
+  {
+    "id": 945,
+    "word": "departure",
+    "meaning": "名 出発",
+    "page": 5
+  },
+  {
+    "id": 946,
+    "word": "direct",
+    "meaning": "形 直接の・直行の・動 指揮する",
+    "page": 5
+  },
+  {
+    "id": 947,
+    "word": "sole",
+    "meaning": "形 唯一の",
+    "page": 5
+  },
+  {
+    "id": 948,
+    "word": "punctual",
+    "meaning": "形 時間を守る",
+    "page": 5
+  },
+  {
+    "id": 949,
+    "word": "dynamic",
+    "meaning": "形 動的な・活動的な",
+    "page": 5
+  },
+  {
+    "id": 950,
+    "word": "owing",
+    "meaning": "前 (owing to ～で)～が原因で",
+    "page": 5
+  },
+  {
+    "id": 951,
+    "word": "series",
+    "meaning": "名 一続き",
+    "page": 5
+  },
+  {
+    "id": 952,
+    "word": "approach",
+    "meaning": "動 近づく・名 接近",
+    "page": 5
+  },
+  {
+    "id": 953,
+    "word": "exact",
+    "meaning": "形 正確な",
+    "page": 5
+  },
+  {
+    "id": 954,
+    "word": "single",
+    "meaning": "形 たった1つの・独身の",
+    "page": 5
+  },
+  {
+    "id": 955,
+    "word": "transform",
+    "meaning": "動 変える・変わる",
+    "page": 5
+  },
+  {
+    "id": 956,
+    "word": "subtitle",
+    "meaning": "名 (映画・テレビの)字幕・動 字幕をつける",
+    "page": 5
+  },
+  {
+    "id": 957,
+    "word": "secretly",
+    "meaning": "副 ひそかに",
+    "page": 5
+  },
+  {
+    "id": 958,
+    "word": "constant",
+    "meaning": "形 絶え間ない",
+    "page": 5
+  },
+  {
+    "id": 959,
+    "word": "victim",
+    "meaning": "名 犠牲者",
+    "page": 5
+  },
+  {
+    "id": 960,
+    "word": "privacy",
+    "meaning": "名 プライバシー",
+    "page": 5
+  },
+  {
+    "id": 961,
+    "word": "remain",
+    "meaning": "動 ～のままでいる・残る",
+    "page": 5
+  },
+  {
+    "id": 962,
+    "word": "dull",
+    "meaning": "形 退屈な・鈍い",
+    "page": 5
+  },
+  {
+    "id": 963,
+    "word": "establish",
+    "meaning": "動 設立する",
+    "page": 5
+  },
+  {
+    "id": 964,
+    "word": "resident",
+    "meaning": "名 住人",
+    "page": 5
+  },
+  {
+    "id": 965,
+    "word": "literature",
+    "meaning": "名 文学・文献・印刷物",
+    "page": 5
+  },
+  {
+    "id": 966,
+    "word": "donor",
+    "meaning": "名 寄贈者・臓器提供者",
+    "page": 5
+  },
+  {
+    "id": 967,
+    "word": "plug",
+    "meaning": "動 電源に差し込む",
+    "page": 5
+  },
+  {
+    "id": 968,
+    "word": "closely",
+    "meaning": "副 念入りに",
+    "page": 5
+  },
+  {
+    "id": 969,
+    "word": "chill",
+    "meaning": "動 冷やす・名 冷たさ",
+    "page": 5
+  },
+  {
+    "id": 970,
+    "word": "humor",
+    "meaning": "名 ユーモア",
+    "page": 5
+  },
+  {
+    "id": 971,
+    "word": "require",
+    "meaning": "動 要求する",
+    "page": 5
+  },
+  {
+    "id": 972,
+    "word": "birth",
+    "meaning": "名 出産・誕生",
+    "page": 5
+  },
+  {
+    "id": 973,
+    "word": "deadline",
+    "meaning": "名 締め切り",
+    "page": 5
+  },
+  {
+    "id": 974,
+    "word": "link",
+    "meaning": "名 つながり・動 つなぐ・結びつける",
+    "page": 5
+  },
+  {
+    "id": 975,
+    "word": "period",
+    "meaning": "名 期間・時代・終止符",
+    "page": 5
+  },
+  {
+    "id": 976,
+    "word": "farther",
+    "meaning": "副 より遠くに・形 もっと遠い",
+    "page": 5
+  },
+  {
+    "id": 977,
+    "word": "further",
+    "meaning": "副 さらに(進んで)・形 さらに進んだ",
+    "page": 5
+  },
+  {
+    "id": 978,
+    "word": "furthermore",
+    "meaning": "副 さらに",
+    "page": 5
+  },
+  {
+    "id": 979,
+    "word": "pretend",
+    "meaning": "動 ふりをする",
+    "page": 5
+  },
+  {
+    "id": 980,
+    "word": "occupation",
+    "meaning": "名 占有・職業",
+    "page": 5
+  },
+  {
+    "id": 981,
+    "word": "loose",
+    "meaning": "形 緩い",
+    "page": 5
+  },
+  {
+    "id": 982,
+    "word": "contrary",
+    "meaning": "名 反対・形 反対の・副 反して",
+    "page": 5
+  },
+  {
+    "id": 983,
+    "word": "cultural background",
+    "meaning": "名 文化的背景",
+    "page": 5
+  },
+  {
+    "id": 984,
+    "word": "vision",
+    "meaning": "名 視力・展望",
+    "page": 5
+  },
+  {
+    "id": 985,
+    "word": "serve",
+    "meaning": "動 仕える・勤務する・(飲食物を)出す・役立つ",
+    "page": 5
+  },
+  {
+    "id": 986,
+    "word": "layout",
+    "meaning": "名 配置・レイアウト",
+    "page": 5
+  },
+  {
+    "id": 987,
+    "word": "approve",
+    "meaning": "動 認める・賛成する",
+    "page": 5
+  },
+  {
+    "id": 988,
+    "word": "accomplish",
+    "meaning": "動 成し遂げる",
+    "page": 5
+  },
+  {
+    "id": 989,
+    "word": "restrict",
+    "meaning": "動 制限する",
+    "page": 5
+  },
+  {
+    "id": 990,
+    "word": "trial",
+    "meaning": "名 試み",
+    "page": 5
+  },
+  {
+    "id": 991,
+    "word": "substance",
+    "meaning": "名 物質・実質",
+    "page": 5
+  },
+  {
+    "id": 992,
+    "word": "emperor",
+    "meaning": "名 皇帝・天皇",
+    "page": 5
+  },
+  {
+    "id": 993,
+    "word": "politics",
+    "meaning": "名 政治・政治学",
+    "page": 5
+  },
+  {
+    "id": 994,
+    "word": "sail",
+    "meaning": "名 航海・動 航海をする",
+    "page": 5
+  },
+  {
+    "id": 995,
+    "word": "reform",
+    "meaning": "動 改革する・名 改革",
+    "page": 5
+  },
+  {
+    "id": 996,
+    "word": "minimize",
+    "meaning": "動 最小にする",
+    "page": 5
+  },
+  {
+    "id": 997,
+    "word": "phenomenon",
+    "meaning": "名 現象",
+    "page": 5
+  },
+  {
+    "id": 998,
+    "word": "candidate",
+    "meaning": "名 候補者",
+    "page": 5
+  },
+  {
+    "id": 999,
+    "word": "secure",
+    "meaning": "形 安全な・動 確保する",
+    "page": 5
+  },
+  {
+    "id": 1000,
+    "word": "method",
+    "meaning": "名 方法",
+    "page": 5
+  }
+];
+
+// ==================================================
+// Data helpers
+// ==================================================
+function getMergedWords() {
+  let words = allWords
+    .filter(w => !deletedIds.has(w.id))
+    .map(w => ({ ...w, meaning: editedMeanings[w.id] !== undefined ? editedMeanings[w.id] : w.meaning }));
+  words = words.concat(customWords.filter(w => !deletedIds.has(w.id)));
+  return words;
+}
+function getFilteredWords() {
+  let words = getMergedWords();
+  const pf = parseInt(pageFrom), pt = parseInt(pageTo);
+  if (!isNaN(pf)) words = words.filter(w => w.page >= pf);
+  if (!isNaN(pt)) words = words.filter(w => w.page <= pt);
+  return words;
+}
+function todayStr() { return new Date().toISOString().slice(0, 10); }
+
+// ==================================================
+// LocalStorage
+// ==================================================
+function loadLocalData() {
+  try {
+    customWords = JSON.parse(localStorage.getItem('sparta_custom') || '[]');
+    editedMeanings = JSON.parse(localStorage.getItem('sparta_edits') || '{}');
+    const del = JSON.parse(localStorage.getItem('sparta_deleted') || '[]');
+    deletedIds = new Set(del);
+    srsData = JSON.parse(localStorage.getItem('sparta_srs') || '{}');
+    studyPlan = JSON.parse(localStorage.getItem('sparta_plan') || '{}');
+    streak = JSON.parse(localStorage.getItem('sparta_streak') || '{}');
+  } catch(e) { console.error('Load error:', e); }
+}
+function saveSRS() { localStorage.setItem('sparta_srs', JSON.stringify(srsData)); }
+function savePlan() { localStorage.setItem('sparta_plan', JSON.stringify(studyPlan)); }
+function saveStreak() { localStorage.setItem('sparta_streak', JSON.stringify(streak)); }
+function saveCustom() { localStorage.setItem('sparta_custom', JSON.stringify(customWords)); }
+function saveEdits() { localStorage.setItem('sparta_edits', JSON.stringify(editedMeanings)); }
+function saveDeleted() { localStorage.setItem('sparta_deleted', JSON.stringify([...deletedIds])); }
+
+// ==================================================
+// Data Migration (old progress -> SRS)
+// ==================================================
+function migrateData() {
+  const oldProgress = JSON.parse(localStorage.getItem('sparta_progress') || 'null');
+  if (oldProgress && Object.keys(srsData).length === 0) {
+    for (const [id, p] of Object.entries(oldProgress)) {
+      const total = (p.correct || 0) + (p.wrong || 0);
+      let stage = 'new', reps = 0, interval = 0, ease = 2.5;
+      if (total > 0) {
+        const rate = (p.correct || 0) / total;
+        if (p.correct >= 3 && rate > 0.66) { stage = 'mature'; reps = p.correct; interval = 7; ease = 2.5; }
+        else if (p.correct >= 1) { stage = 'young'; reps = p.correct; interval = 1; ease = 2.5; }
+        else { stage = 'learning'; reps = 0; interval = 0; ease = 2.5; }
+      }
+      srsData[id] = {
+        stage, ease, interval, nextReview: todayStr(), reps,
+        lapses: p.wrong || 0, phase: stage === 'mature' ? 4 : (total > 0 ? 1 : 0),
+        lastReview: total > 0 ? todayStr() : null,
+        correct: p.correct || 0, wrong: p.wrong || 0
+      };
+    }
+    saveSRS();
+  }
+}
+
+// ==================================================
+// SRS Engine (SM-2 variant)
+// ==================================================
+function getSRS(wordId) {
+  if (!srsData[wordId]) {
+    srsData[wordId] = {
+      stage: 'new', ease: 2.5, interval: 0, nextReview: null,
+      reps: 0, lapses: 0, phase: 0, lastReview: null, correct: 0, wrong: 0
+    };
+  }
+  return srsData[wordId];
+}
+
+function getDaysRemaining() {
+  const programEnd = addDays(studyPlan.startDate, 60);
+  return Math.max(0, Math.floor((new Date(programEnd) - new Date(todayStr())) / 86400000));
+}
+
+function compressInterval(interval, reps, daysRemaining) {
+  // Deadline-aware interval compression
+  // When fewer days remain, pack in more reviews with shorter intervals
+  if (daysRemaining > 10 || daysRemaining <= 0) return interval;
+  const maxInterval = Math.max(1, Math.floor(daysRemaining / 2));
+  let compressed = Math.min(interval, maxInterval);
+  if (reps <= 2) compressed = Math.min(compressed, 1);
+  else if (reps <= 4) compressed = Math.min(compressed, Math.max(1, Math.floor(daysRemaining / 3)));
+  return compressed;
+}
+
+function gradeSRS(wordId, grade) {
+  // grade: 0=Again, 1=Hard, 2=Good, 3=Easy
+  const s = getSRS(wordId);
+  const today = todayStr();
+  s.lastReview = today;
+  const daysRemaining = getDaysRemaining();
+
+  if (grade === 0) {
+    // Again
+    s.wrong++;
+    s.reps = 0;
+    s.lapses++;
+    s.ease = Math.max(1.3, s.ease - 0.2);
+    s.interval = 0;
+    s.nextReview = today;
+    s.stage = 'learning';
+  } else if (grade === 1) {
+    // Hard
+    s.correct++;
+    s.reps++;
+    s.ease = Math.max(1.3, s.ease - 0.15);
+    if (s.interval < 1) { s.interval = 1; }
+    else { s.interval = Math.max(1, Math.round(s.interval * 1.2)); }
+    s.interval = compressInterval(s.interval, s.reps, daysRemaining);
+    s.nextReview = addDays(today, s.interval);
+    s.stage = s.interval >= 21 ? 'mature' : (s.interval >= 3 ? 'young' : 'learning');
+  } else if (grade === 2) {
+    // Good
+    s.correct++;
+    s.reps++;
+    if (s.reps === 1) { s.interval = 1; }
+    else if (s.reps === 2) { s.interval = 3; }
+    else { s.interval = Math.round(s.interval * s.ease); }
+    s.interval = compressInterval(s.interval, s.reps, daysRemaining);
+    s.nextReview = addDays(today, s.interval);
+    s.stage = s.interval >= 21 ? 'mature' : (s.interval >= 3 ? 'young' : 'learning');
+  } else {
+    // Easy
+    s.correct++;
+    s.reps++;
+    s.ease = Math.min(3.0, s.ease + 0.15);
+    if (s.reps === 1) { s.interval = 3; }
+    else if (s.reps === 2) { s.interval = 7; }
+    else { s.interval = Math.round(s.interval * s.ease * 1.3); }
+    s.interval = compressInterval(s.interval, s.reps, daysRemaining);
+    s.nextReview = addDays(today, s.interval);
+    s.stage = s.interval >= 21 ? 'mature' : (s.interval >= 3 ? 'young' : 'learning');
+  }
+
+  if (s.interval > 180) s.interval = 180;
+
+  // Mature requires at least 4 correct answers regardless of interval
+  if (s.correct < 4) s.stage = s.stage === 'mature' ? 'young' : s.stage;
+
+  saveSRS();
+  recordStudyAction(grade >= 2);
+}
+
+function addDays(dateStr, days) {
+  const d = new Date(dateStr);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+function getDueWords() {
+  const today = todayStr();
+  const words = getMergedWords();
+  return words.filter(w => {
+    const s = srsData[w.id];
+    if (!s) return false;
+    if (s.stage === 'new') return false;
+    return s.nextReview && s.nextReview <= today;
+  });
+}
+
+function getNewWords(count) {
+  const words = getMergedWords();
+  // Get words that have never been studied, in order of ID
+  const newWords = words.filter(w => {
+    const s = srsData[w.id];
+    return !s || s.stage === 'new';
+  });
+  newWords.sort((a, b) => a.id - b.id);
+  return newWords.slice(0, count);
+}
+
+function getLearnedCount() {
+  return Object.values(srsData).filter(s => s.stage !== 'new' && s.phase > 0).length;
+}
+
+function getMasteredCount() {
+  return Object.values(srsData).filter(s => s.stage === 'mature' && s.correct >= 4).length;
+}
+
+function getIntervalLabel(interval) {
+  if (interval === 0) return '今日';
+  if (interval === 1) return '1日';
+  if (interval < 7) return interval + '日';
+  if (interval < 30) return Math.round(interval / 7) + '週';
+  return Math.round(interval / 30) + 'ヶ月';
+}
+
+// ==================================================
+// 60-Day Plan
+// ==================================================
+function initPlan() {
+  if (!studyPlan.startDate) {
+    studyPlan.startDate = todayStr();
+    studyPlan.history = {};
+    savePlan();
+  }
+  // Init streak
+  if (!streak.current) {
+    streak = { current: 0, best: 0, lastStudyDate: null };
+    saveStreak();
+  }
+}
+
+function getDayNumber() {
+  const start = new Date(studyPlan.startDate);
+  const now = new Date(todayStr());
+  return Math.floor((now - start) / 86400000) + 1;
+}
+
+function getTodayNewTarget() {
+  const totalWords = getMergedWords().length;
+  const learned = getLearnedCount();
+  const remaining = totalWords - learned;
+  const dayNum = getDayNumber();
+
+  // Relaxed schedule: 60 days, half the daily load
+  // Day  1-20: 25 words/day (500 total)
+  // Day 21-40: 20 words/day (400 total → 900 cumulative)
+  // Day 41-50: 10 words/day (100 total → 1000 cumulative)
+  // Day 51-60: 0 new (pure review & consolidation)
+  let dailyTarget;
+  if (dayNum <= 20) dailyTarget = 25;
+  else if (dayNum <= 40) dailyTarget = 20;
+  else if (dayNum <= 50) dailyTarget = 10;
+  else dailyTarget = 0;
+
+  return Math.min(remaining, dailyTarget);
+}
+
+function getTodayHistory() {
+  const today = todayStr();
+  if (!studyPlan.history) studyPlan.history = {};
+  if (!studyPlan.history[today]) studyPlan.history[today] = { newLearned: 0, reviewed: 0, correct: 0, wrong: 0, startTime: null };
+  return studyPlan.history[today];
+}
+
+function recordStudyAction(isCorrect) {
+  const h = getTodayHistory();
+  if (isCorrect) h.correct++; else h.wrong++;
+  savePlan();
+  updateStreak();
+}
+
+function recordNewLearned() {
+  getTodayHistory().newLearned++;
+  savePlan();
+}
+
+function recordReviewed() {
+  getTodayHistory().reviewed++;
+  savePlan();
+}
+
+function updateStreak() {
+  const today = todayStr();
+  if (streak.lastStudyDate === today) return;
+  const yesterday = addDays(today, -1);
+  if (streak.lastStudyDate === yesterday) {
+    streak.current++;
+  } else if (streak.lastStudyDate !== today) {
+    streak.current = 1;
+  }
+  streak.lastStudyDate = today;
+  if (streak.current > (streak.best || 0)) streak.best = streak.current;
+  saveStreak();
+  updateStreakBadge();
+}
+
+function updateStreakBadge() {
+  const el = document.getElementById('streakBadge');
+  if (el && streak.current > 0) {
+    el.innerHTML = '&#x1F525; ' + streak.current;
+  } else if (el) {
+    el.innerHTML = '';
+  }
+}
+
+// ==================================================
+// Theme
+// ==================================================
+function loadTheme() {
+  const theme = localStorage.getItem('sparta_theme') || 'light';
+  document.documentElement.setAttribute('data-theme', theme);
+}
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('sparta_theme', next);
+}
+
+// ==================================================
+// Navigation
+// ==================================================
+function setupNav() {
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (session && btn.dataset.mode !== 'study') {
+        if (!confirm('学習セッション中です。中断しますか？')) return;
+        session = null;
+      }
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentMode = btn.dataset.mode;
+      render();
+    });
+  });
+}
+
+function switchMode(mode) {
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === mode);
+  });
+  currentMode = mode;
+  render();
+}
+
+// ==================================================
+// Render
+// ==================================================
+function render() {
+  const app = document.getElementById('app');
+  switch(currentMode) {
+    case 'dashboard': renderDashboard(app); break;
+    case 'study': renderStudy(app); break;
+    case 'practice': renderPractice(app); break;
+    case 'edit': renderEdit(app); break;
+    case 'stats': renderStats(app); break;
+    default: renderDashboard(app);
+  }
+}
+
+// ==================================================
+// DASHBOARD
+// ==================================================
+function renderDashboard(app) {
+  const words = getMergedWords();
+  const dayNum = getDayNumber();
+  const dueWords = getDueWords();
+  const newTarget = getTodayNewTarget();
+  const learned = getLearnedCount();
+  const mastered = getMasteredCount();
+  const todayH = getTodayHistory();
+  const estMinutes = Math.ceil((newTarget * 2 + dueWords.length * 0.5) / 2);
+  const daysRemaining = getDaysRemaining();
+  const phase = dayNum <= 20 ? 'Phase 1: 集中インプット' :
+                dayNum <= 40 ? 'Phase 2: インプット + 復習' :
+                dayNum <= 50 ? 'Phase 3: 仕上げ + 復習' :
+                'Phase 4: 総復習';
+
+  // Last 7 days history
+  const today = todayStr();
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = addDays(today, -i);
+    const h = (studyPlan.history || {})[d] || { newLearned: 0, reviewed: 0 };
+    days.push({ date: d, total: h.newLearned + h.reviewed, label: d.slice(5) });
+  }
+  const maxDay = Math.max(1, ...days.map(d => d.total));
+
+  // Zone progress
+  const zones = [1, 2, 3, 4, 5];
+  const zoneStats = zones.map(z => {
+    const zWords = words.filter(w => w.page === z);
+    const zMastered = zWords.filter(w => srsData[w.id] && srsData[w.id].stage === 'mature').length;
+    const zLearning = zWords.filter(w => srsData[w.id] && srsData[w.id].stage !== 'new' && srsData[w.id].stage !== 'mature').length;
+    return { zone: z, total: zWords.length, mastered: zMastered, learning: zLearning };
+  });
+
+  let html = `
+    <div class="card fade-in">
+      <div class="day-counter">
+        <div class="day-num">Day ${Math.min(dayNum, 60)}</div>
+        <div class="day-label">${dayNum <= 60 ? '/ 60日チャレンジ' : '継続学習中!'}</div>
+        <div style="font-size:13px; color:var(--primary); font-weight:600; margin-top:4px;">${phase}</div>
+      </div>
+
+      <div class="task-summary">
+        <div class="task-item task-new">
+          <div class="task-num">${newTarget}</div>
+          <div class="task-label">新規単語</div>
+        </div>
+        <div class="task-item task-review">
+          <div class="task-num">${dueWords.length}</div>
+          <div class="task-label">復習</div>
+        </div>
+        <div class="task-item task-time">
+          <div class="task-num">${estMinutes}</div>
+          <div class="task-label">推定 分</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-lg btn-block" onclick="startStudySession()" style="margin:16px 0;">
+        今日の学習を始める
+      </button>
+
+      ${todayH.newLearned + todayH.reviewed > 0 ? `
+        <p style="text-align:center; font-size:13px; color:var(--text-secondary);">
+          今日: 新規 ${todayH.newLearned}語 / 復習 ${todayH.reviewed}回 / 正解率 ${todayH.correct + todayH.wrong > 0 ? Math.round(todayH.correct / (todayH.correct + todayH.wrong) * 100) : 0}%
+        </p>
+      ` : ''}
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:4px;">全体マスタリー</h3>
+      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:8px;">${mastered} / ${words.length} 語 完全習得 (${words.length ? Math.round(mastered / words.length * 100) : 0}%)</p>
+      <div class="progress-bar" style="height:12px;">
+        <div class="progress-fill" style="width:${words.length ? mastered / words.length * 100 : 0}%; background:linear-gradient(90deg, var(--success), #5ac8fa);"></div>
+      </div>
+      <p style="font-size:13px; color:var(--text-secondary); margin-top:8px;">${learned} / ${words.length} 語 学習中 (${words.length ? Math.round(learned / words.length * 100) : 0}%)</p>
+      <div class="progress-bar" style="height:8px;">
+        <div class="progress-fill" style="width:${words.length ? learned / words.length * 100 : 0}%"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:8px;">ZONE別進捗</h3>
+      <div class="zone-progress">
+        ${zoneStats.map(z => {
+          const pct = z.total ? Math.round((z.mastered / z.total) * 100) : 0;
+          const learnPct = z.total ? Math.round(((z.mastered + z.learning) / z.total) * 100) : 0;
+          return `<div class="zone-row">
+            <span class="zone-label">ZONE ${z.zone}</span>
+            <div class="zone-bar">
+              <div class="zone-bar-fill" style="width:${learnPct}%; background:var(--primary); opacity:0.3; position:absolute;"></div>
+              <div class="zone-bar-fill" style="width:${pct}%; background:var(--success);"></div>
+            </div>
+            <span class="zone-pct">${pct}%</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:8px;">過去7日間</h3>
+      <div class="history-chart">
+        ${days.map(d => `<div class="history-bar${d.date === today ? ' today' : ''}" style="height:${d.total / maxDay * 100}%" title="${d.label}: ${d.total}回"></div>`).join('')}
+      </div>
+      <div class="history-labels">
+        ${days.map(d => `<span>${d.label}</span>`).join('')}
+      </div>
+    </div>
+  `;
+  app.innerHTML = html;
+}
+
+// ==================================================
+// STUDY SESSION (guided learning flow)
+// ==================================================
+function startStudySession() {
+  const newTarget = getTodayNewTarget();
+  const dueWords = getDueWords();
+  const newWords = getNewWords(newTarget);
+
+  session = {
+    // Phase: 'intro' | 'quiz' | 'typing_en_jp' | 'typing_jp_en' | 'review' | 'complete'
+    phase: newWords.length > 0 ? 'intro' : (dueWords.length > 0 ? 'review' : 'complete'),
+    newWords: newWords,
+    newBatch: [],       // current batch of 5 for intro
+    newBatchIdx: 0,     // index within batch
+    newOffset: 0,       // how many new words done
+    dueWords: shuffleArray([...dueWords]),
+    dueIdx: 0,
+    quizQueue: [],
+    quizIdx: 0,
+    typingQueue: [],
+    typingIdx: 0,
+    typingMode: 'en_jp',  // or 'jp_en'
+    correct: 0,
+    wrong: 0,
+    total: 0,
+    newLearned: 0,
+    reviewed: 0,
+    answered: false,
+    showAnswer: false,
+  };
+
+  if (session.phase === 'intro') {
+    loadNextBatch();
+  }
+
+  switchMode('study');
+}
+
+function loadNextBatch() {
+  const batchSize = 5;
+  const start = session.newOffset;
+  const end = Math.min(start + batchSize, session.newWords.length);
+  session.newBatch = session.newWords.slice(start, end);
+  session.newBatchIdx = 0;
+  session.phase = 'intro';
+}
+
+function renderStudy(app) {
+  if (!session) {
+    app.innerHTML = `
+      <div class="card fade-in" style="text-align:center; padding:40px;">
+        <div style="font-size:48px; margin-bottom:16px;">&#x1F4DA;</div>
+        <h2>学習セッション</h2>
+        <p style="color:var(--text-secondary); margin:12px 0;">ダッシュボードから「今日の学習を始める」を押してください。</p>
+        <button class="btn btn-primary" onclick="switchMode('dashboard')">ダッシュボードへ</button>
+      </div>`;
+    return;
+  }
+
+  switch(session.phase) {
+    case 'intro': renderIntro(app); break;
+    case 'quiz': renderSessionQuiz(app); break;
+    case 'typing_en_jp': renderTyping(app, 'en_jp'); break;
+    case 'typing_jp_en': renderReverseQuiz(app); break;
+    case 'review': renderReview(app); break;
+    case 'complete': renderComplete(app); break;
+  }
+}
+
+function renderIntro(app) {
+  const w = session.newBatch[session.newBatchIdx];
+  if (!w) { advanceFromIntro(); return; }
+  const s = getSRS(w.id);
+  const batchNum = Math.floor(session.newOffset / 5) + 1;
+  const totalBatches = Math.ceil(session.newWords.length / 5);
+
+  app.innerHTML = `
+    <div class="card fade-in">
+      <div class="session-header">
+        <span class="session-phase">新規単語を覚えよう (バッチ ${batchNum}/${totalBatches})</span>
+        <span class="session-counter">${session.newBatchIdx + 1} / ${session.newBatch.length}</span>
+      </div>
+      <div class="session-progress">
+        <div class="progress-bar"><div class="progress-fill" style="width:${session.newBatch.length ? (session.newBatchIdx / session.newBatch.length * 100) : 0}%"></div></div>
+      </div>
+    </div>
+    <div class="flashcard-area fade-in">
+      <div class="card" style="text-align:center; padding:40px; width:100%; max-width:500px;">
+        <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">ZONE ${w.page}</div>
+        <div class="flashcard-word" style="margin-bottom:20px;">${escapeHtml(w.word)}</div>
+        <div class="flashcard-meaning" style="font-size:24px;">${formatMeaning(w.meaning)}</div>
+      </div>
+      <p style="font-size:13px; color:var(--text-secondary);">この単語を覚えたら次へ</p>
+      <button class="btn btn-primary btn-lg" onclick="nextIntroWord()">覚えた、次へ</button>
+    </div>`;
+}
+
+function nextIntroWord() {
+  const w = session.newBatch[session.newBatchIdx];
+  // Mark as seen (phase 1)
+  const s = getSRS(w.id);
+  if (s.phase === 0) {
+    s.phase = 1;
+    s.stage = 'learning';
+    s.nextReview = todayStr();
+    saveSRS();
+    recordNewLearned();
+    session.newLearned++;
+  }
+  session.newBatchIdx++;
+  if (session.newBatchIdx >= session.newBatch.length) {
+    advanceFromIntro();
+  } else {
+    render();
+  }
+}
+
+function advanceFromIntro() {
+  // After intro batch -> quiz on those words
+  if (session.newBatch.length > 0) {
+    session.quizQueue = shuffleArray([...session.newBatch]);
+    session.quizIdx = 0;
+    session.answered = false;
+    session.phase = 'quiz';
+  } else {
+    advanceFromQuiz();
+  }
+  render();
+}
+
+function renderSessionQuiz(app) {
+  if (session.quizIdx >= session.quizQueue.length) {
+    advanceFromQuiz();
+    return;
+  }
+  const w = session.quizQueue[session.quizIdx];
+  const allW = getMergedWords();
+  const options = generateQuizOptions(w, allW);
+
+  app.innerHTML = `
+    <div class="card fade-in">
+      <div class="session-header">
+        <span class="session-phase">確認クイズ</span>
+        <span class="session-counter">${session.quizIdx + 1} / ${session.quizQueue.length}</span>
+      </div>
+      <div class="session-progress">
+        <div class="progress-bar"><div class="progress-fill" style="width:${session.quizQueue.length ? (session.quizIdx / session.quizQueue.length * 100) : 0}%"></div></div>
+      </div>
+    </div>
+    <div class="quiz-area fade-in">
+      <div class="card" style="width:100%;text-align:center;">
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">ZONE ${w.page}</div>
+        <div class="quiz-word">${escapeHtml(w.word)}</div>
+      </div>
+      <div class="quiz-options">
+        ${options.map((o, i) => `
+          <button class="quiz-option" data-correct="${o.id === w.id}" onclick="sessionQuizAnswer(this, ${o.id === w.id}, ${w.id})">
+            ${formatMeaning(o.meaning)}
+          </button>
+        `).join('')}
+      </div>
+      <div class="hidden" id="quizNext">
+        <button class="btn btn-primary" onclick="nextSessionQuiz()">次へ</button>
+      </div>
+    </div>`;
+}
+
+function sessionQuizAnswer(el, isCorrect, wordId) {
+  if (session.answered) return;
+  session.answered = true;
+  session.total++;
+
+  document.querySelectorAll('.quiz-option').forEach(opt => {
+    opt.classList.add('disabled');
+    if (opt.dataset.correct === 'true') opt.classList.add('correct');
+  });
+
+  if (isCorrect) {
+    el.classList.add('correct');
+    session.correct++;
+    gradeSRS(wordId, 2); // Good
+  } else {
+    el.classList.add('incorrect');
+    session.wrong++;
+    gradeSRS(wordId, 0); // Again
+  }
+
+  document.getElementById('quizNext').classList.remove('hidden');
+}
+
+function nextSessionQuiz() {
+  session.quizIdx++;
+  session.answered = false;
+  render();
+}
+
+function advanceFromQuiz() {
+  // After quiz -> typing (English -> Japanese)
+  if (session.newBatch.length > 0) {
+    session.typingQueue = shuffleArray([...session.newBatch]);
+    session.typingIdx = 0;
+    session.typingMode = 'en_jp';
+    session.phase = 'typing_en_jp';
+    session.answered = false;
+    session.showAnswer = false;
+  } else {
+    advanceFromTypingEnJp();
+  }
+  render();
+}
+
+function renderTyping(app, mode) {
+  if (session.typingIdx >= session.typingQueue.length) {
+    if (mode === 'en_jp') advanceFromTypingEnJp();
+    else advanceFromTypingJpEn();
+    return;
+  }
+
+  const w = session.typingQueue[session.typingIdx];
+  const isEnJp = mode === 'en_jp';
+  const prompt = isEnJp ? escapeHtml(w.word) : formatMeaning(w.meaning);
+  const promptClass = isEnJp ? 'en' : 'jp';
+  const placeholder = isEnJp ? '日本語の意味を入力...' : '英単語を入力...';
+  const phaseLabel = isEnJp ? 'タイピング (英→日)' : 'タイピング (日→英)';
+
+  app.innerHTML = `
+    <div class="card fade-in">
+      <div class="session-header">
+        <span class="session-phase">${phaseLabel}</span>
+        <span class="session-counter">${session.typingIdx + 1} / ${session.typingQueue.length}</span>
+      </div>
+      <div class="session-progress">
+        <div class="progress-bar"><div class="progress-fill" style="width:${session.typingQueue.length ? (session.typingIdx / session.typingQueue.length * 100) : 0}%"></div></div>
+      </div>
+    </div>
+    <div class="flashcard-area fade-in">
+      <div class="typing-area">
+        <div class="typing-prompt ${promptClass}">${prompt}</div>
+        <div class="typing-sub">${isEnJp ? 'この英単語の意味は？' : 'この意味の英単語は？'}</div>
+        <input class="typing-input" id="typingInput" type="text" placeholder="${placeholder}"
+          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          autofocus inputmode="text"
+          onkeydown="if(event.key==='Enter')checkTyping(${isEnJp}, ${w.id})">
+        <div class="typing-feedback" id="typingFeedback"></div>
+        <div class="typing-answer hidden" id="typingAnswer"></div>
+        <div style="margin-top:16px;">
+          <button class="btn btn-primary" id="typingCheck" onclick="checkTyping(${isEnJp}, ${w.id})">確認</button>
+          <button class="btn btn-outline hidden" id="typingNext" onclick="nextTyping()">次へ</button>
+          <button class="btn btn-outline" id="typingSkip" onclick="skipTyping(${w.id})" style="margin-left:8px;">スキップ</button>
+        </div>
+      </div>
+    </div>`;
+  setTimeout(() => { const inp = document.getElementById('typingInput'); if (inp) { inp.focus(); inp.click(); } }, 100);
+}
+
+function checkTyping(isEnJp, wordId) {
+  if (session.showAnswer) return;
+  const input = document.getElementById('typingInput');
+  const feedback = document.getElementById('typingFeedback');
+  const answer = document.getElementById('typingAnswer');
+  const w = session.typingQueue[session.typingIdx];
+  const userVal = input.value.trim();
+
+  if (!userVal) return;
+
+  session.showAnswer = true;
+  session.total++;
+  let isCorrect = false;
+
+  if (isEnJp) {
+    isCorrect = checkJapaneseFuzzy(userVal, w.meaning);
+    answer.innerHTML = '正解: ' + formatMeaning(w.meaning);
+  } else {
+    isCorrect = checkEnglishFuzzy(userVal, w.word);
+    answer.innerHTML = '正解: ' + escapeHtml(w.word);
+  }
+
+  if (isCorrect) {
+    input.classList.add('correct');
+    feedback.innerHTML = '<span style="color:var(--success)">正解!</span>';
+    session.correct++;
+    gradeSRS(wordId, 2);
+  } else {
+    const dist = isEnJp ? 999 : levenshtein(userVal.toLowerCase(), w.word.toLowerCase());
+    if (!isEnJp && dist <= 1) {
+      input.classList.add('correct');
+      feedback.innerHTML = '<span style="color:var(--warning)">惜しい! (タイプミス)</span>';
+      session.correct++;
+      gradeSRS(wordId, 1); // Hard
+    } else {
+      input.classList.add('incorrect');
+      feedback.innerHTML = '<span style="color:var(--danger)">不正解</span>';
+      session.wrong++;
+      gradeSRS(wordId, 0);
+    }
+  }
+
+  answer.classList.remove('hidden');
+  document.getElementById('typingCheck').classList.add('hidden');
+  document.getElementById('typingSkip').classList.add('hidden');
+  document.getElementById('typingNext').classList.remove('hidden');
+  input.disabled = true;
+}
+
+function skipTyping(wordId) {
+  session.showAnswer = true;
+  session.total++;
+  session.wrong++;
+  gradeSRS(wordId, 0);
+  const w = session.typingQueue[session.typingIdx];
+  const input = document.getElementById('typingInput');
+  const feedback = document.getElementById('typingFeedback');
+  const answer = document.getElementById('typingAnswer');
+  input.classList.add('incorrect');
+  feedback.innerHTML = '<span style="color:var(--danger)">スキップ</span>';
+  if (session.typingMode === 'en_jp') {
+    answer.innerHTML = '正解: ' + formatMeaning(w.meaning);
+  } else {
+    answer.innerHTML = '正解: ' + escapeHtml(w.word);
+  }
+  answer.classList.remove('hidden');
+  document.getElementById('typingCheck').classList.add('hidden');
+  document.getElementById('typingSkip').classList.add('hidden');
+  document.getElementById('typingNext').classList.remove('hidden');
+  input.disabled = true;
+}
+
+function nextTyping() {
+  session.typingIdx++;
+  session.showAnswer = false;
+  render();
+}
+
+function advanceFromTypingEnJp() {
+  // After English->Japanese typing -> Japanese->English typing
+  if (session.newBatch.length > 0) {
+    session.typingQueue = shuffleArray([...session.newBatch]);
+    session.typingIdx = 0;
+    session.typingMode = 'jp_en';
+    session.phase = 'typing_jp_en';
+    session.showAnswer = false;
+  } else {
+    advanceFromTypingJpEn();
+  }
+  render();
+}
+
+function advanceFromTypingJpEn() {
+  // After all typing -> check if more new batches
+  session.newOffset += session.newBatch.length;
+  if (session.newOffset < session.newWords.length) {
+    loadNextBatch();
+    render();
+    return;
+  }
+
+  // After all new words -> review due words
+  if (session.dueWords.length > 0) {
+    session.dueIdx = 0;
+    session.phase = 'review';
+    session.answered = false;
+  } else {
+    session.phase = 'complete';
+  }
+  render();
+}
+
+// Reverse Quiz: Show meaning, pick the correct English word (replaces jp->en typing)
+function renderReverseQuiz(app) {
+  if (session.typingIdx >= session.typingQueue.length) {
+    advanceFromTypingJpEn();
+    return;
+  }
+
+  const w = session.typingQueue[session.typingIdx];
+  const allW = getMergedWords();
+  const options = generateQuizOptions(w, allW);
+
+  app.innerHTML = `
+    <div class="card fade-in">
+      <div class="session-header">
+        <span class="session-phase">意味→英単語クイズ</span>
+        <span class="session-counter">${session.typingIdx + 1} / ${session.typingQueue.length}</span>
+      </div>
+      <div class="session-progress">
+        <div class="progress-bar"><div class="progress-fill" style="width:${session.typingQueue.length ? (session.typingIdx / session.typingQueue.length * 100) : 0}%"></div></div>
+      </div>
+    </div>
+    <div class="quiz-area fade-in">
+      <div class="card" style="width:100%;text-align:center;">
+        <div style="font-size:12px;color:var(--text-secondary);">ZONE ${w.page}</div>
+        <div style="font-size:13px;color:var(--text-secondary);margin:4px 0;">この意味の英単語は？</div>
+        <div class="quiz-word" style="color:var(--text); font-size:28px;">${formatMeaning(w.meaning)}</div>
+      </div>
+      <div class="quiz-options">
+        ${options.map(o => `
+          <button class="quiz-option" style="text-align:center; font-weight:600; font-size:18px;" data-correct="${o.id === w.id}" onclick="reverseQuizAnswer(this, ${o.id === w.id}, ${w.id})">
+            ${escapeHtml(o.word)}
+          </button>
+        `).join('')}
+      </div>
+      <div class="hidden" id="reverseQuizNext">
+        <button class="btn btn-primary" onclick="nextReverseQuiz()">次へ</button>
+      </div>
+      <div style="text-align:center; font-size:13px; color:var(--text-secondary);">${session.typingIdx + 1} / ${session.typingQueue.length}</div>
+    </div>`;
+}
+
+function reverseQuizAnswer(el, isCorrect, wordId) {
+  if (session.showAnswer) return;
+  session.showAnswer = true;
+  session.total++;
+  document.querySelectorAll('.quiz-option').forEach(opt => {
+    opt.classList.add('disabled');
+    if (opt.dataset.correct === 'true') opt.classList.add('correct');
+  });
+  if (isCorrect) {
+    el.classList.add('correct');
+    session.correct++;
+    gradeSRS(wordId, 2);
+  } else {
+    el.classList.add('incorrect');
+    session.wrong++;
+    gradeSRS(wordId, 0);
+  }
+  document.getElementById('reverseQuizNext').classList.remove('hidden');
+}
+
+function nextReverseQuiz() {
+  session.typingIdx++;
+  session.showAnswer = false;
+  render();
+}
+
+function renderReview(app) {
+  if (session.dueIdx >= session.dueWords.length) {
+    session.phase = 'complete';
+    render();
+    return;
+  }
+
+  const w = session.dueWords[session.dueIdx];
+  const s = getSRS(w.id);
+
+  if (!session.answered) {
+    // Show word, user taps to reveal
+    app.innerHTML = `
+      <div class="card fade-in">
+        <div class="session-header">
+          <span class="session-phase">復習</span>
+          <span class="session-counter">${session.dueIdx + 1} / ${session.dueWords.length}</span>
+        </div>
+        <div class="session-progress">
+          <div class="progress-bar"><div class="progress-fill" style="width:${session.dueWords.length ? (session.dueIdx / session.dueWords.length * 100) : 0}%"></div></div>
+        </div>
+      </div>
+      <div class="flashcard-area fade-in">
+        <div class="flashcard-wrapper" onclick="revealReview()">
+          <div class="flashcard" id="flashcard">
+            <div class="flashcard-face">
+              <div class="flashcard-page">ZONE ${w.page} <span class="stage-badge stage-${s.stage}">${s.stage}</span></div>
+              <div class="flashcard-word">${escapeHtml(w.word)}</div>
+              <div class="flashcard-hint">タップして意味を表示</div>
+            </div>
+            <div class="flashcard-face flashcard-back">
+              <div class="flashcard-page">ZONE ${w.page}</div>
+              <div class="flashcard-meaning">${formatMeaning(w.meaning)}</div>
+            </div>
+          </div>
+        </div>
+        <div class="srs-actions" id="srsActions" style="visibility:hidden;">
+          <button class="btn btn-again" onclick="gradeReview(0)">Again<small>今日</small></button>
+          <button class="btn btn-hard" onclick="gradeReview(1)">Hard<small>${getIntervalLabel(Math.max(1, Math.round((s.interval || 1) * 1.2)))}</small></button>
+          <button class="btn btn-good" onclick="gradeReview(2)">Good<small>${getIntervalLabel(s.reps < 1 ? 1 : (s.reps < 2 ? 3 : Math.round((s.interval || 1) * s.ease)))}</small></button>
+          <button class="btn btn-easy" onclick="gradeReview(3)">Easy<small>${getIntervalLabel(s.reps < 1 ? 3 : (s.reps < 2 ? 7 : Math.round((s.interval || 1) * s.ease * 1.3)))}</small></button>
+        </div>
+        <div style="text-align:center; font-size:13px; color:var(--text-secondary);">
+          ${session.dueIdx + 1} / ${session.dueWords.length}
+        </div>
+      </div>`;
+  }
+}
+
+function revealReview() {
+  const card = document.getElementById('flashcard');
+  if (!card) return;
+  card.classList.toggle('flipped');
+  if (card.classList.contains('flipped')) {
+    document.getElementById('srsActions').style.visibility = 'visible';
+  }
+}
+
+function gradeReview(grade) {
+  const w = session.dueWords[session.dueIdx];
+  gradeSRS(w.id, grade);
+  recordReviewed();
+  session.reviewed++;
+  session.total++;
+  if (grade >= 2) session.correct++; else session.wrong++;
+
+  // If Again, re-add to end
+  if (grade === 0) {
+    session.dueWords.push(w);
+  }
+
+  session.dueIdx++;
+  session.answered = false;
+  render();
+}
+
+function renderComplete(app) {
+  const pct = session.total ? Math.round(session.correct / session.total * 100) : 100;
+  const learned = getLearnedCount();
+  const total = getMergedWords().length;
+
+  // Check milestones
+  const milestones = [100, 250, 500, 750, 1000];
+  const masteredNow = getMasteredCount();
+  let milestone = null;
+  for (const m of milestones) {
+    if (masteredNow >= m && !localStorage.getItem('sparta_milestone_' + m)) {
+      milestone = m;
+      localStorage.setItem('sparta_milestone_' + m, '1');
+      break;
+    }
+  }
+
+  app.innerHTML = `
+    <div class="card fade-in" style="text-align:center; padding:40px;">
+      <div style="font-size:48px; margin-bottom:16px;">${pct >= 80 ? '&#x1F389;' : '&#x1F4AA;'}</div>
+      <h2 style="margin-bottom:16px;">セッション完了!</h2>
+      <div style="font-size:48px; font-weight:800; color:var(--primary); margin-bottom:8px;">${pct}%</div>
+      <div class="stats-row" style="justify-content:center; margin:16px 0;">
+        <div class="stat-badge">
+          <div class="stat-num" style="font-size:20px; color:var(--primary);">${session.newLearned}</div>
+          <div class="stat-label">新規習得</div>
+        </div>
+        <div class="stat-badge">
+          <div class="stat-num" style="font-size:20px; color:var(--warning);">${session.reviewed || 0}</div>
+          <div class="stat-label">復習完了</div>
+        </div>
+        <div class="stat-badge">
+          <div class="stat-num" style="font-size:20px; color:var(--success);">${session.correct}</div>
+          <div class="stat-label">正解</div>
+        </div>
+        <div class="stat-badge">
+          <div class="stat-num" style="font-size:20px; color:var(--danger);">${session.wrong}</div>
+          <div class="stat-label">不正解</div>
+        </div>
+      </div>
+      <p style="color:var(--text-secondary); margin-bottom:16px;">
+        全体進捗: ${learned} / ${total} 語 (${total ? Math.round(learned / total * 100) : 0}%)
+      </p>
+      ${milestone ? `<p style="font-size:18px; font-weight:700; color:var(--success); margin-bottom:16px;">&#x1F3C6; ${milestone}語マイルストーン達成!</p>` : ''}
+      <div style="display:flex; gap:8px; justify-content:center;">
+        <button class="btn btn-primary" onclick="session=null; switchMode('dashboard')">ダッシュボードへ</button>
+        <button class="btn btn-outline" onclick="startStudySession()">もう一度</button>
+      </div>
+    </div>`;
+
+  if (milestone) showConfetti();
+  session = null;
+}
+
+// ==================================================
+// FREE PRACTICE MODE
+// ==================================================
+let practiceMode = 'flash'; // 'flash', 'quiz', 'typing_en', 'typing_jp'
+let practiceQueue = [];
+let practiceIdx = 0;
+let practiceAnswered = false;
+let practiceShowAnswer = false;
+let practiceCorrect = 0;
+let practiceTotal = 0;
+
+function renderPractice(app) {
+  const filtered = getFilteredWords();
+
+  let html = `
+    <div class="card">
+      <div class="filter-section">
+        <label>ZONE:</label>
+        <input class="filter-input" type="number" id="practiceFrom" placeholder="1" value="${pageFrom}" min="1" max="5">
+        <span>〜</span>
+        <input class="filter-input" type="number" id="practiceTo" placeholder="5" value="${pageTo}" min="1" max="5">
+        <button class="btn btn-sm btn-primary" onclick="applyPracticeFilter()">適用</button>
+        <button class="btn btn-sm btn-outline" onclick="pageFrom='';pageTo='';practiceQueue=[];render();">リセット</button>
+      </div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+        <button class="btn btn-sm ${practiceMode === 'flash' ? 'btn-primary' : 'btn-outline'}" onclick="setPracticeMode('flash')">フラッシュカード</button>
+        <button class="btn btn-sm ${practiceMode === 'quiz' ? 'btn-primary' : 'btn-outline'}" onclick="setPracticeMode('quiz')">4択クイズ</button>
+        <button class="btn btn-sm ${practiceMode === 'typing_en' ? 'btn-primary' : 'btn-outline'}" onclick="setPracticeMode('typing_en')">英→日</button>
+        <button class="btn btn-sm ${practiceMode === 'typing_jp' ? 'btn-primary' : 'btn-outline'}" onclick="setPracticeMode('typing_jp')">意味→英単語</button>
+      </div>
+    </div>`;
+
+  if (filtered.length === 0) {
+    app.innerHTML = html + `<div class="empty-state"><div class="icon">&#x1F4DA;</div><p>単語がありません</p></div>`;
+    return;
+  }
+
+  if (practiceQueue.length === 0) {
+    practiceQueue = buildPracticeQueue(filtered);
+    practiceIdx = 0;
+    practiceCorrect = 0;
+    practiceTotal = 0;
+  }
+
+  if (practiceIdx >= practiceQueue.length) {
+    html += `
+      <div class="card fade-in" style="text-align:center; padding:40px;">
+        <h2>練習完了!</h2>
+        <p style="color:var(--text-secondary); margin:12px 0;">正解: ${practiceCorrect} / ${practiceTotal}</p>
+        <button class="btn btn-primary" onclick="practiceQueue=[];render();">もう一度</button>
+      </div>`;
+    app.innerHTML = html;
+    return;
+  }
+
+  const w = practiceQueue[practiceIdx];
+  const s = getSRS(w.id);
+
+  if (practiceMode === 'flash') {
+    html += renderPracticeFlash(w, s);
+  } else if (practiceMode === 'quiz') {
+    if (filtered.length < 4) {
+      html += `<div class="empty-state"><p>クイズには最低4語必要です</p></div>`;
+    } else {
+      html += renderPracticeQuiz(w, filtered);
+    }
+  } else if (practiceMode === 'typing_en') {
+    html += renderPracticeTyping(w, true);
+  } else if (practiceMode === 'typing_jp') {
+    if (filtered.length < 4) {
+      html += `<div class="empty-state"><p>クイズには最低4語必要です</p></div>`;
+    } else {
+      html += renderPracticeReverseQuiz(w, filtered);
+    }
+  }
+
+  app.innerHTML = html;
+  if (practiceMode === 'typing_en' && !practiceShowAnswer) {
+    setTimeout(() => { const inp = document.getElementById('typingInput'); if (inp) { inp.focus(); inp.click(); } }, 100);
+  }
+}
+
+function buildPracticeQueue(words) {
+  // Weight by SRS weakness
+  let weighted = words.map(w => {
+    const s = srsData[w.id] || {};
+    let weight = 1;
+    if (s.stage === 'new') weight = 2;
+    else if (s.stage === 'learning') weight = 3;
+    else if (s.stage === 'young') weight = 1.5;
+    else weight = 0.5;
+    if (s.lapses > 0) weight += s.lapses;
+    return { word: w, weight };
+  });
+  return weightedShuffle(weighted).slice(0, 20);
+}
+
+function weightedShuffle(items) {
+  let queue = [];
+  let pool = [...items];
+  while (pool.length > 0) {
+    const total = pool.reduce((s, i) => s + i.weight, 0);
+    let r = Math.random() * total;
+    let idx = 0;
+    for (let i = 0; i < pool.length; i++) {
+      r -= pool[i].weight;
+      if (r <= 0) { idx = i; break; }
+    }
+    queue.push(pool[idx].word);
+    pool.splice(idx, 1);
+  }
+  return queue;
+}
+
+function renderPracticeFlash(w, s) {
+  return `
+    <div class="flashcard-area fade-in">
+      <div class="flashcard-wrapper" onclick="flipCard()">
+        <div class="flashcard" id="flashcard">
+          <div class="flashcard-face">
+            <div class="flashcard-page">ZONE ${w.page} <span class="stage-badge stage-${s.stage || 'new'}">${s.stage || 'new'}</span></div>
+            <div class="flashcard-word">${escapeHtml(w.word)}</div>
+            <div class="flashcard-hint">タップして意味を表示</div>
+          </div>
+          <div class="flashcard-face flashcard-back">
+            <div class="flashcard-page">ZONE ${w.page}</div>
+            <div class="flashcard-meaning">${formatMeaning(w.meaning)}</div>
+          </div>
+        </div>
+      </div>
+      <div class="srs-actions" id="flashActions" style="visibility:hidden;">
+        <button class="btn btn-again" onclick="practiceGrade(0)">Again</button>
+        <button class="btn btn-hard" onclick="practiceGrade(1)">Hard</button>
+        <button class="btn btn-good" onclick="practiceGrade(2)">Good</button>
+        <button class="btn btn-easy" onclick="practiceGrade(3)">Easy</button>
+      </div>
+      <div style="text-align:center; font-size:13px; color:var(--text-secondary);">${practiceIdx + 1} / ${practiceQueue.length}</div>
+    </div>`;
+}
+
+function renderPracticeQuiz(w, pool) {
+  const options = generateQuizOptions(w, pool);
+  return `
+    <div class="quiz-area fade-in">
+      <div class="card" style="width:100%;text-align:center;">
+        <div style="font-size:12px;color:var(--text-secondary);">ZONE ${w.page}</div>
+        <div class="quiz-word">${escapeHtml(w.word)}</div>
+      </div>
+      <div class="quiz-options">
+        ${options.map(o => `
+          <button class="quiz-option" data-correct="${o.id === w.id}" onclick="practiceQuizAnswer(this, ${o.id === w.id}, ${w.id})">
+            ${formatMeaning(o.meaning)}
+          </button>
+        `).join('')}
+      </div>
+      <div class="hidden" id="quizNext">
+        <button class="btn btn-primary" onclick="practiceNext()">次へ</button>
+      </div>
+      <div style="text-align:center; font-size:13px; color:var(--text-secondary);">${practiceIdx + 1} / ${practiceQueue.length}</div>
+    </div>`;
+}
+
+function renderPracticeTyping(w, isEnJp) {
+  const prompt = isEnJp ? escapeHtml(w.word) : formatMeaning(w.meaning);
+  const promptClass = isEnJp ? 'en' : 'jp';
+  const placeholder = isEnJp ? '日本語の意味を入力...' : '英単語を入力...';
+  return `
+    <div class="flashcard-area fade-in">
+      <div class="typing-area">
+        <div class="typing-prompt ${promptClass}">${prompt}</div>
+        <div class="typing-sub">${isEnJp ? 'この英単語の意味は？' : 'この意味の英単語は？'}</div>
+        <input class="typing-input" id="typingInput" type="text" placeholder="${placeholder}"
+          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          autofocus inputmode="text"
+          onkeydown="if(event.key==='Enter')checkPracticeTyping(${isEnJp}, ${w.id})">
+        <div class="typing-feedback" id="typingFeedback"></div>
+        <div class="typing-answer hidden" id="typingAnswer"></div>
+        <div style="margin-top:16px;">
+          <button class="btn btn-primary" id="typingCheck" onclick="checkPracticeTyping(${isEnJp}, ${w.id})">確認</button>
+          <button class="btn btn-outline hidden" id="typingNext" onclick="practiceNext()">次へ</button>
+          <button class="btn btn-outline" id="typingSkip" onclick="skipPracticeTyping(${isEnJp}, ${w.id})" style="margin-left:8px;">スキップ</button>
+        </div>
+      </div>
+      <div style="text-align:center; font-size:13px; color:var(--text-secondary); margin-top:12px;">${practiceIdx + 1} / ${practiceQueue.length}</div>
+    </div>`;
+}
+
+function renderPracticeReverseQuiz(w, pool) {
+  const options = generateQuizOptions(w, pool);
+  return `
+    <div class="quiz-area fade-in">
+      <div class="card" style="width:100%;text-align:center;">
+        <div style="font-size:12px;color:var(--text-secondary);">ZONE ${w.page}</div>
+        <div style="font-size:13px;color:var(--text-secondary);margin:4px 0;">この意味の英単語は？</div>
+        <div class="quiz-word" style="color:var(--text); font-size:28px;">${formatMeaning(w.meaning)}</div>
+      </div>
+      <div class="quiz-options">
+        ${options.map(o => `
+          <button class="quiz-option" style="text-align:center; font-weight:600; font-size:18px;" data-correct="${o.id === w.id}" onclick="practiceReverseQuizAnswer(this, ${o.id === w.id}, ${w.id})">
+            ${escapeHtml(o.word)}
+          </button>
+        `).join('')}
+      </div>
+      <div class="hidden" id="quizNext">
+        <button class="btn btn-primary" onclick="practiceNext()">次へ</button>
+      </div>
+      <div style="text-align:center; font-size:13px; color:var(--text-secondary);">${practiceIdx + 1} / ${practiceQueue.length}</div>
+    </div>`;
+}
+
+function practiceReverseQuizAnswer(el, isCorrect, wordId) {
+  if (practiceAnswered) return;
+  practiceAnswered = true;
+  practiceTotal++;
+  document.querySelectorAll('.quiz-option').forEach(opt => {
+    opt.classList.add('disabled');
+    if (opt.dataset.correct === 'true') opt.classList.add('correct');
+  });
+  if (isCorrect) {
+    el.classList.add('correct');
+    practiceCorrect++;
+    gradeSRS(wordId, 2);
+  } else {
+    el.classList.add('incorrect');
+    gradeSRS(wordId, 0);
+  }
+  document.getElementById('quizNext').classList.remove('hidden');
+}
+
+function flipCard() {
+  const card = document.getElementById('flashcard');
+  if (!card) return;
+  card.classList.toggle('flipped');
+  if (card.classList.contains('flipped')) {
+    const el = document.getElementById('flashActions') || document.getElementById('srsActions');
+    if (el) el.style.visibility = 'visible';
+  }
+}
+
+function practiceGrade(grade) {
+  const w = practiceQueue[practiceIdx];
+  gradeSRS(w.id, grade);
+  practiceTotal++;
+  if (grade >= 2) practiceCorrect++;
+  practiceIdx++;
+  practiceAnswered = false;
+  render();
+}
+
+function practiceQuizAnswer(el, isCorrect, wordId) {
+  if (practiceAnswered) return;
+  practiceAnswered = true;
+  practiceTotal++;
+  document.querySelectorAll('.quiz-option').forEach(opt => {
+    opt.classList.add('disabled');
+    if (opt.dataset.correct === 'true') opt.classList.add('correct');
+  });
+  if (isCorrect) {
+    el.classList.add('correct');
+    practiceCorrect++;
+    gradeSRS(wordId, 2);
+  } else {
+    el.classList.add('incorrect');
+    gradeSRS(wordId, 0);
+  }
+  document.getElementById('quizNext').classList.remove('hidden');
+}
+
+function checkPracticeTyping(isEnJp, wordId) {
+  if (practiceShowAnswer) return;
+  const input = document.getElementById('typingInput');
+  const userVal = input.value.trim();
+  if (!userVal) return;
+  practiceShowAnswer = true;
+  practiceTotal++;
+  const w = practiceQueue[practiceIdx];
+  let isCorrect;
+  if (isEnJp) {
+    isCorrect = checkJapaneseFuzzy(userVal, w.meaning);
+    document.getElementById('typingAnswer').innerHTML = '正解: ' + formatMeaning(w.meaning);
+  } else {
+    isCorrect = checkEnglishFuzzy(userVal, w.word);
+    document.getElementById('typingAnswer').innerHTML = '正解: ' + escapeHtml(w.word);
+  }
+  if (isCorrect) {
+    input.classList.add('correct');
+    document.getElementById('typingFeedback').innerHTML = '<span style="color:var(--success)">正解!</span>';
+    practiceCorrect++;
+    gradeSRS(wordId, 2);
+  } else {
+    const dist = isEnJp ? 999 : levenshtein(userVal.toLowerCase(), w.word.toLowerCase());
+    if (!isEnJp && dist <= 1) {
+      input.classList.add('correct');
+      document.getElementById('typingFeedback').innerHTML = '<span style="color:var(--warning)">惜しい!</span>';
+      practiceCorrect++;
+      gradeSRS(wordId, 1);
+    } else {
+      input.classList.add('incorrect');
+      document.getElementById('typingFeedback').innerHTML = '<span style="color:var(--danger)">不正解</span>';
+      gradeSRS(wordId, 0);
+    }
+  }
+  document.getElementById('typingAnswer').classList.remove('hidden');
+  document.getElementById('typingCheck').classList.add('hidden');
+  document.getElementById('typingSkip').classList.add('hidden');
+  document.getElementById('typingNext').classList.remove('hidden');
+  input.disabled = true;
+}
+
+function skipPracticeTyping(isEnJp, wordId) {
+  if (practiceShowAnswer) return;
+  practiceShowAnswer = true;
+  practiceTotal++;
+  gradeSRS(wordId, 0);
+  const w = practiceQueue[practiceIdx];
+  const input = document.getElementById('typingInput');
+  input.classList.add('incorrect');
+  document.getElementById('typingFeedback').innerHTML = '<span style="color:var(--danger)">スキップ</span>';
+  if (isEnJp) document.getElementById('typingAnswer').innerHTML = '正解: ' + formatMeaning(w.meaning);
+  else document.getElementById('typingAnswer').innerHTML = '正解: ' + escapeHtml(w.word);
+  document.getElementById('typingAnswer').classList.remove('hidden');
+  document.getElementById('typingCheck').classList.add('hidden');
+  document.getElementById('typingSkip').classList.add('hidden');
+  document.getElementById('typingNext').classList.remove('hidden');
+  input.disabled = true;
+}
+
+function practiceNext() {
+  practiceIdx++;
+  practiceAnswered = false;
+  practiceShowAnswer = false;
+  render();
+}
+
+function setPracticeMode(mode) {
+  practiceMode = mode;
+  practiceQueue = [];
+  practiceIdx = 0;
+  practiceCorrect = 0;
+  practiceTotal = 0;
+  practiceAnswered = false;
+  practiceShowAnswer = false;
+  render();
+}
+
+function applyPracticeFilter() {
+  pageFrom = document.getElementById('practiceFrom').value;
+  pageTo = document.getElementById('practiceTo').value;
+  practiceQueue = [];
+  render();
+}
+
+// ==================================================
+// EDIT MODE
+// ==================================================
+let editSearch = '';
+let editSortField = 'id';
+let editSortDir = 1;
+
+function renderEdit(app) {
+  let words = getMergedWords();
+  if (editSearch) {
+    const q = editSearch.toLowerCase();
+    words = words.filter(w => w.word.toLowerCase().includes(q) || w.meaning.includes(q) || String(w.page).includes(q));
+  }
+  words.sort((a, b) => {
+    let va = a[editSortField], vb = b[editSortField];
+    if (typeof va === 'string') return va.localeCompare(vb, 'ja') * editSortDir;
+    return (va - vb) * editSortDir;
+  });
+  const totalWords = getMergedWords().length;
+
+  let html = `
+    <div class="card">
+      <div class="edit-toolbar">
+        <button class="btn btn-sm btn-primary" onclick="openModal('addModal')">+ 単語追加</button>
+        <button class="btn btn-sm btn-outline" onclick="openModal('importModal')">CSVインポート</button>
+        <button class="btn btn-sm btn-warning" onclick="exportCSV()">CSVエクスポート</button>
+        <button class="btn btn-sm btn-outline" onclick="resetStartDate()">開始日リセット</button>
+        <button class="btn btn-sm btn-danger" onclick="resetAllData()">全データリセット</button>
+      </div>
+      <input class="search-input" type="text" placeholder="検索（単語・意味・ZONE）" value="${escapeHtml(editSearch)}" oninput="editSearch=this.value; renderEdit(document.getElementById('app'));">
+      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">全${totalWords}語 / 表示${words.length}語</p>
+      <div class="table-wrapper">
+        <table class="word-list-table">
+          <thead><tr>
+            <th class="sort-btn" onclick="toggleSort('id')">ID ${editSortField === 'id' ? (editSortDir > 0 ? '↑' : '↓') : ''}</th>
+            <th class="sort-btn" onclick="toggleSort('word')">単語 ${editSortField === 'word' ? (editSortDir > 0 ? '↑' : '↓') : ''}</th>
+            <th class="sort-btn" onclick="toggleSort('meaning')">意味 ${editSortField === 'meaning' ? (editSortDir > 0 ? '↑' : '↓') : ''}</th>
+            <th class="sort-btn" onclick="toggleSort('page')">ZONE ${editSortField === 'page' ? (editSortDir > 0 ? '↑' : '↓') : ''}</th>
+            <th>操作</th>
+          </tr></thead>
+          <tbody>
+            ${words.map(w => `<tr>
+              <td>${w.id}</td>
+              <td><strong>${escapeHtml(w.word)}</strong></td>
+              <td><input class="edit-input" value="${escapeAttr(w.meaning)}" onchange="editMeaning(${w.id}, this.value, ${w._custom ? 'true' : 'false'})"></td>
+              <td>${w.page}</td>
+              <td><button class="btn btn-sm btn-danger" onclick="deleteWord(${w.id}, ${w._custom ? 'true' : 'false'})">削除</button></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  app.innerHTML = html;
+}
+
+function toggleSort(field) {
+  if (editSortField === field) editSortDir *= -1;
+  else { editSortField = field; editSortDir = 1; }
+  renderEdit(document.getElementById('app'));
+}
+
+function editMeaning(id, newMeaning, isCustom) {
+  if (isCustom) {
+    const idx = customWords.findIndex(w => w.id === id);
+    if (idx >= 0) { customWords[idx].meaning = newMeaning; saveCustom(); }
+  } else { editedMeanings[id] = newMeaning; saveEdits(); }
+  showToast('意味を更新しました');
+}
+
+function deleteWord(id, isCustom) {
+  if (!confirm('この単語を削除しますか？')) return;
+  if (isCustom) { customWords = customWords.filter(w => w.id !== id); saveCustom(); }
+  deletedIds.add(id);
+  saveDeleted();
+  renderEdit(document.getElementById('app'));
+  showToast('単語を削除しました');
+}
+
+function addWord() {
+  const word = document.getElementById('addWord').value.trim();
+  const meaning = document.getElementById('addMeaning').value.trim();
+  const page = parseInt(document.getElementById('addPage').value) || 1;
+  if (!word || !meaning) { showToast('単語と意味を入力してください'); return; }
+  const maxId = Math.max(...allWords.map(w => w.id), ...customWords.map(w => w.id), 0);
+  customWords.push({ id: maxId + 1, word, meaning, page, _custom: true });
+  saveCustom();
+  closeModal('addModal');
+  document.getElementById('addWord').value = '';
+  document.getElementById('addMeaning').value = '';
+  document.getElementById('addPage').value = '1';
+  showToast('単語を追加しました');
+  renderEdit(document.getElementById('app'));
+}
+
+function importCSV() {
+  const csv = document.getElementById('csvInput').value.trim();
+  if (!csv) { showToast('CSVを入力してください'); return; }
+  const lines = csv.split('\n').filter(l => l.trim());
+  let count = 0;
+  let maxId = Math.max(...allWords.map(w => w.id), ...customWords.map(w => w.id), 0);
+  lines.forEach(line => {
+    const parts = line.split(',');
+    if (parts.length >= 2) {
+      maxId++;
+      customWords.push({ id: maxId, word: parts[0].trim(), meaning: parts[1].trim(), page: parseInt(parts[2]) || 1, _custom: true });
+      count++;
+    }
+  });
+  saveCustom();
+  closeModal('importModal');
+  document.getElementById('csvInput').value = '';
+  showToast(`${count}語をインポートしました`);
+  renderEdit(document.getElementById('app'));
+}
+
+function exportCSV() {
+  const words = getMergedWords();
+  const csv = words.map(w => `${w.word},${w.meaning},${w.page}`).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'sparta_words.csv'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSVをエクスポートしました');
+}
+
+function resetStartDate() {
+  if (!confirm('開始日を今日にリセットしますか？（学習データは保持されます）')) return;
+  studyPlan.startDate = todayStr();
+  savePlan();
+  showToast('開始日を今日にリセットしました');
+  render();
+}
+
+function resetAllData() {
+  if (!confirm('全ての学習・進捗データをリセットしますか？')) return;
+  localStorage.removeItem('sparta_progress');
+  localStorage.removeItem('sparta_srs');
+  localStorage.removeItem('sparta_plan');
+  localStorage.removeItem('sparta_streak');
+  localStorage.removeItem('sparta_custom');
+  localStorage.removeItem('sparta_edits');
+  localStorage.removeItem('sparta_deleted');
+  // Remove milestone flags
+  [100,250,500,750,1000].forEach(m => localStorage.removeItem('sparta_milestone_' + m));
+  srsData = {}; studyPlan = {}; streak = {};
+  customWords = []; editedMeanings = {}; deletedIds = new Set();
+  initPlan();
+  showToast('データをリセットしました');
+  render();
+}
+
+// ==================================================
+// STATS MODE
+// ==================================================
+function renderStats(app) {
+  const words = getMergedWords();
+  let stageCount = { new: 0, learning: 0, young: 0, mature: 0 };
+  let totalCorrect = 0, totalWrong = 0;
+
+  words.forEach(w => {
+    const s = srsData[w.id];
+    if (s) {
+      stageCount[s.stage] = (stageCount[s.stage] || 0) + 1;
+      totalCorrect += s.correct || 0;
+      totalWrong += s.wrong || 0;
+    } else {
+      stageCount.new++;
+    }
+  });
+
+  const studied = words.length - stageCount.new;
+  const accuracy = totalCorrect + totalWrong > 0 ? Math.round(totalCorrect / (totalCorrect + totalWrong) * 100) : 0;
+
+  // Forecast
+  const dayNum = getDayNumber();
+  const masteredPerDay = dayNum > 0 ? stageCount.mature / dayNum : 0;
+  const remaining = words.length - stageCount.mature;
+  const daysToComplete = masteredPerDay > 0 ? Math.ceil(remaining / masteredPerDay) : '?';
+
+  // Weak words
+  let weakWords = words
+    .filter(w => srsData[w.id] && (srsData[w.id].wrong || 0) > 0)
+    .map(w => {
+      const s = srsData[w.id];
+      const total = s.correct + s.wrong;
+      return { ...w, wrongRate: s.wrong / total, correct: s.correct, wrong: s.wrong, stage: s.stage };
+    })
+    .sort((a, b) => b.wrongRate - a.wrongRate)
+    .slice(0, 20);
+
+  let html = `
+    <div class="stats-row">
+      <div class="stat-badge"><div class="stat-num">${words.length}</div><div class="stat-label">全単語</div></div>
+      <div class="stat-badge"><div class="stat-num">${studied}</div><div class="stat-label">学習済</div></div>
+      <div class="stat-badge"><div class="stat-num" style="color:var(--success)">${stageCount.mature}</div><div class="stat-label">習得</div></div>
+      <div class="stat-badge"><div class="stat-num">${accuracy}%</div><div class="stat-label">正解率</div></div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-badge"><div class="stat-num" style="color:var(--border)">${stageCount.new}</div><div class="stat-label">未学習</div></div>
+      <div class="stat-badge"><div class="stat-num" style="color:#64b5f6">${stageCount.learning}</div><div class="stat-label">学習中</div></div>
+      <div class="stat-badge"><div class="stat-num" style="color:var(--warning)">${stageCount.young}</div><div class="stat-label">若い</div></div>
+      <div class="stat-badge"><div class="stat-num" style="color:var(--success)">${stageCount.mature}</div><div class="stat-label">成熟</div></div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:8px;">マスタリーグリッド</h3>
+      <p style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">
+        <span style="color:var(--border);">&#9632;</span> 未学習
+        <span style="color:#64b5f6; margin-left:8px;">&#9632;</span> 学習中
+        <span style="color:var(--warning); margin-left:8px;">&#9632;</span> 若い
+        <span style="color:var(--success); margin-left:8px;">&#9632;</span> 成熟
+      </p>
+      <div class="mastery-grid">
+        ${words.sort((a,b) => a.id - b.id).map(w => {
+          const s = srsData[w.id];
+          const stage = s ? s.stage : 'new';
+          return `<div class="mastery-cell ${stage}" title="${escapeAttr(w.word)}"></div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:8px;">学習統計</h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:14px;">
+        <div>ストリーク: <strong>${streak.current || 0}日</strong> (最高: ${streak.best || 0}日)</div>
+        <div>学習日数: <strong>Day ${dayNum}</strong></div>
+        <div>正解: <strong style="color:var(--success)">${totalCorrect}</strong></div>
+        <div>不正解: <strong style="color:var(--danger)">${totalWrong}</strong></div>
+        <div>予測完了: <strong>${typeof daysToComplete === 'number' ? `あと${daysToComplete}日` : '未定'}</strong></div>
+        <div>1日平均: <strong>${masteredPerDay > 0 ? masteredPerDay.toFixed(1) : '0'}語/日</strong></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:8px;">ZONE別マスタリー</h3>
+      ${[1,2,3,4,5].map(z => {
+        const zW = words.filter(w => w.page === z);
+        const zM = zW.filter(w => srsData[w.id] && srsData[w.id].stage === 'mature').length;
+        const pct = zW.length ? Math.round(zM / zW.length * 100) : 0;
+        return `<div class="zone-row">
+          <span class="zone-label">ZONE ${z}</span>
+          <div class="zone-bar"><div class="zone-bar-fill" style="width:${pct}%; background:var(--success);"></div></div>
+          <span class="zone-pct">${zM}/${zW.length}</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  if (weakWords.length > 0) {
+    html += `
+      <div class="card">
+        <h3 style="margin-bottom:12px;">苦手な単語 TOP ${weakWords.length}</h3>
+        <div class="table-wrapper">
+          <table class="word-list-table">
+            <thead><tr><th>単語</th><th>意味</th><th>正解</th><th>不正解</th><th>ステージ</th></tr></thead>
+            <tbody>
+              ${weakWords.map(w => `<tr>
+                <td><strong>${escapeHtml(w.word)}</strong></td>
+                <td>${formatMeaning(w.meaning)}</td>
+                <td style="color:var(--success)">${w.correct}</td>
+                <td style="color:var(--danger)">${w.wrong}</td>
+                <td><span class="stage-badge stage-${w.stage}">${w.stage}</span></td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+  }
+
+  app.innerHTML = html;
+}
+
+// ==================================================
+// Fuzzy matching
+// ==================================================
+function cleanJapanese(str) {
+  // Remove POS labels, normalize
+  return str.replace(/^(名|動|形|副|前|代|接)\s*/g, '')
+    .replace(/[（\(].*?[）\)]/g, '')
+    .replace(/\s+/g, '')
+    .replace(/〜/g, '')
+    .replace(/～/g, '');
+}
+
+function kataToHira(str) {
+  return str.replace(/[\u30A1-\u30F6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
+}
+
+function checkJapaneseFuzzy(input, answer) {
+  const parts = answer.split('・');
+  const normalInput = kataToHira(cleanJapanese(input));
+  for (const part of parts) {
+    const normalPart = kataToHira(cleanJapanese(part));
+    if (normalInput === normalPart) return true;
+    if (normalPart.includes(normalInput) && normalInput.length >= 2) return true;
+    if (normalInput.includes(normalPart) && normalPart.length >= 2) return true;
+  }
+  return false;
+}
+
+function checkEnglishFuzzy(input, answer) {
+  return input.toLowerCase().trim() === answer.toLowerCase().trim();
+}
+
+function levenshtein(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({length: m + 1}, () => Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = Math.min(
+        dp[i-1][j] + 1,
+        dp[i][j-1] + 1,
+        dp[i-1][j-1] + (a[i-1] !== b[j-1] ? 1 : 0)
+      );
+    }
+  }
+  return dp[m][n];
+}
+
+// ==================================================
+// Quiz helpers
+// ==================================================
+function generateQuizOptions(target, pool) {
+  let options = [target];
+  let available = pool.filter(w => w.id !== target.id);
+  shuffleArray(available);
+  for (let i = 0; i < 3 && i < available.length; i++) options.push(available[i]);
+  shuffleArray(options);
+  return options;
+}
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ==================================================
+// Utility
+// ==================================================
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+function escapeAttr(str) {
+  return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function formatMeaning(raw) {
+  const parts = raw.split('・');
+  const html = parts.map(p => {
+    const m = p.match(/^(名|動|形|副|前|代|接)\s/);
+    if (m) {
+      const pos = m[1];
+      const rest = escapeHtml(p.substring(m[0].length));
+      return '<span class="meaning-part"><span class="pos-badge pos-' + pos + '">' + pos + '</span>' + rest + '</span>';
+    }
+    return '<span class="meaning-part">' + escapeHtml(p) + '</span>';
+  }).join('');
+  return '<span class="meaning-parts">' + html + '</span>';
+}
+
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+function closeResult() {
+  document.getElementById('resultOverlay').classList.remove('active');
+  render();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function showConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti';
+  const colors = ['#ff3b30', '#ff9500', '#ffcc00', '#34c759', '#007aff', '#5856d6', '#af52de'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 2 + 's';
+    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    container.appendChild(piece);
+  }
+  document.body.appendChild(container);
+  setTimeout(() => container.remove(), 4000);
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.classList.remove('active');
+  });
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (currentMode === 'practice' && practiceMode === 'flash') {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+    if (e.key === '1') practiceGrade(0);
+    if (e.key === '2') practiceGrade(1);
+    if (e.key === '3') practiceGrade(2);
+    if (e.key === '4') practiceGrade(3);
+  }
+  if (currentMode === 'study' && session && session.phase === 'review') {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); revealReview(); }
+    if (e.key === '1') gradeReview(0);
+    if (e.key === '2') gradeReview(1);
+    if (e.key === '3') gradeReview(2);
+    if (e.key === '4') gradeReview(3);
+  }
+});
+
+// Start
+init();
+</script>
+</body>
+</html>
+
   --text: #1d1d1f;
   --text-secondary: #6e6e73;
   --primary: #007aff;
