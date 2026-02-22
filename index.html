@@ -111,6 +111,13 @@ body {
 .history-labels { display: flex; gap: 4px; margin-top: 4px; }
 .history-labels span { flex: 1; font-size: 10px; color: var(--text-secondary); text-align: center; }
 
+/* Progress Summary (compact 3-line) */
+.progress-summary { margin-top: 12px; padding: 12px 16px; background: var(--bg-secondary); border-radius: 12px; }
+.progress-summary-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
+.progress-summary-row + .progress-summary-row { border-top: 1px solid var(--border); }
+.progress-summary-label { font-size: 13px; color: var(--text-secondary); }
+.progress-summary-value { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+
 /* SRS Grade Buttons */
 .srs-actions { display: flex; gap: 8px; width: 100%; max-width: 500px; }
 .srs-actions .btn { flex: 1; padding: 12px 4px; font-size: 13px; flex-direction: column; gap: 2px; }
@@ -161,7 +168,7 @@ body {
 .mastery-grid { display: flex; flex-wrap: wrap; gap: 2px; margin: 12px 0; }
 .mastery-cell { width: 8px; height: 8px; border-radius: 2px; background: var(--border); }
 .mastery-cell.new { background: var(--border); }
-.mastery-cell.learning { background: #64b5f6; }
+.mastery-cell.learning { background: var(--warning); }
 .mastery-cell.young { background: var(--warning); }
 .mastery-cell.mature { background: var(--success); }
 
@@ -269,9 +276,7 @@ body {
 </div>
 
 <div class="nav" id="nav">
-  <button class="nav-btn active" data-mode="dashboard">ホーム</button>
-  <button class="nav-btn" data-mode="study">学習</button>
-  <button class="nav-btn" data-mode="practice">自由練習</button>
+  <button class="nav-btn active" data-mode="study">学習</button>
   <button class="nav-btn" data-mode="edit">データ</button>
   <button class="nav-btn" data-mode="stats">統計</button>
 </div>
@@ -327,7 +332,7 @@ let deletedIds = new Set();
 let srsData = {};      // SRS per-word data
 let studyPlan = {};    // 60-day plan
 let streak = {};       // streak tracking
-let currentMode = 'dashboard';
+let currentMode = 'study';
 let pageFrom = '';
 let pageTo = '';
 
@@ -6591,7 +6596,11 @@ function getTodayNewTarget() {
   else if (dayNum <= 50) dailyTarget = 10;
   else dailyTarget = 0;
 
-  return Math.min(remaining, dailyTarget);
+  // Subtract words already learned today
+  const todayH = getTodayHistory();
+  const todayRemaining = Math.max(0, dailyTarget - todayH.newLearned);
+
+  return Math.min(remaining, todayRemaining);
 }
 
 function getTodayHistory() {
@@ -6599,6 +6608,29 @@ function getTodayHistory() {
   if (!studyPlan.history) studyPlan.history = {};
   if (!studyPlan.history[today]) studyPlan.history[today] = { newLearned: 0, reviewed: 0, correct: 0, wrong: 0, startTime: null };
   return studyPlan.history[today];
+}
+
+// Expected cumulative learned count by end of a given day
+function getExpectedByDay(dayNum) {
+  if (dayNum <= 0) return 0;
+  if (dayNum <= 20) return dayNum * 25;
+  if (dayNum <= 40) return 500 + (dayNum - 20) * 20;
+  if (dayNum <= 50) return 900 + (dayNum - 40) * 10;
+  return 1000; // Day 51-60: review only
+}
+
+// Get the range of word IDs being studied today (next new words)
+function getTodayWordRange() {
+  const words = getMergedWords();
+  const newWords = words.filter(w => {
+    const s = srsData[w.id];
+    return !s || s.stage === 'new';
+  });
+  newWords.sort((a, b) => a.id - b.id);
+  const target = getTodayNewTarget();
+  const batch = newWords.slice(0, target);
+  if (batch.length === 0) return null;
+  return { from: batch[0].id, to: batch[batch.length - 1].id, count: batch.length };
 }
 
 function recordStudyAction(isCorrect) {
@@ -6688,12 +6720,10 @@ function switchMode(mode) {
 function render() {
   const app = document.getElementById('app');
   switch(currentMode) {
-    case 'dashboard': renderDashboard(app); break;
     case 'study': renderStudy(app); break;
-    case 'practice': renderPractice(app); break;
     case 'edit': renderEdit(app); break;
     case 'stats': renderStats(app); break;
-    default: renderDashboard(app);
+    default: renderStudy(app);
   }
 }
 
@@ -6734,6 +6764,19 @@ function renderDashboard(app) {
     return { zone: z, total: zWords.length, mastered: zMastered, learning: zLearning };
   });
 
+  // Schedule comparison
+  const expected = Math.min(getExpectedByDay(dayNum), words.length);
+  const diff = learned - expected;
+  const scheduleLabel = diff > 0 ? `${diff}語 先行` : diff < 0 ? `${Math.abs(diff)}語 遅れ` : '予定通り';
+  const scheduleColor = diff >= 0 ? '#34c759' : (diff >= -20 ? '#ff9500' : '#ff3b30');
+
+  // Today's word range
+  const todayRange = getTodayWordRange();
+
+  // End date
+  const endDate = addDays(studyPlan.startDate, 59);
+  const endDateLabel = endDate.replace(/^(\d{4})-(\d{2})-(\d{2})$/, (_, y, m, d) => `${parseInt(m)}/${parseInt(d)}`);
+
   let html = `
     <div class="card fade-in">
       <div class="day-counter">
@@ -6766,18 +6809,26 @@ function renderDashboard(app) {
           今日: 新規 ${todayH.newLearned}語 / 復習 ${todayH.reviewed}回 / 正解率 ${todayH.correct + todayH.wrong > 0 ? Math.round(todayH.correct / (todayH.correct + todayH.wrong) * 100) : 0}%
         </p>
       ` : ''}
-    </div>
 
-    <div class="card">
-      <h3 style="margin-bottom:4px;">全体マスタリー</h3>
-      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:8px;">${mastered} / ${words.length} 語 完全習得 (${words.length ? Math.round(mastered / words.length * 100) : 0}%)</p>
-      <div class="progress-bar" style="height:12px;">
-        <div class="progress-fill" style="width:${words.length ? mastered / words.length * 100 : 0}%; background:linear-gradient(90deg, var(--success), #5ac8fa);"></div>
+      <div class="progress-summary">
+        <div class="progress-summary-row">
+          <span class="progress-summary-label">今日の範囲</span>
+          <span class="progress-summary-value">${todayRange ? `#${todayRange.from} 〜 #${todayRange.to}` : '復習のみ'}</span>
+        </div>
+        <div class="progress-summary-row">
+          <span class="progress-summary-label">進捗</span>
+          <span class="progress-summary-value">${learned} / ${words.length} 語</span>
+        </div>
+        <div class="progress-summary-row">
+          <span class="progress-summary-label">予定との差</span>
+          <span class="progress-summary-value" style="color:${scheduleColor}; font-weight:700;">${scheduleLabel}</span>
+        </div>
+        <div class="progress-summary-row">
+          <span class="progress-summary-label">完了日</span>
+          <span class="progress-summary-value">${endDateLabel}（残り${daysRemaining}日）</span>
+        </div>
       </div>
-      <p style="font-size:13px; color:var(--text-secondary); margin-top:8px;">${learned} / ${words.length} 語 学習中 (${words.length ? Math.round(learned / words.length * 100) : 0}%)</p>
-      <div class="progress-bar" style="height:8px;">
-        <div class="progress-fill" style="width:${words.length ? learned / words.length * 100 : 0}%"></div>
-      </div>
+
     </div>
 
     <div class="card">
@@ -6860,15 +6911,17 @@ function loadNextBatch() {
   session.phase = 'intro';
 }
 
+function getSessionStepLabel(phase) {
+  const batchNum = Math.floor(session.newOffset / 5) + 1;
+  const totalBatches = Math.ceil(session.newWords.length / 5);
+  const steps = { intro: '1/4 カード暗記', quiz: '2/4 4択クイズ', deep_quiz: '3/4 深掘りクイズ', typing_jp_en: '4/4 意味→英単語' };
+  if (phase === 'review') return '復習';
+  return `セット ${batchNum}/${totalBatches} ─ ${steps[phase] || phase}`;
+}
+
 function renderStudy(app) {
   if (!session) {
-    app.innerHTML = `
-      <div class="card fade-in" style="text-align:center; padding:40px;">
-        <div style="font-size:48px; margin-bottom:16px;">&#x1F4DA;</div>
-        <h2>学習セッション</h2>
-        <p style="color:var(--text-secondary); margin:12px 0;">ダッシュボードから「今日の学習を始める」を押してください。</p>
-        <button class="btn btn-primary" onclick="switchMode('dashboard')">ダッシュボードへ</button>
-      </div>`;
+    renderDashboard(app);
     return;
   }
 
@@ -6892,7 +6945,7 @@ function renderIntro(app) {
   app.innerHTML = `
     <div class="card fade-in">
       <div class="session-header">
-        <span class="session-phase">新規単語を覚えよう (バッチ ${batchNum}/${totalBatches})</span>
+        <span class="session-phase">${getSessionStepLabel('intro')}</span>
         <span class="session-counter">${session.newBatchIdx + 1} / ${session.newBatch.length}</span>
       </div>
       <div class="session-progress">
@@ -6955,7 +7008,7 @@ function renderSessionQuiz(app) {
   app.innerHTML = `
     <div class="card fade-in">
       <div class="session-header">
-        <span class="session-phase">確認クイズ</span>
+        <span class="session-phase">${getSessionStepLabel('quiz')}</span>
         <span class="session-counter">${session.quizIdx + 1} / ${session.quizQueue.length}</span>
       </div>
       <div class="session-progress">
@@ -6993,14 +7046,12 @@ function sessionQuizAnswer(el, isCorrect, wordId) {
   if (isCorrect) {
     el.classList.add('correct');
     session.correct++;
-    gradeSRS(wordId, 2); // Good
+    setTimeout(() => nextSessionQuiz(), 500);
   } else {
     el.classList.add('incorrect');
     session.wrong++;
-    gradeSRS(wordId, 0); // Again
+    setTimeout(() => nextSessionQuiz(), 1200);
   }
-
-  document.getElementById('quizNext').classList.remove('hidden');
 }
 
 function nextSessionQuiz() {
@@ -7039,7 +7090,7 @@ function renderDeepQuiz(app) {
   app.innerHTML = `
     <div class="card fade-in">
       <div class="session-header">
-        <span class="session-phase">深掘りクイズ (英→日) ${retryLabel}</span>
+        <span class="session-phase">${getSessionStepLabel('deep_quiz')}${retryLabel ? ' ' + retryLabel : ''}</span>
         <span class="session-counter">${session.deepQuizIdx + 1} / ${session.deepQuizQueue.length}</span>
       </div>
       <div class="session-progress">
@@ -7079,25 +7130,18 @@ function deepQuizAnswer(el, isCorrect, wordId) {
   if (isCorrect) {
     el.classList.add('correct');
     session.correct++;
-    const retries = session.deepQuizRetries[wordId] || 0;
-    gradeSRS(wordId, retries === 0 ? 2 : 1); // 初回正解=Good, リトライ後=Hard
+    setTimeout(() => nextDeepQuiz(), 500);
   } else {
     el.classList.add('incorrect');
     session.wrong++;
     const retries = (session.deepQuizRetries[wordId] || 0) + 1;
     session.deepQuizRetries[wordId] = retries;
     if (retries <= 2) {
-      // キュー末尾に再追加
       const w = session.deepQuizQueue[session.deepQuizIdx];
       session.deepQuizQueue.push(w);
-      const msg = document.getElementById('deepQuizRetryMsg');
-      if (msg) { msg.textContent = 'この単語はもう一度出題します'; msg.classList.remove('hidden'); }
-    } else {
-      gradeSRS(wordId, 0); // 3回不正解=Again
     }
+    setTimeout(() => nextDeepQuiz(), 1200);
   }
-
-  document.getElementById('deepQuizNext').classList.remove('hidden');
 }
 
 function nextDeepQuiz() {
@@ -7153,7 +7197,7 @@ function renderReverseQuiz(app) {
   app.innerHTML = `
     <div class="card fade-in">
       <div class="session-header">
-        <span class="session-phase">意味→英単語クイズ</span>
+        <span class="session-phase">${getSessionStepLabel('typing_jp_en')}</span>
         <span class="session-counter">${session.typingIdx + 1} / ${session.typingQueue.length}</span>
       </div>
       <div class="session-progress">
@@ -7192,12 +7236,13 @@ function reverseQuizAnswer(el, isCorrect, wordId) {
     el.classList.add('correct');
     session.correct++;
     gradeSRS(wordId, 2);
+    setTimeout(() => nextReverseQuiz(), 500);
   } else {
     el.classList.add('incorrect');
     session.wrong++;
     gradeSRS(wordId, 0);
+    setTimeout(() => nextReverseQuiz(), 1200);
   }
-  document.getElementById('reverseQuizNext').classList.remove('hidden');
 }
 
 function nextReverseQuiz() {
@@ -7221,7 +7266,7 @@ function renderReview(app) {
     app.innerHTML = `
       <div class="card fade-in">
         <div class="session-header">
-          <span class="session-phase">復習</span>
+          <span class="session-phase">${getSessionStepLabel('review')}</span>
           <span class="session-counter">${session.dueIdx + 1} / ${session.dueWords.length}</span>
         </div>
         <div class="session-progress">
@@ -7301,34 +7346,15 @@ function renderComplete(app) {
 
   app.innerHTML = `
     <div class="card fade-in" style="text-align:center; padding:40px;">
-      <div style="font-size:48px; margin-bottom:16px;">${pct >= 80 ? '&#x1F389;' : '&#x1F4AA;'}</div>
-      <h2 style="margin-bottom:16px;">セッション完了!</h2>
-      <div style="font-size:48px; font-weight:800; color:var(--primary); margin-bottom:8px;">${pct}%</div>
-      <div class="stats-row" style="justify-content:center; margin:16px 0;">
-        <div class="stat-badge">
-          <div class="stat-num" style="font-size:20px; color:var(--primary);">${session.newLearned}</div>
-          <div class="stat-label">新規習得</div>
-        </div>
-        <div class="stat-badge">
-          <div class="stat-num" style="font-size:20px; color:var(--warning);">${session.reviewed || 0}</div>
-          <div class="stat-label">復習完了</div>
-        </div>
-        <div class="stat-badge">
-          <div class="stat-num" style="font-size:20px; color:var(--success);">${session.correct}</div>
-          <div class="stat-label">正解</div>
-        </div>
-        <div class="stat-badge">
-          <div class="stat-num" style="font-size:20px; color:var(--danger);">${session.wrong}</div>
-          <div class="stat-label">不正解</div>
-        </div>
-      </div>
+      <div style="font-size:48px; margin-bottom:16px;">&#x1F389;</div>
+      <h2 style="margin-bottom:8px;">${session.newLearned}語 学習完了!</h2>
+      ${session.reviewed ? `<p style="color:var(--text-secondary); margin-bottom:8px;">復習 ${session.reviewed}語</p>` : ''}
       <p style="color:var(--text-secondary); margin-bottom:16px;">
         全体進捗: ${learned} / ${total} 語 (${total ? Math.round(learned / total * 100) : 0}%)
       </p>
       ${milestone ? `<p style="font-size:18px; font-weight:700; color:var(--success); margin-bottom:16px;">&#x1F3C6; ${milestone}語マイルストーン達成!</p>` : ''}
       <div style="display:flex; gap:8px; justify-content:center;">
-        <button class="btn btn-primary" onclick="session=null; switchMode('dashboard')">ダッシュボードへ</button>
-        <button class="btn btn-outline" onclick="startStudySession()">もう一度</button>
+        <button class="btn btn-primary" onclick="session=null; switchMode('study')">ホームへ</button>
       </div>
     </div>`;
 
@@ -7852,61 +7878,21 @@ function renderStats(app) {
     .slice(0, 20);
 
   let html = `
-    <div class="stats-row">
-      <div class="stat-badge"><div class="stat-num">${words.length}</div><div class="stat-label">全単語</div></div>
-      <div class="stat-badge"><div class="stat-num">${studied}</div><div class="stat-label">学習済</div></div>
-      <div class="stat-badge"><div class="stat-num" style="color:var(--success)">${stageCount.mature}</div><div class="stat-label">習得</div></div>
-      <div class="stat-badge"><div class="stat-num">${accuracy}%</div><div class="stat-label">正解率</div></div>
-    </div>
-
-    <div class="stats-row">
-      <div class="stat-badge"><div class="stat-num" style="color:var(--border)">${stageCount.new}</div><div class="stat-label">未学習</div></div>
-      <div class="stat-badge"><div class="stat-num" style="color:#64b5f6">${stageCount.learning}</div><div class="stat-label">学習中</div></div>
-      <div class="stat-badge"><div class="stat-num" style="color:var(--warning)">${stageCount.young}</div><div class="stat-label">若い</div></div>
-      <div class="stat-badge"><div class="stat-num" style="color:var(--success)">${stageCount.mature}</div><div class="stat-label">成熟</div></div>
-    </div>
-
     <div class="card">
       <h3 style="margin-bottom:8px;">マスタリーグリッド</h3>
       <p style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">
-        <span style="color:var(--border);">&#9632;</span> 未学習
-        <span style="color:#64b5f6; margin-left:8px;">&#9632;</span> 学習中
-        <span style="color:var(--warning); margin-left:8px;">&#9632;</span> 若い
-        <span style="color:var(--success); margin-left:8px;">&#9632;</span> 成熟
+        <span style="color:var(--border);">&#9632;</span> 未学習 ${stageCount.new}
+        <span style="color:var(--warning); margin-left:8px;">&#9632;</span> 学習中 ${stageCount.learning + stageCount.young}
+        <span style="color:var(--success); margin-left:8px;">&#9632;</span> 覚えた ${stageCount.mature}
       </p>
       <div class="mastery-grid">
         ${words.sort((a,b) => a.id - b.id).map(w => {
           const s = srsData[w.id];
-          const stage = s ? s.stage : 'new';
+          let stage = s ? s.stage : 'new';
+          if (stage === 'learning' || stage === 'young') stage = 'learning';
           return `<div class="mastery-cell ${stage}" title="${escapeAttr(w.word)}"></div>`;
         }).join('')}
       </div>
-    </div>
-
-    <div class="card">
-      <h3 style="margin-bottom:8px;">学習統計</h3>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:14px;">
-        <div>ストリーク: <strong>${streak.current || 0}日</strong> (最高: ${streak.best || 0}日)</div>
-        <div>学習日数: <strong>Day ${dayNum}</strong></div>
-        <div>正解: <strong style="color:var(--success)">${totalCorrect}</strong></div>
-        <div>不正解: <strong style="color:var(--danger)">${totalWrong}</strong></div>
-        <div>予測完了: <strong>${typeof daysToComplete === 'number' ? `あと${daysToComplete}日` : '未定'}</strong></div>
-        <div>1日平均: <strong>${masteredPerDay > 0 ? masteredPerDay.toFixed(1) : '0'}語/日</strong></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3 style="margin-bottom:8px;">ZONE別マスタリー</h3>
-      ${[1,2,3,4,5].map(z => {
-        const zW = words.filter(w => w.page === z);
-        const zM = zW.filter(w => srsData[w.id] && srsData[w.id].stage === 'mature').length;
-        const pct = zW.length ? Math.round(zM / zW.length * 100) : 0;
-        return `<div class="zone-row">
-          <span class="zone-label">ZONE ${z}</span>
-          <div class="zone-bar"><div class="zone-bar-fill" style="width:${pct}%; background:var(--success);"></div></div>
-          <span class="zone-pct">${zM}/${zW.length}</span>
-        </div>`;
-      }).join('')}
     </div>`;
 
   if (weakWords.length > 0) {
